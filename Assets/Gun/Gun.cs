@@ -3,16 +3,68 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Gun : MonoBehaviour {
+    [SerializeField] private float timeBetweenShots;
+    [SerializeField] private GameObject goSFX_gunShot;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+    [SerializeField] private Transform tRecoil;
+    [SerializeField] private AnimationCurve recoilCurve;
+    [SerializeField] private AnimationCurve horizontalRecoilCurve;
+    [SerializeField] private float backRecoil;
+    [SerializeField] private float upRecoil;
+    [SerializeField] private float horizontalRecoil;
+    [SerializeField] private float recoilIncreasPerBullet;
+    [SerializeField] private float recoilResetRate;
+    [SerializeField] private float recoilT;
+    [SerializeField] private float headUpRecoil;
+    [SerializeField] private float headHorizontalRecoil;
+
+    [SerializeField] private Player player;
+
+    private float cooldown = 0;
+
+    private Vector3 targetLocalPosition;
+    private Vector3 targetLocalRotation;
+
+    private void Update() {
+        if (cooldown <= 0) {
+            if (Input.GetKey(KeyCode.Mouse0)) {
+                cooldown = timeBetweenShots;
+                Fire();
+            }
+            else {
+                recoilT -= Time.deltaTime;
+                if (recoilT < 0)
+                    recoilT = 0;
+            }
+        }
+
+        cooldown -= Time.deltaTime;
+
+        targetLocalPosition = Vector3.Lerp(targetLocalPosition, Vector3.zero, 10 * Time.deltaTime);
+        targetLocalRotation = Vector3.Lerp(targetLocalRotation, Vector3.zero, 10 * Time.deltaTime);
+        tRecoil.localPosition = Vector3.Lerp(tRecoil.localPosition, targetLocalPosition, 100 * Time.deltaTime);
+        tRecoil.localRotation = Quaternion.Lerp(tRecoil.localRotation, Quaternion.Euler(targetLocalRotation), 100 * Time.deltaTime);
+        //tRecoil.localPosition = targetLocalPosition;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    private void Fire() {
+        Instantiate(goSFX_gunShot, transform);
+
+        float t = recoilCurve.Evaluate(recoilT);
+        targetLocalPosition += Vector3.back * backRecoil;
+        targetLocalRotation -= Vector3.right * t * upRecoil;
+
+        float horizontalRecoilDirThing = horizontalRecoilCurve.Evaluate(recoilT);
+        targetLocalRotation += Vector3.up * t * horizontalRecoilDirThing * horizontalRecoil;
+
+        recoilT += recoilIncreasPerBullet;
+
+        player.head.Recoil(headUpRecoil * t, headHorizontalRecoil * t * horizontalRecoilDirThing);
     }
+
+    //private IEnumerator RecoilCorutine() {
+    //    while (true) {
+
+    //    }
+    //}
 }
