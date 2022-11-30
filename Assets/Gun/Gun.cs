@@ -4,7 +4,12 @@ using UnityEngine;
 
 public class Gun : MonoBehaviour {
     [SerializeField] private float timeBetweenShots;
+    [SerializeField] private Transform tMuzzle;
+
     [SerializeField] private GameObject goSFX_gunShot;
+    [SerializeField] private GameObject prefabBullet;
+
+    [SerializeField] private float muzzleVelocity;
 
     [SerializeField] private Transform tRecoil;
     [SerializeField] private AnimationCurve recoilCurve;
@@ -49,6 +54,10 @@ public class Gun : MonoBehaviour {
 
     private void Fire() {
         Instantiate(goSFX_gunShot, transform);
+        GameObject goBullet = Instantiate(prefabBullet);
+        goBullet.transform.position = tMuzzle.position;
+        Bullet bullet = goBullet.GetComponent<Bullet>();
+        bullet.Fire(tMuzzle.forward * muzzleVelocity);
 
         float t = recoilCurve.Evaluate(recoilT);
         targetLocalPosition += Vector3.back * backRecoil;
