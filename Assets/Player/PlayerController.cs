@@ -11,6 +11,7 @@ public class PlayerController {
     [SerializeField] private float yVelLerpSpeed;
 
     [SerializeField] private float jumpVelocity;
+    [SerializeField] private AnimationCurve airTimeToGravityScale;
 
     private float targetHeight = 1;
     private float currentHeight = 1;
@@ -19,6 +20,7 @@ public class PlayerController {
 
     private Rigidbody rb;
     private bool isGrounded = true;
+    private float airTime = 0;
     private bool jumpOnCooldown = false;
 
     private Player player;
@@ -27,6 +29,7 @@ public class PlayerController {
         this.player = player;
         rb = player.GetComponent<Rigidbody>();
         player.updateEvent += player_updateEvent;
+        player.fixedUpdateEvent += Player_fixedUpdateEvent;
     }
 
     private void player_updateEvent() {
@@ -49,8 +52,23 @@ public class PlayerController {
 
         if (!jumpOnCooldown && isGrounded && Input.GetKeyDown(KeyCode.Space))
             Jump();
+    }
+
+    private void Player_fixedUpdateEvent() {
+        if (isGrounded)
+            airTime = 0;
+        else
+            airTime += Time.deltaTime;
+
+        if (!isGrounded) {
+            rb.AddForce(Vector3.down * 9.81f * airTimeToGravityScale.Evaluate(airTime), ForceMode.Acceleration);
+        }
+
 
         HorizontalMovement();
+        //if (!Input.GetKey(KeyCode.LeftShift))
+        player.rb.rotation = Quaternion.Euler(0, player.fpCamera.yaw, 0);
+        //player.transform.rotation = Quaternion.Euler(0, player.head.yaw, 0);
     }
 
     private void VerticalMovement() {

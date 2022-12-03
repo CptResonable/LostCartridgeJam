@@ -53,7 +53,7 @@ public class Gun : MonoBehaviour {
     }
 
     private void Fire() {
-        Instantiate(goSFX_gunShot, transform);
+        //Instantiate(goSFX_gunShot, transform);
         GameObject goBullet = Instantiate(prefabBullet);
         goBullet.transform.position = tMuzzle.position;
         Bullet bullet = goBullet.GetComponent<Bullet>();
