@@ -27,6 +27,6 @@ public class Hand {
     }
 
     private void UpdateHand() {
-        tHand.rotation = player.head.tHead.rotation;
+        tHand.rotation = player.fpCamera.tHead.rotation;
     }
 }
