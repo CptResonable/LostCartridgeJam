@@ -13,7 +13,7 @@ public class PlayerController {
     [SerializeField] private float jumpVelocity;
     [SerializeField] private AnimationCurve airTimeToGravityScale;
 
-    private float targetHeight = 1;
+    [SerializeField] private float targetHeight = 0.8f;
     private float currentHeight = 1;
 
     private Vector3 inputDir;

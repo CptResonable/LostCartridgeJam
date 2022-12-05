@@ -47,7 +47,8 @@ public class HandMovement : MonoBehaviour {
 
         targetAngularVelocity = kmTarget.angularVelocity + deltaRotation * 10f;
         angularVelocity = Vector3.Lerp(angularVelocity, targetAngularVelocity, Time.fixedDeltaTime * velocityChangeCoef * 5);
-        rb.angularVelocity = angularVelocity;
+        rb.angularVelocity = Vector3.Lerp(rb.angularVelocity, angularVelocity, 0.5f);
+        //rb.angularVelocity = angularVelocity;
 
     }
 }

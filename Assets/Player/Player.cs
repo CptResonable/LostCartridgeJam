@@ -20,7 +20,7 @@ public class Player : MonoBehaviour {
         fpCamera.Initialize(this);
         playerController.Initialize(this);
         //head.Initialize(this);
-        hand.Initialize(this);
+        //hand.Initialize(this);
     }
 
     private void Update() {
