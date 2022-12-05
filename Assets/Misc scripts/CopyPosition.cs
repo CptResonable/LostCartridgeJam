@@ -8,7 +8,7 @@ public class CopyPosition : MonoBehaviour {
     [SerializeField] bool lateUpdate;
     [SerializeField] Vector3 offset;
 
-    void Update() {
+    void FixedUpdate() {
         if (!lateUpdate)
             DoTheCopy();
     }

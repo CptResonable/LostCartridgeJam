@@ -53,23 +53,30 @@ public class Gun : MonoBehaviour {
     }
 
     private void Fire() {
-        //Instantiate(goSFX_gunShot, transform);
-        GameObject goBullet = Instantiate(prefabBullet);
-        goBullet.transform.position = tMuzzle.position;
-        Bullet bullet = goBullet.GetComponent<Bullet>();
-        bullet.Fire(tMuzzle.forward * muzzleVelocity);
-
-        float t = recoilCurve.Evaluate(recoilT);
-        targetLocalPosition += Vector3.back * backRecoil;
-        targetLocalRotation -= Vector3.right * t * upRecoil;
-
-        float horizontalRecoilDirThing = horizontalRecoilCurve.Evaluate(recoilT);
-        targetLocalRotation += Vector3.up * t * horizontalRecoilDirThing * horizontalRecoil;
-
-        recoilT += recoilIncreasPerBullet;
-
-        player.head.Recoil(headUpRecoil * t, headHorizontalRecoil * t * horizontalRecoilDirThing);
+        Rigidbody rb = transform.parent.GetComponent<Rigidbody>();
+        rb.AddForce(-transform.parent.forward * 8, ForceMode.Impulse);
+        //rb.AddForce(transform.parent.up * 300);
+        rb.AddTorque(transform.parent.right * -30, ForceMode.Impulse);
     }
+
+    //private void Fire() {
+    //    //Instantiate(goSFX_gunShot, transform);
+    //    GameObject goBullet = Instantiate(prefabBullet);
+    //    goBullet.transform.position = tMuzzle.position;
+    //    Bullet bullet = goBullet.GetComponent<Bullet>();
+    //    bullet.Fire(tMuzzle.forward * muzzleVelocity);
+
+    //    float t = recoilCurve.Evaluate(recoilT);
+    //    targetLocalPosition += Vector3.back * backRecoil;
+    //    targetLocalRotation -= Vector3.right * t * upRecoil;
+
+    //    float horizontalRecoilDirThing = horizontalRecoilCurve.Evaluate(recoilT);
+    //    targetLocalRotation += Vector3.up * t * horizontalRecoilDirThing * horizontalRecoil;
+
+    //    recoilT += recoilIncreasPerBullet;
+
+    //    player.head.Recoil(headUpRecoil * t, headHorizontalRecoil * t * horizontalRecoilDirThing);
+    //}
 
     //private IEnumerator RecoilCorutine() {
     //    while (true) {

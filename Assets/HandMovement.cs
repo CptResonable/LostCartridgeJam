@@ -20,9 +20,13 @@ public class HandMovement : MonoBehaviour {
 
     private void Awake() {
         rb = GetComponent<Rigidbody>();
+        Debug.Log(rb.inertiaTensor);
+        //rb.inertiaTensor = Vector3.one;
+        rb.centerOfMass = Vector3.zero;
     }
 
     public void DoUpdate() {
+        Debug.Log(rb.inertiaTensor);
         kmTarget.DoUpdate();
 
         Vector3 deltaPosition = VectorUtils.FromToVector(lastPosition, transform.position);
@@ -42,7 +46,7 @@ public class HandMovement : MonoBehaviour {
         Vector3 deltaRotation = eulerRot * Mathf.Deg2Rad;
 
         targetAngularVelocity = kmTarget.angularVelocity + deltaRotation * 10f;
-        angularVelocity = Vector3.Lerp(angularVelocity, targetAngularVelocity, Time.fixedDeltaTime * velocityChangeCoef);
+        angularVelocity = Vector3.Lerp(angularVelocity, targetAngularVelocity, Time.fixedDeltaTime * velocityChangeCoef * 5);
         rb.angularVelocity = angularVelocity;
 
     }

@@ -15,7 +15,7 @@ public class CopyRotation : MonoBehaviour {
     float old_y;
     float old_z;
 
-    private void Update() {
+    private void FixedUpdate() {
         if (!lateUpdate)
             DoTheCopying();
     }
