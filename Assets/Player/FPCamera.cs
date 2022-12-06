@@ -24,11 +24,11 @@ public class FPCamera {
         yaw += Input.GetAxis("Mouse X") * Settings.MOUSE_SENSITIVITY;
 
         pitch = Mathf.Clamp(pitch, -89, 89);
-        tHead.rotation = Quaternion.Euler(pitch, yaw, 0);
+        tHead.parent.rotation = Quaternion.Euler(pitch, yaw, 0);
     }
 
     public void SetRotation() {
-        tHead.rotation = Quaternion.Euler(pitch, yaw, 0);
+        tHead.parent.rotation = Quaternion.Euler(pitch, yaw, 0);
     }
 
     public void Recoil(float pitch, float yaw) {
