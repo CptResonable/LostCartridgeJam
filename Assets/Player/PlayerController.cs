@@ -50,6 +50,8 @@ public class PlayerController {
 
         inputDir = player.transform.TransformDirection(inputDir);
 
+        //player.transform.rotation = Quaternion.Euler(0, player.fpCamera.yaw, 0);
+
         if (!jumpOnCooldown && isGrounded && Input.GetKeyDown(KeyCode.Space))
             Jump();
     }
@@ -67,7 +69,7 @@ public class PlayerController {
 
         HorizontalMovement();
         //if (!Input.GetKey(KeyCode.LeftShift))
-        player.rb.rotation = Quaternion.Euler(0, player.fpCamera.yaw, 0);
+        //player.rb.rotation = Quaternion.Euler(0, player.fpCamera.yaw, 0);
         //player.transform.rotation = Quaternion.Euler(0, player.head.yaw, 0);
     }
 
