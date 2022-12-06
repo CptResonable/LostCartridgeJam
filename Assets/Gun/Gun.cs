@@ -45,18 +45,18 @@ public class Gun : MonoBehaviour {
 
         cooldown -= Time.deltaTime;
 
-        targetLocalPosition = Vector3.Lerp(targetLocalPosition, Vector3.zero, 10 * Time.deltaTime);
-        targetLocalRotation = Vector3.Lerp(targetLocalRotation, Vector3.zero, 10 * Time.deltaTime);
-        tRecoil.localPosition = Vector3.Lerp(tRecoil.localPosition, targetLocalPosition, 100 * Time.deltaTime);
-        tRecoil.localRotation = Quaternion.Lerp(tRecoil.localRotation, Quaternion.Euler(targetLocalRotation), 100 * Time.deltaTime);
+        //targetLocalPosition = Vector3.Lerp(targetLocalPosition, Vector3.zero, 10 * Time.deltaTime);
+        //targetLocalRotation = Vector3.Lerp(targetLocalRotation, Vector3.zero, 10 * Time.deltaTime);
+        //tRecoil.localPosition = Vector3.Lerp(tRecoil.localPosition, targetLocalPosition, 100 * Time.deltaTime);
+        //tRecoil.localRotation = Quaternion.Lerp(tRecoil.localRotation, Quaternion.Euler(targetLocalRotation), 100 * Time.deltaTime);
         //tRecoil.localPosition = targetLocalPosition;
     }
 
     private void Fire() {
         Rigidbody rb = transform.parent.GetComponent<Rigidbody>();
-        rb.AddForce(-transform.parent.forward * 8, ForceMode.Impulse);
+        rb.AddForce(-transform.parent.forward * 4, ForceMode.Impulse);
         //rb.AddForce(transform.parent.up * 300);
-        rb.AddTorque(transform.parent.right * -30, ForceMode.Impulse);
+        rb.AddTorque(transform.parent.right * -5, ForceMode.Impulse);
     }
 
     //private void Fire() {
