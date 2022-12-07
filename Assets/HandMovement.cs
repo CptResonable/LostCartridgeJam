@@ -7,6 +7,8 @@ public class HandMovement : MonoBehaviour {
     [SerializeField] private KinematicMeasures kmThis;
     [SerializeField] private float errorAdjustmentCoef;
     [SerializeField] private float velocityChangeCoef;
+    [SerializeField] private Transform tCOM;
+
     public Vector3 velocity;
     public Vector3 targetVelocity;
 
@@ -22,6 +24,7 @@ public class HandMovement : MonoBehaviour {
         rb = GetComponent<Rigidbody>();
         Debug.Log(rb.inertiaTensor);
         //rb.inertiaTensor = Vector3.one;
+        rb.centerOfMass = transform.InverseTransformPoint(tCOM.position);
         rb.centerOfMass = Vector3.zero;
     }
 
@@ -41,15 +44,15 @@ public class HandMovement : MonoBehaviour {
         rb.velocity = velocity;
 
 
-        var deltaRot = kmTarget.transform.rotation * Quaternion.Inverse(transform.rotation);
-        var eulerRot = new Vector3(Mathf.DeltaAngle(0, deltaRot.eulerAngles.x), Mathf.DeltaAngle(0, deltaRot.eulerAngles.y), Mathf.DeltaAngle(0, deltaRot.eulerAngles.z));
-        Vector3 deltaRotation = eulerRot * Mathf.Deg2Rad;
-        angularVelocity = rb.angularVelocity;
+        //var deltaRot = kmTarget.transform.rotation * Quaternion.Inverse(transform.rotation);
+        //var eulerRot = new Vector3(Mathf.DeltaAngle(0, deltaRot.eulerAngles.x), Mathf.DeltaAngle(0, deltaRot.eulerAngles.y), Mathf.DeltaAngle(0, deltaRot.eulerAngles.z));
+        //Vector3 deltaRotation = eulerRot * Mathf.Deg2Rad;
+        //angularVelocity = rb.angularVelocity;
 
-        targetAngularVelocity = kmTarget.angularVelocity + deltaRotation * 60f;
-        angularVelocity = Vector3.Lerp(angularVelocity, targetAngularVelocity, Time.fixedDeltaTime * velocityChangeCoef * 1);
-        rb.angularVelocity = Vector3.Lerp(rb.angularVelocity, angularVelocity, 1);
-        //rb.angularVelocity = angularVelocity;
+        //targetAngularVelocity = kmTarget.angularVelocity + deltaRotation * 60f;
+        //angularVelocity = Vector3.Lerp(angularVelocity, targetAngularVelocity, Time.fixedDeltaTime * velocityChangeCoef * 1);
+        //rb.angularVelocity = Vector3.Lerp(rb.angularVelocity, angularVelocity, 1);
+        ////rb.angularVelocity = angularVelocity;
 
     }
 }

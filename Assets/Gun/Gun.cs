@@ -54,9 +54,10 @@ public class Gun : MonoBehaviour {
 
     private void Fire() {
         Rigidbody rb = transform.parent.GetComponent<Rigidbody>();
-        rb.AddForce(-transform.parent.forward * 4, ForceMode.Impulse);
+        rb.AddForce(-transform.forward * 4, ForceMode.Impulse);
         //rb.AddForce(transform.parent.up * 300);
-        rb.AddTorque(transform.parent.right * -5, ForceMode.Impulse);
+        rb.AddTorque(transform.right * -5, ForceMode.Impulse);
+        //rb.AddTorque(Vector3.ProjectOnPlane(transform.right, Vector3.up).normalized * -5, ForceMode.Impulse);
     }
 
     //private void Fire() {
