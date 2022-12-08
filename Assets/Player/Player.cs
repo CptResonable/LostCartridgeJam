@@ -10,6 +10,7 @@ public class Player : MonoBehaviour {
     public Hand hand;
     public Rigidbody rb;
     public HandMovement handMovement;
+    public Arm arm;
 
     public event Delegates.EmptyDelegate updateEvent;
     public event Delegates.EmptyDelegate fixedUpdateEvent;
@@ -19,8 +20,7 @@ public class Player : MonoBehaviour {
         rb = GetComponent<Rigidbody>();
         fpCamera.Initialize(this);
         playerController.Initialize(this);
-        //head.Initialize(this);
-        //hand.Initialize(this);
+        arm.Initialize(this);
     }
 
     private void Update() {

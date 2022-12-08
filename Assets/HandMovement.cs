@@ -12,11 +12,12 @@ public class HandMovement : MonoBehaviour {
     public Vector3 velocity;
     public Vector3 targetVelocity;
 
-    private Vector3 lastPosition;
-    private Quaternion lastRotation;
-
     public Vector3 angularVelocity;
     public Vector3 targetAngularVelocity;
+
+    public Vector3 rotationOffset;
+
+    public Vector3 targetDeltaPos;
 
     private Rigidbody rb;
 
@@ -25,19 +26,14 @@ public class HandMovement : MonoBehaviour {
         Debug.Log(rb.inertiaTensor);
         //rb.inertiaTensor = Vector3.one;
         rb.centerOfMass = transform.InverseTransformPoint(tCOM.position);
-        rb.centerOfMass = Vector3.zero;
+        //rb.centerOfMass = Vector3.zero;
     }
 
     public void DoUpdate() {
-        Debug.Log(rb.inertiaTensor);
         kmTarget.DoUpdate();
 
-        //Vector3 deltaPosition = VectorUtils.FromToVector(lastPosition, transform.position);
-        //velocity = deltaPosition / Time.fixedDeltaTime;
         velocity = rb.velocity;
-        //lastPosition = transform.position;
-
-        Vector3 targetDeltaPos = VectorUtils.FromToVector(transform.position, kmTarget.transform.position);
+        targetDeltaPos = VectorUtils.FromToVector(transform.position, kmTarget.transform.position);
 
         targetVelocity = kmTarget.velocity + targetDeltaPos * errorAdjustmentCoef;
         velocity = Vector3.Lerp(velocity, targetVelocity, Time.fixedDeltaTime * velocityChangeCoef);
@@ -53,6 +49,5 @@ public class HandMovement : MonoBehaviour {
         //angularVelocity = Vector3.Lerp(angularVelocity, targetAngularVelocity, Time.fixedDeltaTime * velocityChangeCoef * 1);
         //rb.angularVelocity = Vector3.Lerp(rb.angularVelocity, angularVelocity, 1);
         ////rb.angularVelocity = angularVelocity;
-
     }
 }
