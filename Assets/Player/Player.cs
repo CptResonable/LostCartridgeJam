@@ -3,12 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour {
-
-    public Head head;
     public FPCamera fpCamera;
     public UpperBody upperBody;
     public PlayerController playerController;
-    public Hand hand;
     public HandMovement handMovement;
     public Arm arm;
     public Body body;
@@ -32,15 +29,8 @@ public class Player : MonoBehaviour {
     Vector3 localVelocity;
     private void Update() {
 
-        Vector3 preAnimPelvisPos = body.tPelvis.position;
-        localVelocity = Vector3.Lerp(localVelocity, transform.InverseTransformVector(rb.velocity), Time.deltaTime * 4);
-        animator.SetFloat("velForward", localVelocity.z / 6);
-        animator.SetFloat("velSide", localVelocity.x / 6);
-        //animator.SetFloat("velForward", playerController.inputDir.z);
-        //animator.SetFloat("velSide", playerController.inputDir.x);
+        UpdateAnimator();
 
-        animator.Update(Time.deltaTime);
-        body.tPelvis.position = Vector3.Lerp(body.tPelvis.position, new Vector3(preAnimPelvisPos.x, body.tPelvis.position.y, preAnimPelvisPos.z), 0.5f);
         updateEvent?.Invoke();
         fpCamera.SetRotation();
     }
@@ -52,5 +42,14 @@ public class Player : MonoBehaviour {
 
     private void LateUpdate() {
         lateUpdateEvent?.Invoke();
+    }
+
+    private void UpdateAnimator() {
+        Vector3 preAnimPelvisPos = body.tPelvis.position;
+        localVelocity = Vector3.Lerp(localVelocity, transform.InverseTransformVector(rb.velocity), Time.deltaTime * 4);
+        animator.SetFloat("velForward", localVelocity.z / 6);
+        animator.SetFloat("velSide", localVelocity.x / 6);
+        animator.Update(Time.deltaTime);
+        body.tPelvis.position = Vector3.Lerp(body.tPelvis.position, new Vector3(preAnimPelvisPos.x, body.tPelvis.position.y, preAnimPelvisPos.z), 0.5f);
     }
 }
