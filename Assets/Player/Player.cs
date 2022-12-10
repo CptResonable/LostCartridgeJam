@@ -29,13 +29,18 @@ public class Player : MonoBehaviour {
         arm.Initialize(this);
     }
 
+    Vector3 localVelocity;
     private void Update() {
 
         Vector3 preAnimPelvisPos = body.tPelvis.position;
-        animator.SetFloat("velForward", playerController.inputDir.z);
-        animator.SetFloat("velSide", playerController.inputDir.x);
+        localVelocity = Vector3.Lerp(localVelocity, transform.InverseTransformVector(rb.velocity), Time.deltaTime * 4);
+        animator.SetFloat("velForward", localVelocity.z / 6);
+        animator.SetFloat("velSide", localVelocity.x / 6);
+        //animator.SetFloat("velForward", playerController.inputDir.z);
+        //animator.SetFloat("velSide", playerController.inputDir.x);
+
         animator.Update(Time.deltaTime);
-        body.tPelvis.position = Vector3.Lerp(body.tPelvis.position, new Vector3(preAnimPelvisPos.x, body.tPelvis.position.y, preAnimPelvisPos.z), 1f);
+        body.tPelvis.position = Vector3.Lerp(body.tPelvis.position, new Vector3(preAnimPelvisPos.x, body.tPelvis.position.y, preAnimPelvisPos.z), 0.5f);
         updateEvent?.Invoke();
         fpCamera.SetRotation();
     }
