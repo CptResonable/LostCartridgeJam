@@ -34,21 +34,33 @@ public class Gun : MonoBehaviour {
     public event Delegates.EmptyDelegate gunFiredEvent;
     public event Delegates.EmptyDelegate reloadFinishedEvent;
 
-    private void Update() {
-        if (cooldown <= 0) {
-            if (Input.GetKey(KeyCode.Mouse0)) {
-                cooldown = timeBetweenShots;
-                Fire();
-            }
-            else {
-                recoilT -= Time.deltaTime;
-                if (recoilT < 0)
-                    recoilT = 0;
-            }
-        }
-
+    private void LateUpdate() {
         cooldown -= Time.deltaTime;
+
+        recoilT -= Time.deltaTime;
+        if (recoilT < 0)
+            recoilT = 0;
     }
+
+    public void TryFire() {
+        if (cooldown <= 0) {
+            cooldown = timeBetweenShots;
+            Fire();
+        }
+    }
+    //public void TryFire() {
+    //    if (cooldown <= 0) {
+    //        if (Input.GetKey(KeyCode.Mouse0)) {
+    //            cooldown = timeBetweenShots;
+    //            Fire();
+    //        }
+    //        else {
+    //            recoilT -= Time.deltaTime;
+    //            if (recoilT < 0)
+    //                recoilT = 0;
+    //        }
+    //    }
+    //}
 
     private void Fire() {
         Rigidbody rb = transform.parent.GetComponent<Rigidbody>();

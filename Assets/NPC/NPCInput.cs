@@ -18,15 +18,15 @@ public class NPCInput : CharacterInput {
     private void NPC_updateEvent() {
         moveInput = Vector3.zero;
 
-        if (Input.GetKey(KeyCode.W))
-            moveInput.z += 1;
-        if (Input.GetKey(KeyCode.S))
-            moveInput.z -= 1;
-        if (Input.GetKey(KeyCode.A))
-            moveInput.x -= 1;
-        if (Input.GetKey(KeyCode.D))
-            moveInput.x += 1;
+        //if (Input.GetKey(KeyCode.W))
+        //    moveInput.z += 1;
+        //if (Input.GetKey(KeyCode.S))
+        //    moveInput.z -= 1;
+        //if (Input.GetKey(KeyCode.A))
+        //    moveInput.x -= 1;
+        //if (Input.GetKey(KeyCode.D))
+        //    moveInput.x += 1;
 
-        moveInput.Normalize();
+        //moveInput.Normalize();
     }
 }

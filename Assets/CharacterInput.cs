@@ -7,6 +7,8 @@ public class CharacterInput : MonoBehaviour {
     public KeyAction action_moveBackward;
     public KeyAction action_moveLeft;
     public KeyAction action_moveRight;
+    public KeyAction action_jump;
+    public KeyAction action_attack;
 
     protected List<KeyAction> actions = new List<KeyAction>();
 
@@ -18,6 +20,8 @@ public class CharacterInput : MonoBehaviour {
         actions.Add(action_moveBackward);
         actions.Add(action_moveLeft);
         actions.Add(action_moveRight);
+        actions.Add(action_jump);
+        actions.Add(action_attack);
     }
 }
 

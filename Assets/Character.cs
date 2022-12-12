@@ -8,6 +8,7 @@ public class Character : MonoBehaviour {
     public UpperBody upperBody;
     public PlayerController playerController;
     public HandMovement handMovement;
+    public WeaponController weaponController;
     public Arm arm;
     public Body body;
 
@@ -25,6 +26,7 @@ public class Character : MonoBehaviour {
 
         fpCamera.Initialize(this);
         playerController.Initialize(this);
+        weaponController.Init(this);
         upperBody.Init(this);
         arm.Initialize(this);
     }

@@ -3,17 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class HandAnchour : MonoBehaviour {
+    [SerializeField] private Character character;
 
-    [SerializeField] Player player;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        transform.position = player.transform.position - player.handMovement.targetDeltaPos;
+    private void Update() {
+        transform.position = character.transform.position - character.handMovement.targetDeltaPos;
     }
 }

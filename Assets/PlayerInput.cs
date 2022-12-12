@@ -18,13 +18,13 @@ public class PlayerInput : CharacterInput {
     private void Player_updateEvent() {
         moveInput = Vector3.zero;
 
-        if (Input.GetKey(KeyCode.W))
+        if (action_moveForward.isDown)
             moveInput.z += 1;
-        if (Input.GetKey(KeyCode.S))
+        if (action_moveBackward.isDown)
             moveInput.z -= 1;
-        if (Input.GetKey(KeyCode.A))
+        if (action_moveLeft.isDown)
             moveInput.x -= 1;
-        if (Input.GetKey(KeyCode.D))
+        if (action_moveRight.isDown)
             moveInput.x += 1;
 
         moveInput.Normalize();
