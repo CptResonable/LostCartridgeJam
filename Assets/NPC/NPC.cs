@@ -2,17 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NPC : MonoBehaviour
-{
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+public class NPC : Character {
+    protected void Awake() {
+        NPCInput npcInput = GetComponent<NPCInput>();
+        npcInput.Init(this);
+        characterInput = npcInput;
+
+        base.Awake();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    protected void Update() {
+        base.Update();
+    }
+
+    protected void FixedUpdate() {
+        base.FixedUpdate();
+    }
+
+    protected void LateUpdate() {
+        base.LateUpdate();
     }
 }

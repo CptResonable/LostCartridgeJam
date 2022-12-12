@@ -8,20 +8,20 @@ public class FPCamera {
 
     public float yaw, pitch;
 
-    private Player player;
-    public void Initialize(Player player) {
-        this.player = player;
+    private Character character;
+    public void Initialize(Character character) {
+        this.character = character;
 
-        player.updateEvent += player_updateEvent;
-        player.fixedUpdateEvent += Player_fixedUpdateEvent;
+        character.updateEvent += character_updateEvent;
+        character.fixedUpdateEvent += character_fixedUpdateEvent;
     }
 
-    private void Player_fixedUpdateEvent() {
+    private void character_fixedUpdateEvent() {
     }
 
-    public void player_updateEvent() {
-        pitch -= player.characterInput.mouseMovement.yDelta * Settings.MOUSE_SENSITIVITY;
-        yaw += player.characterInput.mouseMovement.xDelta * Settings.MOUSE_SENSITIVITY;
+    public void character_updateEvent() {
+        pitch -= character.characterInput.mouseMovement.yDelta * Settings.MOUSE_SENSITIVITY;
+        yaw += character.characterInput.mouseMovement.xDelta * Settings.MOUSE_SENSITIVITY;
 
         pitch = Mathf.Clamp(pitch, -89, 89);
         tHead.parent.rotation = Quaternion.Euler(pitch, yaw, 0);

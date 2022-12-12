@@ -25,34 +25,19 @@ public class PlayerController {
     private float airTime = 0;
     private bool jumpOnCooldown = false;
 
-    private Player player;
+    private Character character;
 
-    public void Initialize(Player player) {
-        this.player = player;
-        rb = player.GetComponent<Rigidbody>();
-        player.updateEvent += player_updateEvent;
-        player.fixedUpdateEvent += Player_fixedUpdateEvent;
+    public void Initialize(Character character) {
+        this.character = character;
+        rb = character.GetComponent<Rigidbody>();
+        character.updateEvent += character_updateEvent;
+        character.fixedUpdateEvent += Player_fixedUpdateEvent;
     }
 
-    private void player_updateEvent() {
+    private void character_updateEvent() {
         VerticalMovement();
 
-        //inputDir = Vector3.zero;
-        //if (Input.GetKey(KeyCode.W))
-        //    inputDir.z += 1;
-        //if (Input.GetKey(KeyCode.S))
-        //    inputDir.z -= 1;
-        //if (Input.GetKey(KeyCode.A))
-        //    inputDir.x -= 1;
-        //if (Input.GetKey(KeyCode.D))
-        //    inputDir.x += 1;
-
-        //if (inputDir.magnitude > 1)
-        //    inputDir.Normalize();
-
-        inputDirLocal = player.transform.TransformDirection(player.characterInput.moveInput);
-
-        //player.transform.rotation = Quaternion.Euler(0, player.fpCamera.yaw, 0);
+        inputDirLocal = character.transform.TransformDirection(character.characterInput.moveInput);
 
         if (!jumpOnCooldown && isGrounded && Input.GetKeyDown(KeyCode.Space))
             Jump();
@@ -70,14 +55,12 @@ public class PlayerController {
 
 
         HorizontalMovement();
-        //if (!Input.GetKey(KeyCode.LeftShift))
-        player.rb.rotation = Quaternion.Euler(0, player.fpCamera.yaw, 0);
-        //player.transform.rotation = Quaternion.Euler(0, player.head.yaw, 0);
+        character.rb.rotation = Quaternion.Euler(0, character.fpCamera.yaw, 0);
     }
 
     private void VerticalMovement() {
         RaycastHit downHit;
-        if (Physics.Raycast(player.transform.position, Vector3.down, out downHit, 100 )) {
+        if (Physics.Raycast(character.transform.position, Vector3.down, out downHit, 100 )) {
             currentHeight = downHit.distance;
         }
 
@@ -100,7 +83,7 @@ public class PlayerController {
     private void Jump() {
         rb.velocity = new Vector3(rb.velocity.x, jumpVelocity, rb.velocity.z);
         jumpOnCooldown = true;
-        player.StartCoroutine(JumpCorutine());
+        character.StartCoroutine(JumpCorutine());
     }
 
     private IEnumerator JumpCorutine() {

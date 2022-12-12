@@ -7,23 +7,23 @@ public class Arm {
     [SerializeField] private Transform tBase;
     [SerializeField] private Transform tHandTarget;
 
-    private Player player;
+    private Character character;
 
     public Vector3 handRotationOffset;
 
-    public void Initialize(Player player) {
-        this.player = player;
+    public void Initialize(Character character) {
+        this.character = character;
 
-        player.fixedUpdateEvent += Player_fixedUpdateEvent;
+        character.fixedUpdateEvent += Player_fixedUpdateEvent;
     }
 
     private void Player_fixedUpdateEvent() {
-        tBase.position = player.fpCamera.tHead.position;
-        tBase.rotation = Quaternion.Lerp(tBase.rotation, player.fpCamera.tHead.rotation, Time.fixedDeltaTime * 20);
+        tBase.position = character.fpCamera.tHead.position;
+        tBase.rotation = Quaternion.Lerp(tBase.rotation, character.fpCamera.tHead.rotation, Time.fixedDeltaTime * 20);
 
-        handRotationOffset = new Vector3(handRotationOffset.x, handRotationOffset.y, Mathf.Lerp(handRotationOffset.z, -player.playerController.inputDir.x * 25 + player.rb.angularVelocity.y * 200, Time.deltaTime * 8));
+        handRotationOffset = new Vector3(handRotationOffset.x, handRotationOffset.y, Mathf.Lerp(handRotationOffset.z, -character.playerController.inputDir.x * 25 + character.rb.angularVelocity.y * 200, Time.deltaTime * 8));
 
-        tHandTarget.rotation = player.fpCamera.tHead.rotation;
+        tHandTarget.rotation = character.fpCamera.tHead.rotation;
         tHandTarget.Rotate(handRotationOffset);
     }
 }

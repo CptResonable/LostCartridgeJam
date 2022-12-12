@@ -58,8 +58,15 @@ public class MouseMovement {
         player.updateEvent += Player_updateEvent;
     }
 
+    public MouseMovement(NPC npc) {
+        npc.updateEvent += Npc_updateEvent;
+    }
+
     private void Player_updateEvent() {
         xDelta = Input.GetAxis("Mouse X");
         yDelta = Input.GetAxis("Mouse Y");
+    }
+
+    private void Npc_updateEvent() {
     }
 }
