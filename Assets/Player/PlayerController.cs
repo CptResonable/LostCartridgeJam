@@ -37,20 +37,20 @@ public class PlayerController {
     private void player_updateEvent() {
         VerticalMovement();
 
-        inputDir = Vector3.zero;
-        if (Input.GetKey(KeyCode.W))
-            inputDir.z += 1;
-        if (Input.GetKey(KeyCode.S))
-            inputDir.z -= 1;
-        if (Input.GetKey(KeyCode.A))
-            inputDir.x -= 1;
-        if (Input.GetKey(KeyCode.D))
-            inputDir.x += 1;
+        //inputDir = Vector3.zero;
+        //if (Input.GetKey(KeyCode.W))
+        //    inputDir.z += 1;
+        //if (Input.GetKey(KeyCode.S))
+        //    inputDir.z -= 1;
+        //if (Input.GetKey(KeyCode.A))
+        //    inputDir.x -= 1;
+        //if (Input.GetKey(KeyCode.D))
+        //    inputDir.x += 1;
 
-        if (inputDir.magnitude > 1)
-            inputDir.Normalize();
+        //if (inputDir.magnitude > 1)
+        //    inputDir.Normalize();
 
-        inputDirLocal = player.transform.TransformDirection(inputDir);
+        inputDirLocal = player.transform.TransformDirection(player.characterInput.moveInput);
 
         //player.transform.rotation = Quaternion.Euler(0, player.fpCamera.yaw, 0);
 

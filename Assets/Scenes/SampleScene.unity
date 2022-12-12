@@ -4232,6 +4232,7 @@ GameObject:
   - component: {fileID: 5628233934188922874}
   - component: {fileID: 5628233934188922853}
   - component: {fileID: 5628233934188922875}
+  - component: {fileID: 5628233934188922877}
   - component: {fileID: 5628233934188922876}
   m_Layer: 0
   m_Name: Player
@@ -4268,16 +4269,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0717d7910b249da46a0240d4df700d5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  characterInput: {fileID: 0}
   fpCamera:
     tHead: {fileID: 5699871155581429587}
     yaw: 0
     pitch: 0
   playerController:
-    moveSpeed: 6
+    moveSpeed: 5
     moveAcceleration: 10
     bounceUpSpeed: 10
     yVelLerpSpeed: 10
-    jumpVelocity: 6
+    jumpVelocity: 7
     airTimeToGravityScale:
       serializedVersion: 2
       m_Curve:
@@ -4454,6 +4456,31 @@ ConfigurableJoint:
   m_EnablePreprocessing: 1
   m_MassScale: 1
   m_ConnectedMassScale: 1
+--- !u!114 &5628233934188922877
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5628233934188922855}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 121414e76b82eb141821e1cb9185a2ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  action_moveForward:
+    keyCode: 119
+    isDown: 0
+  action_moveBackward:
+    keyCode: 115
+    isDown: 0
+  action_moveLeft:
+    keyCode: 97
+    isDown: 0
+  action_moveRight:
+    keyCode: 100
+    isDown: 0
+  moveInput: {x: 0, y: 0, z: 0}
 --- !u!4 &5628233934453417288
 Transform:
   m_ObjectHideFlags: 0

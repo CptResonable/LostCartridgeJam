@@ -3,11 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class CharacterInput : MonoBehaviour {
-    public MouseMovement mouseMovement;
+    public KeyAction action_moveForward;
+    public KeyAction action_moveBackward;
+    public KeyAction action_moveLeft;
+    public KeyAction action_moveRight;
 
-    public class MouseMovement {
-        public float x, y;
-        public float xDelta, yDelta;
+    protected List<KeyAction> actions = new List<KeyAction>();
+
+    public MouseMovement mouseMovement;
+    public Vector3 moveInput;
+
+    public void Init() {
+        actions.Add(action_moveForward);
+        actions.Add(action_moveBackward);
+        actions.Add(action_moveLeft);
+        actions.Add(action_moveRight);
     }
 }
 
@@ -22,14 +32,14 @@ public class KeyAction {
         player.updateEvent += Player_updateEvent;
     }
 
-    public void InitNPC(Player player) {
+    public void InitNPC() {
 
     }
 
     private void Player_updateEvent() {
 
         if (Input.GetKeyDown(keyCode)) {
-            isDown = false;
+            isDown = true;
             keyDownEvent?.Invoke();
         }
 
@@ -37,5 +47,19 @@ public class KeyAction {
             isDown = false;
             keyUpEvent?.Invoke();
         }
+    }
+}
+
+public class MouseMovement {
+    public float x, y;
+    public float xDelta, yDelta;
+
+    public MouseMovement(Player player) {
+        player.updateEvent += Player_updateEvent;
+    }
+
+    private void Player_updateEvent() {
+        xDelta = Input.GetAxis("Mouse X");
+        yDelta = Input.GetAxis("Mouse Y");
     }
 }

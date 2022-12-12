@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour {
+    public PlayerInput characterInput;
     public FPCamera fpCamera;
     public UpperBody upperBody;
     public PlayerController playerController;
@@ -20,6 +21,9 @@ public class Player : MonoBehaviour {
     private Vector3 localVelocity;
 
     private void Awake() {
+        characterInput = GetComponent<PlayerInput>();
+        characterInput.Init(this);
+
         rb = GetComponent<Rigidbody>();
 
         fpCamera.Initialize(this);

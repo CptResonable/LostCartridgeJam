@@ -20,8 +20,8 @@ public class FPCamera {
     }
 
     public void player_updateEvent() {
-        pitch -= Input.GetAxis("Mouse Y") * Settings.MOUSE_SENSITIVITY;
-        yaw += Input.GetAxis("Mouse X") * Settings.MOUSE_SENSITIVITY;
+        pitch -= player.characterInput.mouseMovement.yDelta * Settings.MOUSE_SENSITIVITY;
+        yaw += player.characterInput.mouseMovement.xDelta * Settings.MOUSE_SENSITIVITY;
 
         pitch = Mathf.Clamp(pitch, -89, 89);
         tHead.parent.rotation = Quaternion.Euler(pitch, yaw, 0);
