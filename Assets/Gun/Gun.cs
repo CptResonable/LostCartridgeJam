@@ -8,6 +8,7 @@ public class Gun : MonoBehaviour {
 
     [SerializeField] private GameObject goSFX_gunShot;
     [SerializeField] private GameObject prefabBullet;
+    [SerializeField] private GameObject prefab_vfxMuzzleFlash;
 
     [SerializeField] private float muzzleVelocity;
 
@@ -51,7 +52,15 @@ public class Gun : MonoBehaviour {
 
     private void Fire() {
         Rigidbody rb = transform.parent.GetComponent<Rigidbody>();
-        rb.AddForce(-transform.forward * 4, ForceMode.Impulse);
-        rb.AddTorque(transform.right * -5, ForceMode.Impulse);
+        rb.AddForce(-transform.forward * 9, ForceMode.Impulse);
+        rb.AddTorque(transform.right * -1.5f, ForceMode.Impulse);
+
+        GameObject goBullet = EZ_Pooling.EZ_PoolManager.Spawn(prefabBullet.transform, tMuzzle.position, tMuzzle.rotation).gameObject;
+        Bullet bullet = goBullet.GetComponent<Bullet>();
+        bullet.Fire(tMuzzle.forward * muzzleVelocity);
+
+        GameObject goMuzzle = EZ_Pooling.EZ_PoolManager.Spawn(prefab_vfxMuzzleFlash.transform, tMuzzle.position, tMuzzle.rotation).gameObject;
+        Vfx_muzzleFlash muzzleFlash = goMuzzle.GetComponent<Vfx_muzzleFlash>();
+        muzzleFlash.Initiate();
     }
 }

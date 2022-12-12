@@ -93,26 +93,9 @@ public class PlayerController {
         }
     }
 
-    float force;
     private void HorizontalMovement() {
         rb.velocity = Vector3.Lerp(rb.velocity, inputDirLocal * moveSpeed + Vector3.up * rb.velocity.y, moveAcceleration * Time.deltaTime);
-
-        if (player.handMovement.targetDeltaPos.magnitude > 0.3f) {
-            Vector3 v = Vector3.Project(rb.velocity, player.handMovement.targetDeltaPos);
-            rb.velocity = Vector3.Lerp(rb.velocity, rb.velocity - v, Time.fixedDeltaTime * 20);
-        }
-
-        //force = Mathf.Lerp(force, handDistanceForceCurve.Evaluate(player.handMovement.targetDeltaPos.magnitude) * -400000, 5 * Time.fixedDeltaTime);
-        //rb.AddForce(player.handMovement.targetDeltaPos.normalized * force * Time.fixedDeltaTime);
-        ////rb.velocity = Vector3.Lerp(rb.velocity, player.handMovement.targetDeltaPos.normalized, -player.handMovement.targetDeltaPos.sqrMagnitude * 10 * Time.deltaTime);
     }
-    //private void HorizontalMovement() {
-    //    rb.velocity = Vector3.Lerp(rb.velocity, inputDirLocal * moveSpeed + Vector3.up * rb.velocity.y, moveAcceleration * Time.deltaTime);
-    //    //rb.AddForce(player.handMovement.targetDeltaPos * -900000 * Time.fixedDeltaTime);
-    //    force = Mathf.Lerp(force, handDistanceForceCurve.Evaluate(player.handMovement.targetDeltaPos.magnitude) * -400000, 5 * Time.fixedDeltaTime);
-    //    rb.AddForce(player.handMovement.targetDeltaPos.normalized * force * Time.fixedDeltaTime);
-    //    //rb.velocity = Vector3.Lerp(rb.velocity, player.handMovement.targetDeltaPos.normalized, -player.handMovement.targetDeltaPos.sqrMagnitude * 10 * Time.deltaTime);
-    //}
 
     private void Jump() {
         rb.velocity = new Vector3(rb.velocity.x, jumpVelocity, rb.velocity.z);

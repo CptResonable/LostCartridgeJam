@@ -17,6 +17,8 @@ public class Player : MonoBehaviour {
     public event Delegates.EmptyDelegate fixedUpdateEvent;
     public event Delegates.EmptyDelegate lateUpdateEvent;
 
+    private Vector3 localVelocity;
+
     private void Awake() {
         rb = GetComponent<Rigidbody>();
 
@@ -26,7 +28,6 @@ public class Player : MonoBehaviour {
         arm.Initialize(this);
     }
 
-    Vector3 localVelocity;
     private void Update() {
 
         UpdateAnimator();
