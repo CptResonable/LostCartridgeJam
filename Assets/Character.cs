@@ -10,6 +10,7 @@ public class Character : MonoBehaviour {
     public HandMovement handMovement;
     public WeaponController weaponController;
     public Arm arm;
+    public Health health;
     public Body body;
 
     public Rigidbody rb;
@@ -29,6 +30,7 @@ public class Character : MonoBehaviour {
         weaponController.Init(this);
         upperBody.Init(this);
         arm.Initialize(this);
+        health.Init(this);
     }
 
     protected void Update() {

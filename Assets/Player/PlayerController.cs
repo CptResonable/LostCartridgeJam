@@ -15,6 +15,9 @@ public class PlayerController {
     [SerializeField] private AnimationCurve handDistanceForceCurve;
 
     [SerializeField] private float targetHeight = 0.8f;
+
+    [SerializeField] private LayerMask layerMask;
+
     private float currentHeight = 1;
 
     private Vector3 inputDirLocal;
@@ -62,7 +65,7 @@ public class PlayerController {
 
     private void VerticalMovement() {
         RaycastHit downHit;
-        if (Physics.Raycast(character.transform.position, Vector3.down, out downHit, 100 )) {
+        if (Physics.Raycast(character.transform.position, Vector3.down, out downHit, 100, layerMask)) {
             currentHeight = downHit.distance;
         }
 
