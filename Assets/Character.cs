@@ -16,6 +16,9 @@ public class Character : MonoBehaviour {
     public Rigidbody rb;
     public Animator animator;
 
+    public GameObject goAliveModel;
+    public GameObject goDeadModel;
+
     public event Delegates.EmptyDelegate updateEvent;
     public event Delegates.EmptyDelegate fixedUpdateEvent;
     public event Delegates.EmptyDelegate lateUpdateEvent;
@@ -31,6 +34,9 @@ public class Character : MonoBehaviour {
         upperBody.Init(this);
         arm.Initialize(this);
         health.Init(this);
+        body.Init(this);
+
+        health.diedEvent += Health_diedEvent;
     }
 
     protected void Update() {
@@ -48,6 +54,12 @@ public class Character : MonoBehaviour {
 
     protected void LateUpdate() {
         lateUpdateEvent?.Invoke();
+    }
+
+    private void Health_diedEvent() {
+        goAliveModel.SetActive(false);
+        body.Ragdollify();
+        goDeadModel.SetActive(true);
     }
 
     private void UpdateAnimator() {
