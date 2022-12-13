@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class NPCInput : CharacterInput {
+    private NPCLogic npcLogic;
+
     public void Init(NPC npc) {
         base.Init();
 
@@ -12,12 +14,15 @@ public class NPCInput : CharacterInput {
             action.InitNPC();
         }
 
+        npcLogic = npc.GetComponent<NPCLogic>();
+
         npc.updateEvent += NPC_updateEvent;
     }
 
     private void NPC_updateEvent() {
         moveInput = Vector3.zero;
 
+        npcLogic.UpdateInput(this);
         //if (Input.GetKey(KeyCode.W))
         //    moveInput.z += 1;
         //if (Input.GetKey(KeyCode.S))
