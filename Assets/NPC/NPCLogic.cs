@@ -3,7 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class NPCLogic : MonoBehaviour {
-    private Character character;
+    protected NPC character;
+
+    protected virtual void Awake() {    
+        character = GetComponent<NPC>();
+    }
 
     public virtual void UpdateInput(CharacterInput input) {
     }

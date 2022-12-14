@@ -18,6 +18,7 @@ public class Character : MonoBehaviour {
 
     public GameObject goAliveModel;
     public GameObject goDeadModel;
+    public CapsuleCollider capColider;
 
     public event Delegates.EmptyDelegate updateEvent;
     public event Delegates.EmptyDelegate fixedUpdateEvent;
@@ -27,6 +28,7 @@ public class Character : MonoBehaviour {
 
     protected void Awake() {
         rb = GetComponent<Rigidbody>();
+        capColider = GetComponent<CapsuleCollider>();
 
         fpCamera.Initialize(this);
         playerController.Initialize(this);
@@ -40,6 +42,8 @@ public class Character : MonoBehaviour {
     }
 
     protected void Update() {
+        if (!health.isAlive)
+            return;
 
         UpdateAnimator();
 
@@ -48,15 +52,23 @@ public class Character : MonoBehaviour {
     }
 
     protected void FixedUpdate() {
+        if (!health.isAlive)
+            return;
+
         fixedUpdateEvent?.Invoke();
         handMovement.DoUpdate();
     }
 
     protected void LateUpdate() {
+        if (!health.isAlive)
+            return;
+
         lateUpdateEvent?.Invoke();
     }
 
     private void Health_diedEvent() {
+        capColider.enabled = false;
+        rb.isKinematic = true;
         goAliveModel.SetActive(false);
         body.Ragdollify();
         goDeadModel.SetActive(true);

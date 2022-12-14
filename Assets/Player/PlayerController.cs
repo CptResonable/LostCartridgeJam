@@ -29,6 +29,10 @@ public class PlayerController {
 
     private Character character;
 
+    // Dash 
+    private bool isDashing;
+    private Vector3 dashVector;
+
     public void Initialize(Character character) {
         this.character = character;
         rb = character.GetComponent<Rigidbody>();
@@ -82,7 +86,11 @@ public class PlayerController {
     }
 
     private void HorizontalMovement() {
-        rb.velocity = Vector3.Lerp(rb.velocity, inputDirLocal * moveSpeed + Vector3.up * rb.velocity.y, moveAcceleration * Time.deltaTime);
+
+        if (isDashing)
+            rb.velocity = Vector3.Lerp(rb.velocity, dashVector * moveSpeed + Vector3.up * rb.velocity.y, moveAcceleration * Time.deltaTime);
+        else
+            rb.velocity = Vector3.Lerp(rb.velocity, inputDirLocal * moveSpeed + Vector3.up * rb.velocity.y, moveAcceleration * Time.deltaTime);
     }
 
     private void Jump() {
@@ -94,5 +102,24 @@ public class PlayerController {
     private IEnumerator JumpCorutine() {
         yield return new WaitForSeconds(0.3f);
         jumpOnCooldown = false;
+    }
+
+    public void Dash(float time, Vector3 dashVector) {
+        this.dashVector = dashVector;
+        character.StartCoroutine(DashCorutine(time));
+    }
+
+    private IEnumerator DashCorutine(float time) {
+        float defaultMoveSpeed = moveSpeed;
+        float defaultAcceleration = moveAcceleration;
+        isDashing = true;
+
+        moveSpeed *= 3;
+        moveAcceleration *= 2;
+        yield return new WaitForSeconds(time);
+
+        moveAcceleration = defaultAcceleration;
+        moveSpeed = defaultMoveSpeed;
+        isDashing = false;
     }
 }

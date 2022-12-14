@@ -4,13 +4,15 @@ using UnityEngine;
 
 [System.Serializable]
 public class Health {
-    [SerializeField] private float maxHP;
+    [SerializeField] public float maxHP;
     [SerializeField] private DamageReceiver[] damageReceivers;
 
     public float HP;
+    public bool isAlive = true;
 
     private Character character;
 
+    public event Delegates.FloatDelegate damageTakenEvent;
     public event Delegates.EmptyDelegate diedEvent;
 
     public void Init(Character character) {
@@ -26,8 +28,7 @@ public class Health {
 
     private void DamageReceiver_damageReceivedEvent(float damage) {
         HP -= damage;
-
-        Debug.Log("HEACÖTJ DAMAGE RECIEVED!: " + damage);
+        damageTakenEvent?.Invoke(damage);
 
         if (HP < 0) {
             HP = 0;
@@ -36,6 +37,7 @@ public class Health {
     }
 
     public void Die() {
+        isAlive = false;
         diedEvent?.Invoke();
     }
 }
