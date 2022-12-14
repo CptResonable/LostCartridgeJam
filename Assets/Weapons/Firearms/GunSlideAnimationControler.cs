@@ -15,7 +15,7 @@ public class GunSlideAnimationControler : MonoBehaviour {
         gun.reloadFinishedEvent += Gun_reloadCompletedEvent;
     }
 
-    private void Gun_gunFiredEvent() {
+    private void Gun_gunFiredEvent(Vector3 rotationalRecoil, Vector3 translationalRecoil) {
         SlideBlowback();
     }
 

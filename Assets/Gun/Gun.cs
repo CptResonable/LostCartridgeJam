@@ -31,7 +31,8 @@ public class Gun : MonoBehaviour {
 
     public bool hasSlideStop = true;
 
-    public event Delegates.EmptyDelegate gunFiredEvent;
+    public delegate void GunFiredDelegate(Vector3 rotationalRecoil, Vector3 translationalRecoil);
+    public event GunFiredDelegate gunFiredEvent;
     public event Delegates.EmptyDelegate reloadFinishedEvent;
 
     private void LateUpdate() {
@@ -73,6 +74,6 @@ public class Gun : MonoBehaviour {
 
         GameObject goMuzzle = EZ_Pooling.EZ_PoolManager.Spawn(prefab_vfxMuzzleFlash.transform, tMuzzle.position, tMuzzle.rotation).gameObject;
         Vfx_muzzleFlash muzzleFlash = goMuzzle.GetComponent<Vfx_muzzleFlash>();
-        muzzleFlash.Initiate();
+        muzzleFlash.Initiate(tMuzzle);
     }
 }

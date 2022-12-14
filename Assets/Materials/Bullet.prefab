@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 962106130471605484}
   - component: {fileID: 658237997999191081}
   - component: {fileID: -7347959104772917827}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Bullet
   m_TagString: Bullet
   m_Icon: {fileID: 0}
@@ -129,7 +129,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93599f26138d600478aee43cb9bf1c3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 243
   rb: {fileID: 190644715523745550}
+  prefab_vfxDirtKickup: {fileID: 638455987314716288, guid: ac017b1e7d5ac9d408dfbc0204869dac,
+    type: 3}
 --- !u!114 &658237997999191081
 MonoBehaviour:
   m_ObjectHideFlags: 0

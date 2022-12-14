@@ -18,7 +18,7 @@ public class VFX : MonoBehaviour {
         time += Time.deltaTime;
     }
 
-    public virtual void Initiate() {
+    public virtual void Initiate(Transform origin) {
         time = 0;
 
         despawner.DelayedDespawn(lifetime);
