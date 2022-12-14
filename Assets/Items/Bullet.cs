@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour {
     [SerializeField] private LayerMask layerMask;
+    [SerializeField] private LayerMask fleshLayerMask;
     public Rigidbody rb;
 
     private Vector3 lastPosition;
@@ -12,6 +13,7 @@ public class Bullet : MonoBehaviour {
     private bool isActive;
 
     [SerializeField] private GameObject prefab_vfxDirtKickup;
+    [SerializeField] private Color bloodColor;
 
     private void Awake() {
         rb = GetComponent<Rigidbody>();
@@ -35,14 +37,21 @@ public class Bullet : MonoBehaviour {
         RaycastHit hit;
         if (Physics.Linecast(lastPosition, transform.position, out hit, layerMask)) {
 
-            DamageReceiver damageReceiver;
-            if (hit.collider.TryGetComponent<DamageReceiver>(out damageReceiver)) {
-                damageReceiver.ReceiveDamage(22);
+            if (fleshLayerMask.Contains(hit.collider.gameObject.layer)) {
+                GameObject goDirtKickup = EZ_Pooling.EZ_PoolManager.Spawn(prefab_vfxDirtKickup.transform, hit.point, Quaternion.LookRotation(hit.normal)).gameObject;
+                Vfx_dirtKickup dirtKickup = goDirtKickup.GetComponent<Vfx_dirtKickup>();
+                dirtKickup.Initiate(hit.collider.transform, true, bloodColor);
             }
             else {
                 GameObject goDirtKickup = EZ_Pooling.EZ_PoolManager.Spawn(prefab_vfxDirtKickup.transform, hit.point, Quaternion.LookRotation(hit.normal)).gameObject;
                 Vfx_dirtKickup dirtKickup = goDirtKickup.GetComponent<Vfx_dirtKickup>();
-                dirtKickup.Initiate(hit.collider.transform);
+                dirtKickup.Initiate(hit.collider.transform, false, Color.white);
+            }
+
+            DamageReceiver damageReceiver;
+            if (hit.collider.TryGetComponent<DamageReceiver>(out damageReceiver)) {
+                damageReceiver.ReceiveDamage(22);
+
             }
 
             meshRenderer.enabled = false;
