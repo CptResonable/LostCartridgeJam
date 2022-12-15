@@ -12,6 +12,7 @@ public class WeaponController {
 
     public event Delegates.EmptyDelegate adsEnteredEvent;
     public event Delegates.EmptyDelegate adsExitedEvent;
+    public event Delegates.FloatDelegate reloadStartedEvent;
 
     public void Init(Character character) {
         this.character = character;
@@ -20,6 +21,19 @@ public class WeaponController {
 
         character.characterInput.action_ads.keyDownEvent += Action_ads_keyDownEvent;
         character.characterInput.action_ads.keyUpEvent += Action_ads_keyUpEvent;
+
+        character.characterInput.action_reload.keyDownEvent += Action_reload_keyDownEvent;
+
+        equipedGun.reloadStartedEvent += EquipedGun_reloadStartedEvent;
+    }
+
+    private void EquipedGun_reloadStartedEvent(float reloadTime) {
+        reloadStartedEvent?.Invoke(reloadTime);
+    }
+
+    private void Action_reload_keyDownEvent() {
+        Debug.Log("RELOAD!");
+        equipedGun.Reload();
     }
 
     private void Character_updateEvent() {

@@ -3304,7 +3304,9 @@ MonoBehaviour:
   prefabBullet: {fileID: 2770143488651664736, guid: a8b1289ede2bd444ab247980d3778f00,
     type: 3}
   prefab_vfxMuzzleFlash: {fileID: 0}
+  magSize: 0
   muzzleVelocity: 80
+  reloadTime: 0
   recoilCurve:
     serializedVersion: 2
     m_Curve:
@@ -4893,7 +4895,9 @@ MonoBehaviour:
     type: 3}
   prefab_vfxMuzzleFlash: {fileID: 638455987314716288, guid: 78b680f0f37a6d0479d39650b0200b83,
     type: 3}
+  magSize: 30
   muzzleVelocity: 180
+  reloadTime: 1.25
   recoilCurve:
     serializedVersion: 2
     m_Curve:
@@ -5003,7 +5007,7 @@ MonoBehaviour:
   headHorizontalRecoil: 5
   horizontalChangeSpeed: 4
   player: {fileID: 5628233934188922875}
-  bulletsInMagCount: 10
+  bulletsInMagCount: 30
   hasSlideStop: 1
 --- !u!1001 &3107843033057604129
 PrefabInstance:
@@ -5568,6 +5572,9 @@ MonoBehaviour:
     isDown: 0
   action_ads:
     keyCode: 324
+    isDown: 0
+  action_reload:
+    keyCode: 114
     isDown: 0
   moveInput: {x: 0, y: 0, z: 0}
 --- !u!4 &5628233934453417288

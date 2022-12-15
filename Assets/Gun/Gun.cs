@@ -10,7 +10,9 @@ public class Gun : MonoBehaviour {
     [SerializeField] private GameObject prefabBullet;
     [SerializeField] private GameObject prefab_vfxMuzzleFlash;
 
+    [SerializeField] private int magSize;
     [SerializeField] private float muzzleVelocity;
+    [SerializeField] private float reloadTime;
 
     [SerializeField] private AnimationCurve recoilCurve;
     [SerializeField] private AnimationCurve horizontalRecoilCurve;
@@ -30,12 +32,15 @@ public class Gun : MonoBehaviour {
     private float cooldown = 0;
     private float timeSinceLastShot = 0;
 
-    public int bulletsInMagCount = 10;
+    public int bulletsInMagCount = 30;
+    private Coroutine reloadCorutine;
+    public bool isReloading = false;
 
     public bool hasSlideStop = true;
 
     public delegate void GunFiredDelegate(Vector3 rotationalRecoil, Vector3 translationalRecoil);
     public event GunFiredDelegate gunFiredEvent;
+    public event Delegates.FloatDelegate reloadStartedEvent;
     public event Delegates.EmptyDelegate reloadFinishedEvent;
 
     private void LateUpdate() {
@@ -50,15 +55,24 @@ public class Gun : MonoBehaviour {
     }
 
     public void TryFire() {
-        if (cooldown <= 0) {
+        if (cooldown <= 0 && bulletsInMagCount > 0 && !isReloading) {
             cooldown = timeBetweenShots;
             Fire();
         }
     }
 
+    public void Reload() {
+        if (!isReloading)
+            reloadCorutine = StartCoroutine(ReloadCorutine());
+    }
+
+    public void ReloadCanceled() {
+        isReloading = false;
+    }
 
     private void Fire() {
         timeSinceLastShot = 0;
+        bulletsInMagCount--;
 
         Recoil();
 
@@ -92,5 +106,19 @@ public class Gun : MonoBehaviour {
         gunFiredEvent?.Invoke(new Vector3((force * 3) + 2, horizontalForceScale * 5.5f), Vector3.zero);
 
         recoilT += recoilIncreasPerBullet;
+    }
+
+    private IEnumerator ReloadCorutine() {
+        isReloading = true;
+        reloadStartedEvent?.Invoke(reloadTime);
+        float t = 0;
+
+        while (t < 1) {
+            t += Time.deltaTime / reloadTime;
+            yield return new WaitForEndOfFrame();
+        }
+
+        isReloading = false;
+        bulletsInMagCount = magSize;
     }
 }

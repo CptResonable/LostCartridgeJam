@@ -26,6 +26,7 @@ public class Arm {
 
         character.weaponController.adsEnteredEvent += WeaponController_adsEnteredEvent;
         character.weaponController.adsExitedEvent += WeaponController_adsExitedEvent;
+        character.weaponController.reloadStartedEvent += WeaponController_reloadStartedEvent;
     }
 
     private void Player_fixedUpdateEvent() {
@@ -37,6 +38,10 @@ public class Arm {
         tHandTarget.localPosition = Vector3.Lerp(hipHandPosition, adsHandPosition, hipAdsInterpolator.t);
         tHandTarget.rotation = character.fpCamera.tHead.rotation;
         tHandTarget.Rotate(handRotationOffset);
+        if (reloadSpinPitch != 0) {
+            tHandTarget.Rotate(new Vector3(0, 0, -50), Space.Self);
+            tHandTarget.Rotate(new Vector3(-reloadSpinPitch, 0, 0), Space.Self);
+        }
     }
 
     private void WeaponController_adsEnteredEvent() {
@@ -53,4 +58,20 @@ public class Arm {
         interpolationCorutine = character.StartCoroutine(InterpolationUtils.i.SmoothStep(hipAdsInterpolator.t, 0, 4, hipAdsInterpolator));
     }
 
+    private void WeaponController_reloadStartedEvent(float reloadTime) {
+        character.StartCoroutine(ReloadCorutine(reloadTime));
+    }
+
+    private float reloadSpinPitch;
+    private IEnumerator ReloadCorutine(float reloadTime) {
+        float t = 0;
+
+        while (t < 1) {
+            t += Time.deltaTime / reloadTime;
+            reloadSpinPitch = 1440 * t;
+            yield return new WaitForEndOfFrame();
+        }
+
+        reloadSpinPitch = 0;
+    }
 }

@@ -38,7 +38,7 @@ public class FPCamera {
     }
 
     private void EquipedGun_gunFiredEvent(Vector3 rotationalRecoil, Vector3 translationalRecoil) {
-        character.StartCoroutine(ApplyRecoilCorutine(-rotationalRecoil.x, rotationalRecoil.y, 0.2f));
+        character.StartCoroutine(ApplyRecoilCorutine(-rotationalRecoil.x, rotationalRecoil.y, 0.12f));
     }
 
     public void SetRotation() {

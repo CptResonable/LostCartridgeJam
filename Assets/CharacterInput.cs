@@ -10,6 +10,7 @@ public class CharacterInput : MonoBehaviour {
     public KeyAction action_jump;
     public KeyAction action_attack;
     public KeyAction action_ads;
+    public KeyAction action_reload;
 
     protected List<KeyAction> actions = new List<KeyAction>();
 
@@ -24,6 +25,7 @@ public class CharacterInput : MonoBehaviour {
         actions.Add(action_jump);
         actions.Add(action_attack);
         actions.Add(action_ads);
+        actions.Add(action_reload);
     }
 }
 
