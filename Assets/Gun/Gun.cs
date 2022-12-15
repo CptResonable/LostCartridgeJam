@@ -69,5 +69,7 @@ public class Gun : MonoBehaviour {
         GameObject goMuzzle = EZ_Pooling.EZ_PoolManager.Spawn(prefab_vfxMuzzleFlash.transform, tMuzzle.position, tMuzzle.rotation).gameObject;
         Vfx_muzzleFlash muzzleFlash = goMuzzle.GetComponent<Vfx_muzzleFlash>();
         muzzleFlash.Initiate(tMuzzle);
+
+        gunFiredEvent?.Invoke(Vector3.zero, Vector3.zero);
     }
 }

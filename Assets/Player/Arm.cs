@@ -14,7 +14,7 @@ public class Arm {
 
     public Vector3 handRotationOffset;
 
-    private TWrapper hipAdsInterpolator = new TWrapper(0, 1, 0);
+    public TWrapper hipAdsInterpolator = new TWrapper(0, 1, 0);
     private Coroutine interpolationCorutine;
 
     public void Init(Character character) {

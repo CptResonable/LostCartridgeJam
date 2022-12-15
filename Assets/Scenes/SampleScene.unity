@@ -4492,7 +4492,7 @@ Camera:
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
-  m_FOVAxisMode: 1
+  m_FOVAxisMode: 0
   m_SensorSize: {x: 36, y: 24}
   m_LensShift: {x: 0, y: 0}
   m_FocalLength: 50
@@ -5279,6 +5279,30 @@ MonoBehaviour:
     tHead: {fileID: 5699871155581429587}
     yaw: 0
     pitch: 0
+    recoilApplicationCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 5.379924
+        outSlope: 5.379924
+        tangentMode: 0
+        weightedMode: 2
+        inWeight: 0
+        outWeight: 0.31507555
+      - serializedVersion: 3
+        time: 1
+        value: 0.7
+        inSlope: -0.009575423
+        outSlope: -0.009575423
+        tangentMode: 0
+        weightedMode: 1
+        inWeight: 0.20144546
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
   playerController:
     moveSpeed: 5
     moveAcceleration: 10
