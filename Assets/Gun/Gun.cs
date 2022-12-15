@@ -14,6 +14,7 @@ public class Gun : MonoBehaviour {
 
     [SerializeField] private AnimationCurve recoilCurve;
     [SerializeField] private AnimationCurve horizontalRecoilCurve;
+    [SerializeField] private AnimationCurve recoilResetSpeedCurve;
     [SerializeField] private float backRecoil;
     [SerializeField] private float upRecoil;
     [SerializeField] private float horizontalRecoil;
@@ -22,10 +23,12 @@ public class Gun : MonoBehaviour {
     [SerializeField] private float recoilT;
     [SerializeField] private float headUpRecoil;
     [SerializeField] private float headHorizontalRecoil;
+    [SerializeField] private float horizontalChangeSpeed;
 
     [SerializeField] private Player player;
 
     private float cooldown = 0;
+    private float timeSinceLastShot = 0;
 
     public int bulletsInMagCount = 10;
 
@@ -36,9 +39,12 @@ public class Gun : MonoBehaviour {
     public event Delegates.EmptyDelegate reloadFinishedEvent;
 
     private void LateUpdate() {
+
         cooldown -= Time.deltaTime;
 
-        recoilT -= Time.deltaTime;
+        recoilT -= Time.deltaTime * recoilResetSpeedCurve.Evaluate(timeSinceLastShot);
+        timeSinceLastShot += Time.deltaTime;
+
         if (recoilT < 0)
             recoilT = 0;
     }
@@ -52,9 +58,9 @@ public class Gun : MonoBehaviour {
 
 
     private void Fire() {
-        Rigidbody rb = transform.parent.GetComponent<Rigidbody>();
-        rb.AddForce(-transform.forward * 9, ForceMode.Impulse);
-        rb.AddTorque(transform.right * -1.5f, ForceMode.Impulse);
+        timeSinceLastShot = 0;
+
+        Recoil();
 
         GameObject goBullet = EZ_Pooling.EZ_PoolManager.Spawn(prefabBullet.transform, tMuzzle.position, tMuzzle.rotation).gameObject;
         Bullet bullet = goBullet.GetComponent<Bullet>();
@@ -69,7 +75,22 @@ public class Gun : MonoBehaviour {
         GameObject goMuzzle = EZ_Pooling.EZ_PoolManager.Spawn(prefab_vfxMuzzleFlash.transform, tMuzzle.position, tMuzzle.rotation).gameObject;
         Vfx_muzzleFlash muzzleFlash = goMuzzle.GetComponent<Vfx_muzzleFlash>();
         muzzleFlash.Initiate(tMuzzle);
+     
+    }
 
-        gunFiredEvent?.Invoke(Vector3.zero, Vector3.zero);
+    private void Recoil() {
+        Rigidbody rb = transform.parent.GetComponent<Rigidbody>();
+
+        float force = recoilCurve.Evaluate(recoilT);
+        float horizontalForceScale = (Mathf.PerlinNoise(recoilT * horizontalChangeSpeed, 321.43f) - 0.2f) * 2 * horizontalRecoilCurve.Evaluate(recoilT);
+        rb.AddForce(-transform.forward * ((force * 5) + 5) , ForceMode.Impulse);
+        rb.AddForce(transform.right * horizontalForceScale * 5, ForceMode.Impulse);
+        rb.AddTorque(transform.right * -((force * 1.25f) + 0.75f), ForceMode.Impulse);
+        rb.AddTorque(transform.up * horizontalForceScale * 1.25f, ForceMode.Impulse);
+        //rb.AddTorque(transform.up * ((force * 1) + 0.25f) * horizontalForceScale, ForceMode.Impulse);
+
+        gunFiredEvent?.Invoke(new Vector3((force * 3) + 2, horizontalForceScale * 5.5f), Vector3.zero);
+
+        recoilT += recoilIncreasPerBullet;
     }
 }
