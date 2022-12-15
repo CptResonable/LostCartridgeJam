@@ -6,7 +6,7 @@ public class Gun : MonoBehaviour {
     [SerializeField] private float timeBetweenShots;
     [SerializeField] private Transform tMuzzle;
 
-    [SerializeField] private GameObject goSFX_gunShot;
+    [SerializeField] private GameObject prefabSFX;
     [SerializeField] private GameObject prefabBullet;
     [SerializeField] private GameObject prefab_vfxMuzzleFlash;
 
@@ -49,19 +49,7 @@ public class Gun : MonoBehaviour {
             Fire();
         }
     }
-    //public void TryFire() {
-    //    if (cooldown <= 0) {
-    //        if (Input.GetKey(KeyCode.Mouse0)) {
-    //            cooldown = timeBetweenShots;
-    //            Fire();
-    //        }
-    //        else {
-    //            recoilT -= Time.deltaTime;
-    //            if (recoilT < 0)
-    //                recoilT = 0;
-    //        }
-    //    }
-    //}
+
 
     private void Fire() {
         Rigidbody rb = transform.parent.GetComponent<Rigidbody>();
@@ -72,6 +60,12 @@ public class Gun : MonoBehaviour {
         Bullet bullet = goBullet.GetComponent<Bullet>();
         bullet.Fire(tMuzzle.forward * muzzleVelocity);
 
+        // SFX
+        GameObject goSFX = EZ_Pooling.EZ_PoolManager.Spawn(prefabSFX.transform, tMuzzle.position, tMuzzle.rotation).gameObject;
+        SFX sfx = goSFX.GetComponent<SFX>();
+        sfx.Play();
+
+        // VFX
         GameObject goMuzzle = EZ_Pooling.EZ_PoolManager.Spawn(prefab_vfxMuzzleFlash.transform, tMuzzle.position, tMuzzle.rotation).gameObject;
         Vfx_muzzleFlash muzzleFlash = goMuzzle.GetComponent<Vfx_muzzleFlash>();
         muzzleFlash.Initiate(tMuzzle);

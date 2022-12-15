@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Character : MonoBehaviour {
+    public bool isPlayer;
     public CharacterInput characterInput;
     public FPCamera fpCamera;
     public UpperBody upperBody;
@@ -34,7 +35,7 @@ public class Character : MonoBehaviour {
         playerController.Initialize(this);
         weaponController.Init(this);
         upperBody.Init(this);
-        arm.Initialize(this);
+        arm.Init(this);
         health.Init(this);
         body.Init(this);
 
