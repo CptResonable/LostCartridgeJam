@@ -308,7 +308,7 @@ PrefabInstance:
     - target: {fileID: 3107843032187100667, guid: 8a9d139b447860a43a4b2f9104ca9c20,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5241182617990415360, guid: 8a9d139b447860a43a4b2f9104ca9c20,
         type: 3}
@@ -2572,7 +2572,7 @@ PrefabInstance:
     - target: {fileID: 3107843032187100667, guid: 8a9d139b447860a43a4b2f9104ca9c20,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5241182617990415360, guid: 8a9d139b447860a43a4b2f9104ca9c20,
         type: 3}
@@ -2653,7 +2653,7 @@ PrefabInstance:
     - target: {fileID: 3107843032187100667, guid: 8a9d139b447860a43a4b2f9104ca9c20,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5241182617990415360, guid: 8a9d139b447860a43a4b2f9104ca9c20,
         type: 3}
@@ -3408,6 +3408,7 @@ MonoBehaviour:
   horizontalChangeSpeed: 0
   player: {fileID: 5628233934188922875}
   bulletsInMagCount: 10
+  isReloading: 0
   hasSlideStop: 1
 --- !u!1 &1271808246
 GameObject:
@@ -3859,7 +3860,7 @@ PrefabInstance:
     - target: {fileID: 3107843032187100667, guid: 8a9d139b447860a43a4b2f9104ca9c20,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5241182617990415360, guid: 8a9d139b447860a43a4b2f9104ca9c20,
         type: 3}
@@ -4387,7 +4388,7 @@ PrefabInstance:
     - target: {fileID: 3107843032187100667, guid: 8a9d139b447860a43a4b2f9104ca9c20,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5241182617990415360, guid: 8a9d139b447860a43a4b2f9104ca9c20,
         type: 3}
@@ -5008,6 +5009,7 @@ MonoBehaviour:
   horizontalChangeSpeed: 4
   player: {fileID: 5628233934188922875}
   bulletsInMagCount: 30
+  isReloading: 0
   hasSlideStop: 1
 --- !u!1001 &3107843033057604129
 PrefabInstance:

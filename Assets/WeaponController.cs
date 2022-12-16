@@ -24,7 +24,8 @@ public class WeaponController {
 
         character.characterInput.action_reload.keyDownEvent += Action_reload_keyDownEvent;
 
-        equipedGun.reloadStartedEvent += EquipedGun_reloadStartedEvent;
+        if (equipedGun != null)
+            equipedGun.reloadStartedEvent += EquipedGun_reloadStartedEvent;
     }
 
     private void EquipedGun_reloadStartedEvent(float reloadTime) {
