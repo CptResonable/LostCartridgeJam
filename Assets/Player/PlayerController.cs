@@ -18,6 +18,8 @@ public class PlayerController {
 
     [SerializeField] private LayerMask layerMask;
 
+    [SerializeField] private WallDetector wallDetector;
+
     private float currentHeight = 1;
 
     private Vector3 inputDirLocal;
@@ -50,11 +52,23 @@ public class PlayerController {
     private void Character_fixedUpdateEvent() {
         if (isGrounded)
             airTime = 0;
-        else
+        else 
             airTime += Time.deltaTime;
-
+            
         if (!isGrounded) {
+
+            if (wallDetector != null) {
+                if (!wallDetector.wallDetected)
+                    rb.AddForce(Vector3.down * 9.81f, ForceMode.Acceleration);
+            }
+            else {
+                rb.AddForce(Vector3.down * 9.81f, ForceMode.Acceleration);
+            }
+
             rb.AddForce(Vector3.down * 9.81f * airTimeToGravityScale.Evaluate(airTime), ForceMode.Acceleration);
+        }
+        else {
+            rb.AddForce(Vector3.down * 9.81f, ForceMode.Acceleration);
         }
 
 

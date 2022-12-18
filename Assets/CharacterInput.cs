@@ -44,6 +44,12 @@ public class KeyAction {
 
     }
 
+    public void Click() {
+        if (!isDown) {
+            keyDownEvent?.Invoke();
+        }
+    }
+
     private void Player_updateEvent() {
 
         if (Input.GetKeyDown(keyCode)) {

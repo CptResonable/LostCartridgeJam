@@ -30,6 +30,7 @@ public class HandMovement : MonoBehaviour {
     }
 
     public void DoUpdate() {
+        rb = GetComponent<Rigidbody>();
         kmTarget.DoUpdate();
 
         velocity = rb.velocity;
