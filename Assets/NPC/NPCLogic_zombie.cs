@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class NPCLogic_zombie : NPCLogic {
-    [SerializeField] private Character target;
     [SerializeField] private float perlinScale;
 
     private Vector3 toTargetVector;

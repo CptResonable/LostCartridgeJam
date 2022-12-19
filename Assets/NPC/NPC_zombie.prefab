@@ -330,7 +330,7 @@ Transform:
   - {fileID: 3107843031936582101}
   - {fileID: 3107843033243343421}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3107843032999442346
 GameObject:
@@ -564,7 +564,7 @@ ConfigurableJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0.01699999, y: -0.12600008, z: 0.138}
+  m_ConnectedAnchor: {x: 0.017000005, y: -0.12600008, z: 0.13800006}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 1, z: 0}
   m_XMotion: 2
@@ -1007,11 +1007,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47c4b607a49fa80429aa4a2e3022e278, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isPlayer: 0
   characterInput: {fileID: 0}
   fpCamera:
     tHead: {fileID: 3107843031994062702}
     yaw: 0
     pitch: 0
+    recoilApplicationCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
   playerController:
     moveSpeed: 3
     moveAcceleration: 10
@@ -1088,12 +1095,16 @@ MonoBehaviour:
     layerMask:
       serializedVersion: 2
       m_Bits: 119
+    wallDetector: {fileID: 0}
   handMovement: {fileID: 3107843033243343420}
   weaponController:
     equipedGun: {fileID: 0}
+    isADS: 0
   arm:
     tBase: {fileID: 3107843031936582101}
     tHandTarget: {fileID: 3107843033127412302}
+    hipHandPosition: {x: 0, y: 0, z: 0}
+    adsHandPosition: {x: 0, y: 0, z: 0}
     handRotationOffset: {x: 0, y: 0, z: 0}
   health:
     maxHP: 100
@@ -1267,6 +1278,12 @@ MonoBehaviour:
     keyCode: 0
     isDown: 0
   action_attack:
+    keyCode: 0
+    isDown: 0
+  action_ads:
+    keyCode: 0
+    isDown: 0
+  action_reload:
     keyCode: 0
     isDown: 0
   moveInput: {x: 0, y: 0, z: 0}

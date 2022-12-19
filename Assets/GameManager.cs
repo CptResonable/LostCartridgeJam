@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 using TMPro;
 
 public class GameManager : MonoBehaviour {
+    [SerializeField] private EnemySpawnManager enemySpawnManager;
+
     [SerializeField] private GameObject goStartPanel;
     [SerializeField] private GameObject goControlsPanel;
     [SerializeField] private GameObject goPausePanel;
@@ -30,6 +32,8 @@ public class GameManager : MonoBehaviour {
         sensSlider.value = Settings.MOUSE_SENSITIVITY;
         txtSens.text = "Mouse sensitivity: " + Settings.MOUSE_SENSITIVITY.ToString("0.0");
         Time.timeScale = 0;
+
+        enemySpawnManager.SpawnWave(5, 5, 15);
     }
 
     private void Start() {

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class NPCLogic_assault : NPCLogic {
-    [SerializeField] private Character target;
     [SerializeField] private float perlinScale;
     [SerializeField] private LayerMask losCheckLayerMask;
 
