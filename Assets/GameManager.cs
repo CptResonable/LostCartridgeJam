@@ -3,10 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class GameManager : MonoBehaviour {
     [SerializeField] private GameObject goPausePanel;
     [SerializeField] private GameObject goGameOverPanel;
+
+    [SerializeField] private TMP_Text txtSens;
+    [SerializeField] private Slider sensSlider;
 
     public Player player;
 
@@ -21,6 +25,9 @@ public class GameManager : MonoBehaviour {
         Cursor.lockState = CursorLockMode.Locked;
 
         player.health.diedEvent += Health_diedEvent;
+
+        sensSlider.value = Settings.MOUSE_SENSITIVITY;
+        txtSens.text = "Mouse sensitivity: " + Settings.MOUSE_SENSITIVITY.ToString("0.0");
     }
 
     private void Start() {
@@ -42,6 +49,7 @@ public class GameManager : MonoBehaviour {
             }
         }
     }
+
     private void Health_diedEvent() {
         gameState = GameState.GameOver;
         Cursor.lockState = CursorLockMode.None;
@@ -62,7 +70,11 @@ public class GameManager : MonoBehaviour {
     }
 
     public void OnBtn_Restart() {
-        Debug.Log("Restart");
         SceneManager.LoadScene("SampleScene");
+    }
+
+    public void OnSensChange() {
+        Settings.MOUSE_SENSITIVITY = sensSlider.value;
+        txtSens.text = "Mouse sensitivity: " + Settings.MOUSE_SENSITIVITY.ToString("0.0");
     }
 }
