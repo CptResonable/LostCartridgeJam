@@ -80,7 +80,6 @@ public class NPCLogic_assault : NPCLogic {
         //Debug.DrawRay(input.transform.position, toTargetVector, Color.red);
         //Debug.DrawRay(input.transform.position, -character.fpCamera.pitch, Color.blue);
         dAnglePitch = Vector3.Angle(character.body.tHead.forward, toTargetVector);
-        Debug.Log("dAnglePitch: " + dAnglePitch);
         input.mouseMovement.yDelta = character.fpCamera.pitch / Settings.MOUSE_SENSITIVITY;
     }
 

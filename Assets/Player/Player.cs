@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class Player : Character {
     [SerializeField] private DamageEffectController damageEffectController;
+    [SerializeField] private Camera deathCamera;
 
     protected void Awake() {
         PlayerInput playerInput = GetComponent<PlayerInput>();
         playerInput.Init(this);
         characterInput = playerInput;
         damageEffectController.Init(this);
+        health.diedEvent += Health_diedEvent;
 
         base.Awake();
     }
@@ -24,5 +26,9 @@ public class Player : Character {
 
     protected void LateUpdate() {
         base.LateUpdate();
+    }
+
+    private void Health_diedEvent() {
+        deathCamera.gameObject.SetActive(true);
     }
 }
