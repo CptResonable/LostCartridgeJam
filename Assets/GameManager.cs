@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 using TMPro;
 
 public class GameManager : MonoBehaviour {
+    [SerializeField] private GameObject goStartPanel;
+    [SerializeField] private GameObject goControlsPanel;
     [SerializeField] private GameObject goPausePanel;
     [SerializeField] private GameObject goGameOverPanel;
 
@@ -21,13 +23,13 @@ public class GameManager : MonoBehaviour {
 
     private void Awake() {
         i = this;
-        gameState = GameState.Playing;
-        Cursor.lockState = CursorLockMode.Locked;
-
+        gameState = GameState.Menu;
+  
         player.health.diedEvent += Health_diedEvent;
 
         sensSlider.value = Settings.MOUSE_SENSITIVITY;
         txtSens.text = "Mouse sensitivity: " + Settings.MOUSE_SENSITIVITY.ToString("0.0");
+        Time.timeScale = 0;
     }
 
     private void Start() {
@@ -53,25 +55,43 @@ public class GameManager : MonoBehaviour {
     private void Health_diedEvent() {
         gameState = GameState.GameOver;
         Cursor.lockState = CursorLockMode.None;
+        goControlsPanel.SetActive(true);
         goGameOverPanel.SetActive(true);
     }
 
 
     private void PauseGame() {
         gameState = GameState.Paused;
+        Cursor.lockState = CursorLockMode.None;
         goPausePanel.SetActive(true);
+        goControlsPanel.SetActive(true);
         Time.timeScale = 0;
     }
 
     private void UnpauseGame() {
         gameState = GameState.Playing;
+        Cursor.lockState = CursorLockMode.Locked;
         goPausePanel.SetActive(false);
+        goControlsPanel.SetActive(false);
         Time.timeScale = 1;
+    }
+
+    public void OnBtn_Start() {
+        gameState = GameState.Playing;
+        Cursor.lockState = CursorLockMode.Locked;
+        goControlsPanel.SetActive(false);
+        goStartPanel.SetActive(false);
+        Time.timeScale = 1;
+    }
+
+    public void OnBtn_Continue() {
+        UnpauseGame();
     }
 
     public void OnBtn_Restart() {
         SceneManager.LoadScene("SampleScene");
     }
+
 
     public void OnSensChange() {
         Settings.MOUSE_SENSITIVITY = sensSlider.value;
