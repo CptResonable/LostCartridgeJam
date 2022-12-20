@@ -44,14 +44,14 @@ public class NPCLogic_assault : NPCLogic {
 
     private void Shooting() {
 
-        //RaycastHit lineHit;
-        if (!Physics.Linecast(character.transform.position + Vector3.up, target.transform.position + Vector3.up, losCheckLayerMask) && !burstOnCooldown) {
-            StartCoroutine(BurstCorutine());
-            //input.action_attack.isDown = true;
-        }
-        else {
-            //input.action_attack.isDown = false;
-        }
+        ////RaycastHit lineHit;
+        //if (!Physics.Linecast(character.transform.position + Vector3.up, target.transform.position + Vector3.up, losCheckLayerMask) && !burstOnCooldown) {
+        //    StartCoroutine(BurstCorutine());
+        //    //input.action_attack.isDown = true;
+        //}
+        //else {
+        //    //input.action_attack.isDown = false;
+        //}
     }
 
     private IEnumerator BurstCorutine() {
@@ -85,13 +85,35 @@ public class NPCLogic_assault : NPCLogic {
     private void Translation(CharacterInput input) {
 
         float timeSample = Time.time * perlinScale;
+        Vector3 randomDirTarget = Vector3.zero;
+        randomDirTarget.x = Mathf.PerlinNoise(timeSample + perlinOffset - 230, timeSample + perlinOffset + 1330) - 0.5f;
+        randomDirTarget.z = Mathf.PerlinNoise(timeSample + perlinOffset + 4330, timeSample + perlinOffset - 6130) - 0.5f;
+        randomDirTarget.Normalize();
+
+        float timeSample2 = Time.time * perlinScale * 0.2f;
+        float targetDistance = Mathf.PerlinNoise(timeSample + perlinOffset - 4230, timeSample + perlinOffset + 330) * (10 + 5);
+
+        navMeshAgent.transform.position = transform.position;
+        navMeshAgent.SetDestination(target.transform.position + randomDirTarget * targetDistance);
+
         Vector3 randomDir = Vector3.zero;
         randomDir.x = Mathf.PerlinNoise(timeSample + perlinOffset - 830, timeSample + perlinOffset + 32130) - 0.5f;
         randomDir.z = Mathf.PerlinNoise(timeSample + perlinOffset + 230, timeSample + perlinOffset - 62130) - 0.5f;
         randomDir.Normalize();
 
+        //RaycastHit randomHit;
+        if (Physics.Raycast(transform.position, randomDir, 1, environmentLayerMask))
+            perlinOffset += Random.Range(-40, 40);
+
         randomDir = transform.InverseTransformVector(randomDir);
-        Vector3 moveDir = Vector3.Lerp(transform.InverseTransformVector(Vector3.ProjectOnPlane(toTargetVector, Vector3.up).normalized), randomDir, 0.5f);
+
+        Vector3 moveDir = transform.InverseTransformVector(navMeshAgent.desiredVelocity.normalized);
+        if (Vector3.Angle(randomDir, moveDir) > 90)
+            randomDir = Vector3.ProjectOnPlane(randomDir, moveDir);
+        moveDir = Vector3.Lerp(moveDir, randomDir, 0.5f);
+
+        if (target.transform.position.y > transform.position.y + 0.1f && Vector3.Distance(transform.position, target.transform.position) < 2)
+            input.action_jump.Click();
 
         if (toTargetVector.magnitude > 0.2f)
             input.moveInput = moveDir;

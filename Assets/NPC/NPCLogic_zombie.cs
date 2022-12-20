@@ -1,10 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 
 public class NPCLogic_zombie : NPCLogic {
-    [SerializeField] private LayerMask environmentLayerMask;
     [SerializeField] private float perlinScale;
 
     private Vector3 toTargetVector;
@@ -12,8 +10,6 @@ public class NPCLogic_zombie : NPCLogic {
     private float perlinOffset;
 
     private float dashAttackCooldown;
-
-    [SerializeField] private NavMeshAgent navMeshAgent;
 
     protected override void Awake() {
         base.Awake();
@@ -56,16 +52,7 @@ public class NPCLogic_zombie : NPCLogic {
 
         randomDir = transform.InverseTransformVector(randomDir);
 
-        Vector3 moveDir = Vector3.Lerp(transform.InverseTransformVector(Vector3.ProjectOnPlane(toTargetVector, Vector3.up).normalized), randomDir, 0.5f);
-
-        if (navMeshAgent.path.corners.Length > 0) {
-            moveDir = navMeshAgent.path.corners[0] - transform.position;
-        }
-        else {
-            Vector3.ProjectOnPlane(toTargetVector, Vector3.up);
-        }
-
-        moveDir = transform.InverseTransformVector(navMeshAgent.desiredVelocity.normalized);
+        Vector3 moveDir = transform.InverseTransformVector(navMeshAgent.desiredVelocity.normalized);
         if (Vector3.Angle(randomDir, moveDir) > 90)
             randomDir = Vector3.ProjectOnPlane(randomDir, moveDir);
         moveDir = Vector3.Lerp(moveDir, randomDir, 0.5f);
@@ -75,9 +62,6 @@ public class NPCLogic_zombie : NPCLogic {
 
         if (target.transform.position.y > transform.position.y + 0.1f && Vector3.Distance(transform.position, target.transform.position) < 2)
             input.action_jump.Click();
-
-        //navMeshAgent.path.corners[]
-        //moveDir = navMeshAgent.desiredVelocity.normalized;
 
         if (toTargetVector.magnitude > 0.2f)
             input.moveInput = moveDir;
