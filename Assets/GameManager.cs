@@ -33,7 +33,7 @@ public class GameManager : MonoBehaviour {
         txtSens.text = "Mouse sensitivity: " + Settings.MOUSE_SENSITIVITY.ToString("0.0");
         Time.timeScale = 0;
 
-        enemySpawnManager.SpawnWave(5, 5, 15);
+        enemySpawnManager.SpawnWave(0, 2, 15);
     }
 
     private void Start() {

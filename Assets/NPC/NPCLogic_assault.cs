@@ -45,7 +45,7 @@ public class NPCLogic_assault : NPCLogic {
     private void Shooting() {
 
         //RaycastHit lineHit;
-        if (!Physics.Linecast(character.transform.position, target.transform.position, losCheckLayerMask) && !burstOnCooldown) {
+        if (!Physics.Linecast(character.transform.position + Vector3.up, target.transform.position + Vector3.up, losCheckLayerMask) && !burstOnCooldown) {
             StartCoroutine(BurstCorutine());
             //input.action_attack.isDown = true;
         }

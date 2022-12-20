@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class NPCLogic_zombie : NPCLogic {
+    [SerializeField] private LayerMask environmentLayerMask;
     [SerializeField] private float perlinScale;
 
     private Vector3 toTargetVector;
@@ -11,10 +13,12 @@ public class NPCLogic_zombie : NPCLogic {
 
     private float dashAttackCooldown;
 
+    [SerializeField] private NavMeshAgent navMeshAgent;
+
     protected override void Awake() {
         base.Awake();
 
-        perlinOffset = Random.Range(0f, 20000f);
+        perlinOffset = Random.Range(0f, 20000f);    
     }
 
     public override void UpdateInput(CharacterInput input) {
@@ -37,14 +41,43 @@ public class NPCLogic_zombie : NPCLogic {
 
     private void Translation(CharacterInput input) {
 
+        navMeshAgent.transform.position = transform.position;
+        navMeshAgent.SetDestination(target.transform.position);
+
         float timeSample = Time.time * perlinScale;
         Vector3 randomDir = Vector3.zero;
         randomDir.x = Mathf.PerlinNoise(timeSample + perlinOffset - 830, timeSample + perlinOffset + 32130) - 0.5f;
         randomDir.z = Mathf.PerlinNoise(timeSample + perlinOffset + 230, timeSample + perlinOffset - 62130) - 0.5f;
         randomDir.Normalize();
 
+        //RaycastHit randomHit;
+        if (Physics.Raycast(transform.position, randomDir, 1, environmentLayerMask))
+            perlinOffset += Random.Range(-40, 40);
+
         randomDir = transform.InverseTransformVector(randomDir);
+
         Vector3 moveDir = Vector3.Lerp(transform.InverseTransformVector(Vector3.ProjectOnPlane(toTargetVector, Vector3.up).normalized), randomDir, 0.5f);
+
+        if (navMeshAgent.path.corners.Length > 0) {
+            moveDir = navMeshAgent.path.corners[0] - transform.position;
+        }
+        else {
+            Vector3.ProjectOnPlane(toTargetVector, Vector3.up);
+        }
+
+        moveDir = transform.InverseTransformVector(navMeshAgent.desiredVelocity.normalized);
+        if (Vector3.Angle(randomDir, moveDir) > 90)
+            randomDir = Vector3.ProjectOnPlane(randomDir, moveDir);
+        moveDir = Vector3.Lerp(moveDir, randomDir, 0.5f);
+
+        if (Vector3.Distance(transform.position, target.transform.position) < 2f)
+            moveDir = transform.InverseTransformVector(Vector3.ProjectOnPlane(toTargetVector, Vector3.up).normalized);
+
+        if (target.transform.position.y > transform.position.y + 0.1f && Vector3.Distance(transform.position, target.transform.position) < 2)
+            input.action_jump.Click();
+
+        //navMeshAgent.path.corners[]
+        //moveDir = navMeshAgent.desiredVelocity.normalized;
 
         if (toTargetVector.magnitude > 0.2f)
             input.moveInput = moveDir;

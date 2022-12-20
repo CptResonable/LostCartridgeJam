@@ -12,6 +12,7 @@ public class Bullet : MonoBehaviour {
     private MeshRenderer meshRenderer;
     private bool isActive;
 
+
     [SerializeField] private GameObject prefab_vfxDirtKickup;
     [SerializeField] private Color bloodColor;
 
@@ -50,7 +51,7 @@ public class Bullet : MonoBehaviour {
 
             DamageReceiver damageReceiver;
             if (hit.collider.TryGetComponent<DamageReceiver>(out damageReceiver)) {
-                damageReceiver.ReceiveDamage(22);
+                damageReceiver.ReceiveDamage(26);
 
             }
 

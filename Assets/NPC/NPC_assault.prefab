@@ -2997,7 +2997,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d722258e8589d5241a98d35e29c3a0e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageMultiplier: 1
+  damageMultiplier: 2
 --- !u!1 &5290183812571670998
 GameObject:
   m_ObjectHideFlags: 0
@@ -4118,7 +4118,7 @@ Transform:
   - {fileID: 2918224251291936039}
   - {fileID: 4589676643005111656}
   m_Father: {fileID: 0}
-  m_RootOrder: 18
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7378054590869710461
 GameObject:
@@ -4543,7 +4543,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7cb8fb565baa48f48abd9844e659eee5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
   perlinScale: 0
   losCheckLayerMask:
     serializedVersion: 2
