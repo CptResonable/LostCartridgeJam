@@ -11,7 +11,7 @@ public class DashTrigger : MonoBehaviour {
             if (other.TryGetComponent<DamageReceiver>(out damageReceiver)) {
                 Debug.Log("DASH ATTACK HIT!");
                 isActive = false;
-                damageReceiver.ReceiveDamage(15);
+                damageReceiver.ReceiveDamage(18);
             }            
         }
     }

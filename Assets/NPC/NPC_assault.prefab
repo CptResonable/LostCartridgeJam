@@ -2997,7 +2997,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d722258e8589d5241a98d35e29c3a0e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageMultiplier: 2
+  damageMultiplier: 2.5
 --- !u!1 &5290183812571670998
 GameObject:
   m_ObjectHideFlags: 0
@@ -3455,10 +3455,10 @@ MonoBehaviour:
     type: 3}
   prefab_vfxMuzzleFlash: {fileID: 638455987314716288, guid: 78b680f0f37a6d0479d39650b0200b83,
     type: 3}
-  magSize: 30
+  magSize: 20
   muzzleVelocity: 180
   reloadTime: 1.25
-  damage: 12
+  damage: 10
   recoilCurve:
     serializedVersion: 2
     m_Curve:
@@ -4407,7 +4407,7 @@ MonoBehaviour:
     adsHandPosition: {x: 0, y: -0.15, z: 0.2}
     handRotationOffset: {x: 0, y: 0, z: 0}
   health:
-    maxHP: 100
+    maxHP: 60
     damageReceivers:
     - {fileID: 2918224251167931722}
     - {fileID: 2918224251121779895}
@@ -4417,7 +4417,7 @@ MonoBehaviour:
     - {fileID: 2918224252341607831}
     - {fileID: 2918224250713218798}
     - {fileID: 2918224251372884158}
-    HP: 100
+    HP: 60
     isAlive: 1
   body:
     tPelvis: {fileID: 4715784424219102788}
