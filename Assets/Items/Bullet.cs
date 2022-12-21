@@ -17,6 +17,8 @@ public class Bullet : MonoBehaviour {
 
     [SerializeField] private GameObject prefab_vfxDirtKickup;
     [SerializeField] private Color bloodColor;
+    [SerializeField] private Color groundColor;
+    [SerializeField] private Color wallColor;
 
     private void Awake() {
         rb = GetComponent<Rigidbody>();
@@ -49,7 +51,11 @@ public class Bullet : MonoBehaviour {
             else {
                 GameObject goDirtKickup = EZ_Pooling.EZ_PoolManager.Spawn(prefab_vfxDirtKickup.transform, hit.point, Quaternion.LookRotation(hit.normal)).gameObject;
                 Vfx_dirtKickup dirtKickup = goDirtKickup.GetComponent<Vfx_dirtKickup>();
-                dirtKickup.Initiate(hit.collider.transform, false, Color.white);
+
+                if (hit.collider.transform.name == "Terrain")
+                    dirtKickup.Initiate(hit.collider.transform, true, groundColor);
+                else
+                    dirtKickup.Initiate(hit.collider.transform, true, wallColor);
             }
 
             DamageReceiver damageReceiver;
