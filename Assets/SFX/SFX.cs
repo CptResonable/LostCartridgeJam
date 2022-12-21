@@ -18,5 +18,12 @@ public class SFX : MonoBehaviour {
         audioSource.clip = audioClips[Random.Range(0, audioClips.Length)];
         audioSource.pitch = pitch + (pitchVariance * Random.Range(-1f, 1f));
         audioSource.Play();
+
+        StartCoroutine(DespawnCorutine(audioSource.clip.length * 2));
+    }
+
+    public IEnumerator DespawnCorutine(float time) {
+        yield return new WaitForSeconds(time);
+        EZ_Pooling.EZ_PoolManager.Despawn(transform);
     }
 }

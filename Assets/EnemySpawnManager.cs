@@ -16,8 +16,8 @@ public class EnemySpawnManager {
     public Vector3Int[] waves = new Vector3Int[10] {
         new Vector3Int(6, 0, 12),
         new Vector3Int(0, 2, 8),
-        new Vector3Int(6, 2, 20),
-        new Vector3Int(12, 0, 24),
+        new Vector3Int(6, 2, 16),
+        new Vector3Int(12, 0, 20),
         new Vector3Int(0, 4, 16),
         new Vector3Int(6, 0, 12),
         new Vector3Int(6, 0, 12),
@@ -59,9 +59,11 @@ public class EnemySpawnManager {
             }
 
             enemySpawnedEvent?.Invoke();
+
+            if (i == totalCount - 1)
+                spawningComplete = true;
+
             yield return new WaitForSeconds(timeBetweenSpawns);
         }
-
-        spawningComplete = true;
     }
 }
