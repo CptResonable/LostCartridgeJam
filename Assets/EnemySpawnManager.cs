@@ -8,6 +8,7 @@ public class EnemySpawnManager {
     [SerializeField] private Spawner[] spawners;
     [SerializeField] private GameObject zombiePrefab;
     [SerializeField] private GameObject assaultPrefab;
+    public GameObject spawnSfxPrefab;
 
     public event Delegates.EmptyDelegate enemySpawnedEvent;
 

@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 using TMPro;
 
 public class GameManager : MonoBehaviour {
-    [SerializeField] private EnemySpawnManager enemySpawnManager;
+    [SerializeField] public EnemySpawnManager enemySpawnManager;
 
     [SerializeField] private GameObject goStartPanel;
     [SerializeField] private GameObject goControlsPanel;
@@ -20,6 +20,10 @@ public class GameManager : MonoBehaviour {
     [SerializeField] private TMP_Text txtEnemies;
     [SerializeField] private TMP_Text txtWave;
     [SerializeField] private TMP_Text txtInfo;
+
+    [SerializeField] private UI_bar barBulletTime;
+
+    public bool usingBulletTime;
 
     public Player player;
 
@@ -65,6 +69,29 @@ public class GameManager : MonoBehaviour {
                     break;
             }
         }
+
+        if (gameState == GameState.Playing) {
+            if (Input.GetKeyDown(KeyCode.LeftShift)) {
+                if (!usingBulletTime && barBulletTime.fillAmount > 0)
+                    StartBulletTime();
+                else if (usingBulletTime)
+                    StopBulletTime();
+            }
+
+            //if (Input.GetKey(KeyCode.LeftShift))
+            //    Time.timeScale = 0.35f;
+            //else
+            //    Time.timeScale = 1;
+
+            if (usingBulletTime) {
+                barBulletTime.fillAmount -= Time.unscaledDeltaTime * 0.15f;
+
+                if (barBulletTime.fillAmount <= 0) {
+                    barBulletTime.fillAmount = 0;
+                    StopBulletTime();
+                }
+            }
+        }
     }
 
     private void Player_diedEvent() {
@@ -74,6 +101,15 @@ public class GameManager : MonoBehaviour {
         goGameOverPanel.SetActive(true);
     }
 
+    private void StartBulletTime() {
+        usingBulletTime = true;
+        Time.timeScale = 0.35f;
+    }
+
+    private void StopBulletTime() {
+        usingBulletTime = false;
+        Time.timeScale = 1f;
+    }
 
     private void PauseGame() {
         gameState = GameState.Paused;
@@ -127,6 +163,10 @@ public class GameManager : MonoBehaviour {
 
         if (enemiesAlive == 0 && enemySpawnManager.spawningComplete)
             WaveCompleted();
+
+        barBulletTime.fillAmount += 0.07f;
+        if (barBulletTime.fillAmount > 1)
+            barBulletTime.fillAmount = 1;
     }
 
     private void WaveCompleted() {
