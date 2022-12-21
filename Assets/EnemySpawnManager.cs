@@ -11,6 +11,8 @@ public class EnemySpawnManager {
 
     public event Delegates.EmptyDelegate enemySpawnedEvent;
 
+    public bool spawningComplete = false;
+
     public Vector3Int[] waves = new Vector3Int[10] {
         new Vector3Int(6, 0, 12),
         new Vector3Int(0, 2, 8),
@@ -45,6 +47,8 @@ public class EnemySpawnManager {
 
         list = list.OrderBy(x => Random.value).ToList();
 
+        spawningComplete = false;
+
         for (int i = 0; i < totalCount; i++) {
             Spawner spawner = spawners[Random.Range(0, spawners.Length)];
             if (list[i] == 0) {
@@ -57,5 +61,7 @@ public class EnemySpawnManager {
             enemySpawnedEvent?.Invoke();
             yield return new WaitForSeconds(timeBetweenSpawns);
         }
+
+        spawningComplete = true;
     }
 }

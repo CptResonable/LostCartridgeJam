@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour {
     [SerializeField] private TMP_Text txtKills;
     [SerializeField] private TMP_Text txtEnemies;
     [SerializeField] private TMP_Text txtWave;
+    [SerializeField] private TMP_Text txtInfo;
 
     public Player player;
 
@@ -27,7 +28,7 @@ public class GameManager : MonoBehaviour {
 
     public int kills;
     public int enemiesAlive;
-    public int wave;
+    [HideInInspector] public int wave = 1;
 
     public static GameManager i;
 
@@ -41,7 +42,8 @@ public class GameManager : MonoBehaviour {
         txtSens.text = "Mouse sensitivity: " + Settings.MOUSE_SENSITIVITY.ToString("0.0");
         Time.timeScale = 0;
 
-        enemySpawnManager.SpawnWave(wave);
+        wave = 1;
+        StartCoroutine(StartWaveCorutine());
         //enemySpawnManager.SpawnWave(6, 2, 15);
     }
 
@@ -123,7 +125,7 @@ public class GameManager : MonoBehaviour {
         txtKills.text = "KILLS: " + kills.ToString();
         txtEnemies.text = "ALIVE ENEMIES: " + enemiesAlive.ToString();
 
-        if (enemiesAlive == 0)
+        if (enemiesAlive == 0 && enemySpawnManager.spawningComplete)
             WaveCompleted();
     }
 
@@ -131,6 +133,23 @@ public class GameManager : MonoBehaviour {
         wave++;
         txtWave.text = "WAVE: " + wave.ToString();
 
-        enemySpawnManager.SpawnWave(wave);
+        txtInfo.text = "WAVE " + (wave - 1).ToString() + " DEFEATED";
+        player.health.HP = player.health.maxHP;
+        StartCoroutine(StartWaveCorutine());
+    }
+
+    private IEnumerator StartWaveCorutine() {
+        yield return new WaitForSeconds(2);
+
+        txtInfo.text = "WAVE " + wave + " STARTS IN 3...";
+        yield return new WaitForSeconds(1);
+        txtInfo.text = "WAVE " + wave + " STARTS IN 2...";
+        yield return new WaitForSeconds(1);
+        txtInfo.text = "WAVE " + wave + " STARTS IN 1...";
+        yield return new WaitForSeconds(1);
+        txtInfo.text = "WAVE " + wave + " STARTS NOW!!";
+        enemySpawnManager.SpawnWave(wave - 1);
+        yield return new WaitForSeconds(1);
+        txtInfo.text = "";
     }
 }
