@@ -1300,11 +1300,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2f998fae525c7f45a6bfd9d8d05dc62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  navMeshAgent: {fileID: 889693259310185414}
   environmentLayerMask:
     serializedVersion: 2
     m_Bits: 1
   perlinScale: 0.5
-  navMeshAgent: {fileID: 889693259310185414}
 --- !u!1 &5028775537441313783
 GameObject:
   m_ObjectHideFlags: 0
@@ -1626,7 +1626,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: c55e5d97e158dcb40a1a01e1082146c0, type: 2}
+      objectReference: {fileID: 2100000, guid: 40703776a6d082c4ba22819b8628642f, type: 2}
     - target: {fileID: 8790364033423574129, guid: f869c8affc168f24cbeec4ce02c99087,
         type: 3}
       propertyPath: m_Layer
@@ -2518,7 +2518,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: c55e5d97e158dcb40a1a01e1082146c0, type: 2}
+      objectReference: {fileID: 2100000, guid: 40703776a6d082c4ba22819b8628642f, type: 2}
     - target: {fileID: 8790364033423574129, guid: f869c8affc168f24cbeec4ce02c99087,
         type: 3}
       propertyPath: m_Layer

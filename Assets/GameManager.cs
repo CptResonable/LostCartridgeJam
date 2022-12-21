@@ -16,10 +16,18 @@ public class GameManager : MonoBehaviour {
     [SerializeField] private TMP_Text txtSens;
     [SerializeField] private Slider sensSlider;
 
+    [SerializeField] private TMP_Text txtKills;
+    [SerializeField] private TMP_Text txtEnemies;
+    [SerializeField] private TMP_Text txtWave;
+
     public Player player;
 
     public enum GameState { Menu, Playing, Paused, GameOver }
     public GameState gameState;
+
+    public int kills;
+    public int enemiesAlive;
+    public int wave;
 
     public static GameManager i;
 
@@ -27,13 +35,14 @@ public class GameManager : MonoBehaviour {
         i = this;
         gameState = GameState.Menu;
   
-        player.health.diedEvent += Health_diedEvent;
+        player.health.diedEvent += Player_diedEvent;
 
         sensSlider.value = Settings.MOUSE_SENSITIVITY;
         txtSens.text = "Mouse sensitivity: " + Settings.MOUSE_SENSITIVITY.ToString("0.0");
         Time.timeScale = 0;
 
-        enemySpawnManager.SpawnWave(0, 2, 15);
+        enemySpawnManager.SpawnWave(wave);
+        //enemySpawnManager.SpawnWave(6, 2, 15);
     }
 
     private void Start() {
@@ -56,7 +65,7 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    private void Health_diedEvent() {
+    private void Player_diedEvent() {
         gameState = GameState.GameOver;
         Cursor.lockState = CursorLockMode.None;
         goControlsPanel.SetActive(true);
@@ -96,9 +105,32 @@ public class GameManager : MonoBehaviour {
         SceneManager.LoadScene("SampleScene");
     }
 
-
     public void OnSensChange() {
         Settings.MOUSE_SENSITIVITY = sensSlider.value;
         txtSens.text = "Mouse sensitivity: " + Settings.MOUSE_SENSITIVITY.ToString("0.0");
+    }
+
+    public void EnemySpawned(Character character) {
+        character.health.diedEvent += Enemy_diedEvent;
+        enemiesAlive++;
+        txtEnemies.text = "ALIVE ENEMIES: " + enemiesAlive.ToString();
+    }
+
+    private void Enemy_diedEvent() {
+        enemiesAlive--;
+        kills++;
+
+        txtKills.text = "KILLS: " + kills.ToString();
+        txtEnemies.text = "ALIVE ENEMIES: " + enemiesAlive.ToString();
+
+        if (enemiesAlive == 0)
+            WaveCompleted();
+    }
+
+    private void WaveCompleted() {
+        wave++;
+        txtWave.text = "WAVE: " + wave.ToString();
+
+        enemySpawnManager.SpawnWave(wave);
     }
 }

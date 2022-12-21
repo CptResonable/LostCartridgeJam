@@ -12,6 +12,8 @@ public class Bullet : MonoBehaviour {
     private MeshRenderer meshRenderer;
     private bool isActive;
 
+    private float damage;
+
 
     [SerializeField] private GameObject prefab_vfxDirtKickup;
     [SerializeField] private Color bloodColor;
@@ -22,7 +24,8 @@ public class Bullet : MonoBehaviour {
         meshRenderer = GetComponent<MeshRenderer>();
     }
 
-    public void Fire(Vector3 velocity) {
+    public void Fire(Vector3 velocity, float damage) {
+        this.damage = damage;
         meshRenderer.enabled = true;
         isActive = true;
         rb.isKinematic = false;
@@ -51,7 +54,7 @@ public class Bullet : MonoBehaviour {
 
             DamageReceiver damageReceiver;
             if (hit.collider.TryGetComponent<DamageReceiver>(out damageReceiver)) {
-                damageReceiver.ReceiveDamage(26);
+                damageReceiver.ReceiveDamage(damage);
 
             }
 

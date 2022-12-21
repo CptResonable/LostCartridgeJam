@@ -13,6 +13,7 @@ public class Gun : MonoBehaviour {
     [SerializeField] private int magSize;
     [SerializeField] private float muzzleVelocity;
     [SerializeField] private float reloadTime;
+    [SerializeField] private float damage;
 
     [SerializeField] private AnimationCurve recoilCurve;
     [SerializeField] private AnimationCurve horizontalRecoilCurve;
@@ -78,7 +79,7 @@ public class Gun : MonoBehaviour {
 
         GameObject goBullet = EZ_Pooling.EZ_PoolManager.Spawn(prefabBullet.transform, tMuzzle.position, tMuzzle.rotation).gameObject;
         Bullet bullet = goBullet.GetComponent<Bullet>();
-        bullet.Fire(tMuzzle.forward * muzzleVelocity);
+        bullet.Fire(tMuzzle.forward * muzzleVelocity, damage);
 
         // SFX
         GameObject goSFX = EZ_Pooling.EZ_PoolManager.Spawn(prefabSFX.transform, tMuzzle.position, tMuzzle.rotation).gameObject;

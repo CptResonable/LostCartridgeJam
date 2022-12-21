@@ -60,6 +60,9 @@ public class NPCLogic_zombie : NPCLogic {
         if (Vector3.Distance(transform.position, target.transform.position) < 2f)
             moveDir = transform.InverseTransformVector(Vector3.ProjectOnPlane(toTargetVector, Vector3.up).normalized);
 
+        if (dashAttackCooldown > 0)
+            moveDir = Vector3.zero;
+
         if (target.transform.position.y > transform.position.y + 0.1f && Vector3.Distance(transform.position, target.transform.position) < 2)
             input.action_jump.Click();
 
@@ -68,7 +71,7 @@ public class NPCLogic_zombie : NPCLogic {
     }
 
     private void Dash() {
-        dashAttackCooldown = 1;
+        dashAttackCooldown = 1.5F;
         character.DashAttack(toTargetVector);
     }
 }

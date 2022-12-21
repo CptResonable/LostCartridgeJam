@@ -2693,7 +2693,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c55e5d97e158dcb40a1a01e1082146c0, type: 2}
+  - {fileID: 2100000, guid: 9c838df91e4132c45abf9b19deb57e03, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3458,6 +3458,7 @@ MonoBehaviour:
   magSize: 30
   muzzleVelocity: 180
   reloadTime: 1.25
+  damage: 12
   recoilCurve:
     serializedVersion: 2
     m_Curve:
@@ -5048,9 +5049,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7205140776170859923, guid: f869c8affc168f24cbeec4ce02c99087,
         type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7205140776170859923, guid: f869c8affc168f24cbeec4ce02c99087,
+        type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: c55e5d97e158dcb40a1a01e1082146c0, type: 2}
+      objectReference: {fileID: 2100000, guid: 9c838df91e4132c45abf9b19deb57e03, type: 2}
+    - target: {fileID: 7205140776170859923, guid: f869c8affc168f24cbeec4ce02c99087,
+        type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: 9c838df91e4132c45abf9b19deb57e03, type: 2}
     - target: {fileID: 8790364033423574129, guid: f869c8affc168f24cbeec4ce02c99087,
         type: 3}
       propertyPath: m_Layer

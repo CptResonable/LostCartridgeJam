@@ -44,17 +44,18 @@ public class NPCLogic_assault : NPCLogic {
 
     private void Shooting() {
 
-        ////RaycastHit lineHit;
-        //if (!Physics.Linecast(character.transform.position + Vector3.up, target.transform.position + Vector3.up, losCheckLayerMask) && !burstOnCooldown) {
-        //    StartCoroutine(BurstCorutine());
-        //    //input.action_attack.isDown = true;
-        //}
-        //else {
-        //    //input.action_attack.isDown = false;
-        //}
+        //RaycastHit lineHit;
+        if (!Physics.Linecast(character.transform.position + Vector3.up, target.transform.position + Vector3.up, losCheckLayerMask) && !burstOnCooldown) {
+            StartCoroutine(BurstCorutine());
+            //input.action_attack.isDown = true;
+        }
+        else {
+            //input.action_attack.isDown = false;
+        }
     }
 
     private IEnumerator BurstCorutine() {
+        yield return new WaitForSeconds(Random.Range(0.3f, 0.8f));
         isBursting = true;
         burstOnCooldown = true;
         float burstDuration = Random.Range(0.2f, 1.5f);
@@ -62,7 +63,7 @@ public class NPCLogic_assault : NPCLogic {
         yield return new WaitForSeconds(burstDuration);
         input.action_attack.isDown = false;
         isBursting = false;
-        float burstCooldown = Random.Range(0.4f, 1.5f) * burstDuration;
+        float burstCooldown = Random.Range(0.3f, 1.2f) * burstDuration;
         yield return new WaitForSeconds(burstCooldown);
         burstOnCooldown = false;
     }

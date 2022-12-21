@@ -9,8 +9,27 @@ public class EnemySpawnManager {
     [SerializeField] private GameObject zombiePrefab;
     [SerializeField] private GameObject assaultPrefab;
 
+    public event Delegates.EmptyDelegate enemySpawnedEvent;
+
+    public Vector3Int[] waves = new Vector3Int[10] {
+        new Vector3Int(6, 0, 12),
+        new Vector3Int(0, 2, 8),
+        new Vector3Int(6, 2, 20),
+        new Vector3Int(12, 0, 24),
+        new Vector3Int(0, 4, 16),
+        new Vector3Int(6, 0, 12),
+        new Vector3Int(6, 0, 12),
+        new Vector3Int(6, 0, 12),
+        new Vector3Int(6, 0, 12),
+        new Vector3Int(6, 0, 12),
+    };
+
     public void SpawnWave(int zombieCount, int assaultCount, float waveDuration) {
         GameManager.i.StartCoroutine(SpawnCorutine(zombieCount, assaultCount, waveDuration));
+    }
+
+    public void SpawnWave(int wave) {
+        GameManager.i.StartCoroutine(SpawnCorutine(waves[wave].x, waves[wave].y, waves[wave].z));
     }
 
     public IEnumerator SpawnCorutine(int zombieCount, int assaultCount, float waveDuration) {
@@ -34,6 +53,8 @@ public class EnemySpawnManager {
             else {
                 spawner.Spawn(assaultPrefab);
             }
+
+            enemySpawnedEvent?.Invoke();
             yield return new WaitForSeconds(timeBetweenSpawns);
         }
     }
