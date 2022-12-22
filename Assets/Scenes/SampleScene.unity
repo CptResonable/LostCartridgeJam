@@ -41588,6 +41588,10 @@ MonoBehaviour:
   headHorizontalRecoil: 5
   horizontalChangeSpeed: 0
   player: {fileID: 5628233934188922875}
+  isAuto: 0
+  tOffHandTarget: {fileID: 0}
+  targetHandPosition: {x: 0, y: 0, z: 0}
+  targetAdsHandPosition: {x: 0, y: 0, z: 0}
   bulletsInMagCount: 10
   isReloading: 0
   hasSlideStop: 1
@@ -48728,6 +48732,16 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1285744482911927165, guid: b0a49345d2a43e644944d5f67068cf41,
+        type: 3}
+      propertyPath: m_SlerpDrive.positionDamper
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1285744482911927165, guid: b0a49345d2a43e644944d5f67068cf41,
+        type: 3}
+      propertyPath: m_SlerpDrive.positionSpring
+      value: 150
+      objectReference: {fileID: 0}
     - target: {fileID: 7386630257032044851, guid: b0a49345d2a43e644944d5f67068cf41,
         type: 3}
       propertyPath: m_RootOrder

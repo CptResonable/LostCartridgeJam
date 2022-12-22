@@ -49,6 +49,8 @@ public class WeaponController {
         tHandTarget.localPosition = gun.targetHandPosition;
         tHandTarget.localPosition = Vector3.zero;
         tOffHandPosition.position = gun.tOffHandTarget.position;
+
+        character.handMovement.SetCOM();
     }
 
     private void Action_attack_keyDownEvent() {

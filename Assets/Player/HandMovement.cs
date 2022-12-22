@@ -29,6 +29,14 @@ public class HandMovement : MonoBehaviour {
         //rb.centerOfMass = Vector3.zero;
     }
 
+    public void SetCOM() {
+        rb = GetComponent<Rigidbody>();
+        Debug.Log(rb.inertiaTensor);
+        //rb.inertiaTensor = Vector3.one;
+        rb.centerOfMass = transform.InverseTransformPoint(tCOM.position);
+        //rb.centerOfMass = Vector3.zero;
+    }
+
     public void DoUpdate() {
         rb = GetComponent<Rigidbody>();
         kmTarget.DoUpdate();
