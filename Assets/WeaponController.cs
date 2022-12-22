@@ -4,12 +4,13 @@ using UnityEngine;
 
 [System.Serializable]
 public class WeaponController {
-    [SerializeField] private Gun pistol;
-    [SerializeField] private Gun rifle;
+    [SerializeField] public Gun pistol;
+    [SerializeField] public Gun rifle;
     public Gun equipedGun;
 
     [SerializeField] private Transform tHandTarget;
     [SerializeField] private Transform tOffHandPosition;
+    [SerializeField] private ConfigurableJoint handJoint;
 
     private Character character;
 
@@ -72,9 +73,17 @@ public class WeaponController {
     private void Character_updateEvent() {
         if (Input.GetKeyDown(KeyCode.Alpha2) && equipedGun != rifle) {
             EquipGun(rifle);
+            JointDrive jd = handJoint.slerpDrive;
+            jd.positionSpring = 180;
+            jd.positionDamper = 3.5f;
+            handJoint.slerpDrive = jd;
         }
         else if (Input.GetKeyDown(KeyCode.Alpha1) && equipedGun != pistol) {
             EquipGun(pistol);
+            JointDrive jd = handJoint.slerpDrive;
+            jd.positionSpring = 100;
+            jd.positionDamper = 2f;
+            handJoint.slerpDrive = jd;
         }
 
 

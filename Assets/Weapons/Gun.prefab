@@ -554,7 +554,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: b097ce11400089240885e6dd2ffe4872, type: 2}
+      objectReference: {fileID: 2100000, guid: 019b733faae114348a8fe9bc40a319bb, type: 2}
     - target: {fileID: -5534512211518477834, guid: b23106927e9ab37428ce5bd23c349456,
         type: 3}
       propertyPath: m_Layer
@@ -659,7 +659,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: b097ce11400089240885e6dd2ffe4872, type: 2}
+      objectReference: {fileID: 2100000, guid: 6c5d0648c9cae4e4581bff318d00367e, type: 2}
     - target: {fileID: 1670937768116498379, guid: b23106927e9ab37428ce5bd23c349456,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -679,7 +679,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: b097ce11400089240885e6dd2ffe4872, type: 2}
+      objectReference: {fileID: 2100000, guid: 019b733faae114348a8fe9bc40a319bb, type: 2}
     - target: {fileID: 3261804551078021931, guid: b23106927e9ab37428ce5bd23c349456,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -714,7 +714,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: b097ce11400089240885e6dd2ffe4872, type: 2}
+      objectReference: {fileID: 2100000, guid: 6c5d0648c9cae4e4581bff318d00367e, type: 2}
     - target: {fileID: 5233112405309087440, guid: b23106927e9ab37428ce5bd23c349456,
         type: 3}
       propertyPath: m_Layer
@@ -759,7 +759,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: b097ce11400089240885e6dd2ffe4872, type: 2}
+      objectReference: {fileID: 2100000, guid: 6c5d0648c9cae4e4581bff318d00367e, type: 2}
     m_RemovedComponents: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: b23106927e9ab37428ce5bd23c349456,

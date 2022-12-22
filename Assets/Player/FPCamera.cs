@@ -18,8 +18,11 @@ public class FPCamera {
         character.updateEvent += character_updateEvent;
         character.fixedUpdateEvent += character_fixedUpdateEvent;
 
-        if (character.weaponController.equipedGun != null)
-            character.weaponController.equipedGun.gunFiredEvent += EquipedGun_gunFiredEvent;
+        if (character.weaponController.rifle != null)
+            character.weaponController.rifle.gunFiredEvent += EquipedGun_gunFiredEvent;
+
+        if (character.weaponController.pistol != null)
+            character.weaponController.pistol.gunFiredEvent += EquipedGun_gunFiredEvent;
     }
 
     private void character_fixedUpdateEvent() {

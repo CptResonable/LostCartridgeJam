@@ -37508,6 +37508,12 @@ Transform:
   m_Father: {fileID: 2071289517}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!153 &1041505860 stripped
+ConfigurableJoint:
+  m_CorrespondingSourceObject: {fileID: 1285744482911927165, guid: b0a49345d2a43e644944d5f67068cf41,
+    type: 3}
+  m_PrefabInstance: {fileID: 2925393505217285473}
+  m_PrefabAsset: {fileID: 0}
 --- !u!43 &1044812481
 Mesh:
   m_ObjectHideFlags: 0
@@ -48740,7 +48746,7 @@ PrefabInstance:
     - target: {fileID: 1285744482911927165, guid: b0a49345d2a43e644944d5f67068cf41,
         type: 3}
       propertyPath: m_SlerpDrive.positionSpring
-      value: 150
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 7386630257032044851, guid: b0a49345d2a43e644944d5f67068cf41,
         type: 3}
@@ -48937,6 +48943,11 @@ PrefabInstance:
       propertyPath: body.rTorso_2
       value: 
       objectReference: {fileID: 1608623215}
+    - target: {fileID: 7386630257519315610, guid: b0a49345d2a43e644944d5f67068cf41,
+        type: 3}
+      propertyPath: weaponController.handJoint
+      value: 
+      objectReference: {fileID: 1041505860}
     m_RemovedComponents: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 7386630257519315589, guid: b0a49345d2a43e644944d5f67068cf41,
