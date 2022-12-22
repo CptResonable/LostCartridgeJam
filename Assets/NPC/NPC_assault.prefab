@@ -2184,12 +2184,11 @@ MonoBehaviour:
     equipedGun: {fileID: 6051278489966719889}
     tHandTarget: {fileID: 0}
     tOffHandPosition: {fileID: 0}
+    handJoint: {fileID: 0}
     isADS: 0
   arm:
     tBase: {fileID: 2918224251291936039}
     tHandTarget: {fileID: 2918224251304727286}
-    hipHandPosition: {x: 0, y: 0, z: 0}
-    adsHandPosition: {x: 0, y: -0.15, z: 0.2}
     handRotationOffset: {x: 0, y: 0, z: 0}
   health:
     maxHP: 60
@@ -2239,6 +2238,9 @@ MonoBehaviour:
   goDeadModel: {fileID: 9076336714070652320}
   capColider: {fileID: 0}
   dashTrigger: {fileID: 0}
+  dropAmmo: 1
+  ammoBoxPrefab: {fileID: 694261354230246643, guid: cf503a743a6a29645b395dd24aff4698,
+    type: 3}
 --- !u!114 &7378054590932894914
 MonoBehaviour:
   m_ObjectHideFlags: 0

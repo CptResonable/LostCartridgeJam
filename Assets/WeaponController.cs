@@ -36,6 +36,9 @@ public class WeaponController {
         if (equipedGun != null) {
             equipedGun.reloadStartedEvent += EquipedGun_reloadStartedEvent;
         }
+
+        if (character.isPlayer)
+            EquipGun(pistol);
     }
 
     private void EquipGun(Gun gun) {
