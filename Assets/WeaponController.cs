@@ -4,7 +4,12 @@ using UnityEngine;
 
 [System.Serializable]
 public class WeaponController {
+    [SerializeField] private Gun pistol;
+    [SerializeField] private Gun rifle;
     public Gun equipedGun;
+
+    [SerializeField] private Transform tHandTarget;
+    [SerializeField] private Transform tOffHandPosition;
 
     private Character character;
 
@@ -24,8 +29,33 @@ public class WeaponController {
 
         character.characterInput.action_reload.keyDownEvent += Action_reload_keyDownEvent;
 
-        if (equipedGun != null)
+        character.characterInput.action_attack.keyDownEvent += Action_attack_keyDownEvent;
+
+        if (equipedGun != null) {
             equipedGun.reloadStartedEvent += EquipedGun_reloadStartedEvent;
+        }
+    }
+
+    private void EquipGun(Gun gun) {
+        if (equipedGun != null) {
+            equipedGun.reloadStartedEvent -= EquipedGun_reloadStartedEvent;
+            equipedGun.gameObject.SetActive(false);
+        }
+
+        equipedGun = gun;
+        equipedGun.gameObject.SetActive(true);
+        equipedGun.reloadStartedEvent += EquipedGun_reloadStartedEvent;
+
+        tHandTarget.localPosition = gun.targetHandPosition;
+        tHandTarget.localPosition = Vector3.zero;
+        tOffHandPosition.position = gun.tOffHandTarget.position;
+    }
+
+    private void Action_attack_keyDownEvent() {
+        if (equipedGun.isAuto)
+            return;
+
+        equipedGun.TryFire();
     }
 
     private void EquipedGun_reloadStartedEvent(float reloadTime) {
@@ -38,6 +68,19 @@ public class WeaponController {
     }
 
     private void Character_updateEvent() {
+        if (Input.GetKeyDown(KeyCode.Alpha2) && equipedGun != rifle) {
+            EquipGun(rifle);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha1) && equipedGun != pistol) {
+            EquipGun(pistol);
+        }
+
+
+        if (equipedGun != null) {
+            if (!equipedGun.isAuto)
+                return;
+        }
+
         if (character.characterInput.action_attack.isDown)
             equipedGun.TryFire();
     }

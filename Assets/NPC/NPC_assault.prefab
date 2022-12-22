@@ -2179,7 +2179,11 @@ MonoBehaviour:
     wallDetector: {fileID: 2918224251807160225}
   handMovement: {fileID: 2918224250366114602}
   weaponController:
+    pistol: {fileID: 0}
+    rifle: {fileID: 6051278489966719889}
     equipedGun: {fileID: 6051278489966719889}
+    tHandTarget: {fileID: 0}
+    tOffHandPosition: {fileID: 0}
     isADS: 0
   arm:
     tBase: {fileID: 2918224251291936039}

@@ -29,6 +29,10 @@ public class Gun : MonoBehaviour {
     [SerializeField] private float horizontalChangeSpeed;
 
     [SerializeField] private Player player;
+    [SerializeField] public bool isAuto;
+    public Transform tOffHandTarget;
+    public Vector3 targetHandPosition;
+    public Vector3 targetAdsHandPosition;
 
     private float cooldown = 0;
     private float timeSinceLastShot = 0;

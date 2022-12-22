@@ -7,8 +7,8 @@ public class Arm {
     [SerializeField] private Transform tBase;
     [SerializeField] private Transform tHandTarget;
 
-    public Vector3 hipHandPosition;
-    public Vector3 adsHandPosition;
+    //public Vector3 hipHandPosition;
+    //public Vector3 adsHandPosition;
 
     private Character character;
 
@@ -20,7 +20,7 @@ public class Arm {
     public void Init(Character character) {
         this.character = character;
 
-        hipHandPosition = tHandTarget.localPosition;
+        //hipHandPosition = tHandTarget.localPosition;
 
         character.fixedUpdateEvent += Player_fixedUpdateEvent;
 
@@ -35,7 +35,7 @@ public class Arm {
 
         handRotationOffset = new Vector3(handRotationOffset.x, handRotationOffset.y, Mathf.Lerp(handRotationOffset.z, -character.characterInput.moveInput.x * 25 + character.rb.angularVelocity.y * 200, Time.deltaTime * 8));
 
-        tHandTarget.localPosition = Vector3.Lerp(hipHandPosition, adsHandPosition, hipAdsInterpolator.t);
+        tHandTarget.localPosition = Vector3.Lerp(character.weaponController.equipedGun.targetHandPosition, character.weaponController.equipedGun.targetAdsHandPosition, hipAdsInterpolator.t);
         tHandTarget.rotation = character.fpCamera.tHead.rotation;
         tHandTarget.Rotate(handRotationOffset);
         if (reloadSpinPitch != 0) {

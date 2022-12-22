@@ -139,7 +139,7 @@ MonoBehaviour:
   prefab_vfxDirtKickup: {fileID: 638455987314716288, guid: ac017b1e7d5ac9d408dfbc0204869dac,
     type: 3}
   bloodColor: {r: 0.2924528, g: 0, b: 0, a: 0}
-  groundColor: {r: 0.2735849, g: 0.124032676, b: 0, a: 0}
+  groundColor: {r: 0.2509804, g: 0.16078432, b: 0.019607844, a: 0}
   wallColor: {r: 0.3490566, g: 0.3490566, b: 0.3490566, a: 0}
 --- !u!114 &658237997999191081
 MonoBehaviour:
