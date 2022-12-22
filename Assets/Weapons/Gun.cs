@@ -30,6 +30,10 @@ public class Gun : MonoBehaviour {
 
     [SerializeField] private Player player;
     [SerializeField] public bool isAuto;
+
+    public bool consumeAmmo;
+    public int ammoReserve;
+
     public Transform tOffHandTarget;
     public Vector3 targetHandPosition;
     public Vector3 targetAdsHandPosition;
@@ -67,12 +71,23 @@ public class Gun : MonoBehaviour {
     }
 
     public void Reload() {
+        if (consumeAmmo) {
+            if (ammoReserve <= 0) {
+                return;
+            }
+            else {
+            }
+        }
+
         if (!isReloading)
             reloadCorutine = StartCoroutine(ReloadCorutine());
     }
 
     public void ReloadCanceled() {
-        isReloading = false;
+        if (isReloading) {
+            isReloading = false;
+            StopCoroutine(reloadCorutine);
+        }
     }
 
     private void Fire() {
@@ -144,6 +159,14 @@ public class Gun : MonoBehaviour {
         }
 
         isReloading = false;
-        bulletsInMagCount = magSize;
+
+        if (consumeAmmo && ammoReserve < magSize) {
+            bulletsInMagCount = ammoReserve;
+            ammoReserve = 0;
+        }
+        else {
+            ammoReserve -= (magSize - bulletsInMagCount);
+            bulletsInMagCount = magSize;
+        }
     }
 }

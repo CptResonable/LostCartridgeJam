@@ -972,7 +972,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0717d7910b249da46a0240d4df700d5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isPlayer: 0
+  isPlayer: 1
   characterInput: {fileID: 0}
   fpCamera:
     tHead: {fileID: 7458831216974441010}
@@ -1086,6 +1086,7 @@ MonoBehaviour:
     equipedGun: {fileID: 3737601585298911470}
     tHandTarget: {fileID: 2925393505618189473}
     tOffHandPosition: {fileID: 2925393505419985796}
+    handJoint: {fileID: 0}
     isADS: 0
   arm:
     tBase: {fileID: 2925393505612606320}
@@ -2106,6 +2107,16 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 7386630257519315610}
+    - target: {fileID: 6137723419212577545, guid: 4ba8ce35c85fc4545aec492fab4d95b9,
+        type: 3}
+      propertyPath: ammoReserve
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 6137723419212577545, guid: 4ba8ce35c85fc4545aec492fab4d95b9,
+        type: 3}
+      propertyPath: consumeAmmo
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: 4ba8ce35c85fc4545aec492fab4d95b9, type: 3}

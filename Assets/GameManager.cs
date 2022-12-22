@@ -21,6 +21,9 @@ public class GameManager : MonoBehaviour {
     [SerializeField] private TMP_Text txtWave;
     [SerializeField] private TMP_Text txtInfo;
 
+    [SerializeField] private TMP_Text txtRifleAmmo;
+    [SerializeField] private TMP_Text txtPistolAmmo;
+
     [SerializeField] private UI_bar barBulletTime;
 
     public bool usingBulletTime;
@@ -92,6 +95,9 @@ public class GameManager : MonoBehaviour {
                 }
             }
         }
+
+        txtPistolAmmo.text = "Pistol ammo: " + player.weaponController.pistol.bulletsInMagCount + "/  ";
+        txtRifleAmmo.text = "Rifle ammo: " + player.weaponController.rifle.bulletsInMagCount + "/" + player.weaponController.rifle.ammoReserve;
     }
 
     private void Player_diedEvent() {

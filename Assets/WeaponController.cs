@@ -19,6 +19,7 @@ public class WeaponController {
     public event Delegates.EmptyDelegate adsEnteredEvent;
     public event Delegates.EmptyDelegate adsExitedEvent;
     public event Delegates.FloatDelegate reloadStartedEvent;
+    public event Delegates.EmptyDelegate weaponEquipedEvent;
 
     public void Init(Character character) {
         this.character = character;
@@ -39,6 +40,7 @@ public class WeaponController {
 
     private void EquipGun(Gun gun) {
         if (equipedGun != null) {
+            equipedGun.ReloadCanceled();
             equipedGun.reloadStartedEvent -= EquipedGun_reloadStartedEvent;
             equipedGun.gameObject.SetActive(false);
         }
@@ -52,6 +54,7 @@ public class WeaponController {
         tOffHandPosition.position = gun.tOffHandTarget.position;
 
         character.handMovement.SetCOM();
+        weaponEquipedEvent.Invoke();
     }
 
     private void Action_attack_keyDownEvent() {
@@ -71,19 +74,22 @@ public class WeaponController {
     }
 
     private void Character_updateEvent() {
-        if (Input.GetKeyDown(KeyCode.Alpha2) && equipedGun != rifle) {
-            EquipGun(rifle);
-            JointDrive jd = handJoint.slerpDrive;
-            jd.positionSpring = 180;
-            jd.positionDamper = 3.5f;
-            handJoint.slerpDrive = jd;
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha1) && equipedGun != pistol) {
-            EquipGun(pistol);
-            JointDrive jd = handJoint.slerpDrive;
-            jd.positionSpring = 100;
-            jd.positionDamper = 2f;
-            handJoint.slerpDrive = jd;
+
+        if (character.isPlayer) {
+            if (Input.GetKeyDown(KeyCode.Alpha2) && equipedGun != rifle) {
+                EquipGun(rifle);
+                JointDrive jd = handJoint.slerpDrive;
+                jd.positionSpring = 180;
+                jd.positionDamper = 3.5f;
+                handJoint.slerpDrive = jd;
+            }
+            else if (Input.GetKeyDown(KeyCode.Alpha1) && equipedGun != pistol) {
+                EquipGun(pistol);
+                JointDrive jd = handJoint.slerpDrive;
+                jd.positionSpring = 100;
+                jd.positionDamper = 2f;
+                handJoint.slerpDrive = jd;
+            }
         }
 
 

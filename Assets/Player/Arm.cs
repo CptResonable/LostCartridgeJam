@@ -16,6 +16,7 @@ public class Arm {
 
     public TWrapper hipAdsInterpolator = new TWrapper(0, 1, 0);
     private Coroutine interpolationCorutine;
+    private Coroutine reloadCorutine;
 
     public void Init(Character character) {
         this.character = character;
@@ -27,6 +28,7 @@ public class Arm {
         character.weaponController.adsEnteredEvent += WeaponController_adsEnteredEvent;
         character.weaponController.adsExitedEvent += WeaponController_adsExitedEvent;
         character.weaponController.reloadStartedEvent += WeaponController_reloadStartedEvent;
+        character.weaponController.weaponEquipedEvent += WeaponController_weaponEquipedEvent;
     }
 
     private void Player_fixedUpdateEvent() {
@@ -60,7 +62,14 @@ public class Arm {
     }
 
     private void WeaponController_reloadStartedEvent(float reloadTime) {
-        character.StartCoroutine(ReloadCorutine(reloadTime));
+        reloadCorutine = character.StartCoroutine(ReloadCorutine(reloadTime));
+    }
+
+    private void WeaponController_weaponEquipedEvent() {
+        if (reloadCorutine != null)
+            character.StopCoroutine(reloadCorutine);
+
+        reloadSpinPitch = 0;
     }
 
     private float reloadSpinPitch;

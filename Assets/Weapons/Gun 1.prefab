@@ -198,10 +198,12 @@ MonoBehaviour:
   horizontalChangeSpeed: 4
   player: {fileID: 0}
   isAuto: 0
+  consumeAmmo: 0
+  ammoReserve: 0
   tOffHandTarget: {fileID: 1055402783947464875}
   targetHandPosition: {x: 0.135, y: -0.225, z: 0.2}
   targetAdsHandPosition: {x: 0, y: -0.13, z: 0.3}
-  bulletsInMagCount: 30
+  bulletsInMagCount: 11
   isReloading: 0
   hasSlideStop: 1
 --- !u!1 &4726187503812688207
