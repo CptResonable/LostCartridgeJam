@@ -87,7 +87,7 @@ public class GameManager : MonoBehaviour {
             //    Time.timeScale = 1;
 
             if (usingBulletTime) {
-                barBulletTime.fillAmount -= Time.unscaledDeltaTime * 0.15f;
+                barBulletTime.fillAmount -= Time.unscaledDeltaTime * 0.075f;
 
                 if (barBulletTime.fillAmount <= 0) {
                     barBulletTime.fillAmount = 0;

@@ -20,11 +20,11 @@ public class EnemySpawnManager {
         new Vector3Int(6, 2, 16),
         new Vector3Int(12, 0, 20),
         new Vector3Int(0, 4, 16),
-        new Vector3Int(6, 0, 12),
-        new Vector3Int(6, 0, 12),
-        new Vector3Int(6, 0, 12),
-        new Vector3Int(6, 0, 12),
-        new Vector3Int(6, 0, 12),
+        new Vector3Int(22, 2, 22),
+        new Vector3Int(12, 4, 22),
+        new Vector3Int(50, 0, 18),
+        new Vector3Int(0, 8, 12),
+        new Vector3Int(50, 10, 30),
     };
 
     public void SpawnWave(int zombieCount, int assaultCount, float waveDuration) {
