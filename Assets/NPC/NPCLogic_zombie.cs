@@ -57,7 +57,7 @@ public class NPCLogic_zombie : NPCLogic {
             randomDir = Vector3.ProjectOnPlane(randomDir, moveDir);
         moveDir = Vector3.Lerp(moveDir, randomDir, 0.5f);
 
-        if (Vector3.Distance(transform.position, target.transform.position) < 2f)
+        if (Vector3.Distance(transform.position, target.transform.position) < 4f)
             moveDir = transform.InverseTransformVector(Vector3.ProjectOnPlane(toTargetVector, Vector3.up).normalized);
 
         if (dashAttackCooldown > 0)

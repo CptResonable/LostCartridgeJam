@@ -96,7 +96,7 @@ public class Gun : MonoBehaviour {
 
         Recoil();
 
-        GameObject goBullet = EZ_Pooling.EZ_PoolManager.Spawn(prefabBullet.transform, tMuzzle.position, tMuzzle.rotation).gameObject;
+        GameObject goBullet = EZ_Pooling.EZ_PoolManager.Spawn(prefabBullet.transform, tMuzzle.position - tMuzzle.forward * 0.05f, tMuzzle.rotation).gameObject;
         Bullet bullet = goBullet.GetComponent<Bullet>();
         bullet.Fire(tMuzzle.forward * muzzleVelocity, damage);
 
