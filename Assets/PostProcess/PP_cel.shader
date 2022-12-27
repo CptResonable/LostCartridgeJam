@@ -47,7 +47,7 @@ Shader "PP_cel"
 
             fixed4 frag(v2f i) : SV_Target
             {
-                float levels = 4.0;
+                float levels = 8.0;
 
                 //float2 texSize = textureSize(colorTexture, 0).xy;
                 //float2 texCoord = gl_FragCoord.xy / texSize;

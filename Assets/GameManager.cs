@@ -21,6 +21,9 @@ public class GameManager : MonoBehaviour {
     [SerializeField] private TMP_Text txtWave;
     [SerializeField] private TMP_Text txtInfo;
 
+    [SerializeField] private TMP_Text txtDeadKills;
+    [SerializeField] private TMP_Text txtDeadHighscore;
+
     [SerializeField] private TMP_Text txtRifleAmmo;
     [SerializeField] private TMP_Text txtPistolAmmo;
 
@@ -105,6 +108,11 @@ public class GameManager : MonoBehaviour {
         Cursor.lockState = CursorLockMode.None;
         goControlsPanel.SetActive(true);
         goGameOverPanel.SetActive(true);
+
+        txtDeadKills.text = "Kills: " + kills;
+        if (HighScoreKeeper.recordKills < kills)
+            HighScoreKeeper.recordKills = kills;
+        txtDeadHighscore.text = "Highscore: " + HighScoreKeeper.recordKills;
     }
 
     private void StartBulletTime() {
@@ -177,7 +185,7 @@ public class GameManager : MonoBehaviour {
 
     private void WaveCompleted() {
         wave++;
-        txtWave.text = "WAVE: " + wave.ToString();
+        txtWave.text = "WAVE: " + wave.ToString() + " / 10";
 
         txtInfo.text = "WAVE " + (wave - 1).ToString() + " DEFEATED";
         player.health.HP = player.health.maxHP;
@@ -198,4 +206,8 @@ public class GameManager : MonoBehaviour {
         yield return new WaitForSeconds(1);
         txtInfo.text = "";
     }
+}
+
+public static class HighScoreKeeper {
+    public static int recordKills;
 }
