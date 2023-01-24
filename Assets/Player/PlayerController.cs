@@ -5,6 +5,7 @@ using UnityEngine;
 [System.Serializable]
 public class PlayerController {
     [SerializeField] private float moveSpeed;
+    [SerializeField] private float sprintSpeed;
     [SerializeField] private float moveAcceleration;
 
     [SerializeField] private float bounceUpSpeed;
@@ -18,11 +19,11 @@ public class PlayerController {
 
     [SerializeField] private LayerMask layerMask;
 
-    [SerializeField] private WallDetector wallDetector;
+    public bool isSprining;
 
     private float currentHeight = 1;
 
-    private Vector3 inputDirLocal;
+    private Vector3 inputDir;
 
     private Rigidbody rb;
     private bool isGrounded = true;
@@ -46,7 +47,12 @@ public class PlayerController {
     private void Character_updateEvent() {
         VerticalMovement();
 
-        inputDirLocal = character.transform.TransformDirection(character.characterInput.moveInput);
+        if (character.characterInput.action_sprint.isDown)
+            isSprining = true;
+        else 
+            isSprining = false;
+
+        inputDir = character.transform.TransformDirection(character.characterInput.moveInput);
     }
 
     private void Character_fixedUpdateEvent() {
@@ -57,14 +63,7 @@ public class PlayerController {
             
         if (!isGrounded) {
 
-            if (wallDetector != null) {
-                if (!wallDetector.wallDetected)
-                    rb.AddForce(Vector3.down * 9.81f, ForceMode.Acceleration);
-            }
-            else {
-                rb.AddForce(Vector3.down * 9.81f, ForceMode.Acceleration);
-            }
-
+            rb.AddForce(Vector3.down * 9.81f, ForceMode.Acceleration);
             rb.AddForce(Vector3.down * 9.81f * airTimeToGravityScale.Evaluate(airTime), ForceMode.Acceleration);
         }
         else {
@@ -100,11 +99,22 @@ public class PlayerController {
     }
 
     private void HorizontalMovement() {
+        Vector3 moveDir_forwardPart = Vector3.zero;
+        if (character.characterInput.moveInput.z > 0)
+            moveDir_forwardPart = Vector3.Project(inputDir, character.transform.forward);
+
+        Vector3 moveDir_otherPart = inputDir - moveDir_forwardPart;
+        Vector3 moveVector = moveDir_otherPart * moveSpeed;
+
+        if (isSprining)
+            moveVector += moveDir_forwardPart * sprintSpeed;
+        else
+            moveVector += moveDir_forwardPart * moveSpeed;
 
         if (isDashing)
             rb.velocity = Vector3.Lerp(rb.velocity, dashVector * moveSpeed + Vector3.up * rb.velocity.y, moveAcceleration * Time.deltaTime);
         else
-            rb.velocity = Vector3.Lerp(rb.velocity, inputDirLocal * moveSpeed + Vector3.up * rb.velocity.y, moveAcceleration * Time.deltaTime);
+            rb.velocity = Vector3.Lerp(rb.velocity, moveVector + Vector3.up * rb.velocity.y, moveAcceleration * Time.deltaTime);
     }
 
     private void Jump() {

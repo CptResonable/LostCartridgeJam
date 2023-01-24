@@ -11,6 +11,7 @@ public class CharacterInput : MonoBehaviour {
     public KeyAction action_attack;
     public KeyAction action_ads;
     public KeyAction action_reload;
+    public KeyAction action_sprint;
 
     protected List<KeyAction> actions = new List<KeyAction>();
 
@@ -26,6 +27,7 @@ public class CharacterInput : MonoBehaviour {
         actions.Add(action_attack);
         actions.Add(action_ads);
         actions.Add(action_reload);
+        actions.Add(action_sprint);
     }
 }
 
