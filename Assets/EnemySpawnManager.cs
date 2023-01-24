@@ -14,7 +14,7 @@ public class EnemySpawnManager {
 
     public bool spawningComplete = false;
 
-    [HideInInspector] public Vector3Int[] waves = new Vector3Int[10] {
+    [HideInInspector] private Vector3Int[] waves = new Vector3Int[10] {
         new Vector3Int(6, 0, 12),
         new Vector3Int(0, 2, 8),
         new Vector3Int(6, 2, 16),
@@ -24,7 +24,7 @@ public class EnemySpawnManager {
         new Vector3Int(10, 4, 22),
         new Vector3Int(30, 0, 18),
         new Vector3Int(0, 6, 12),
-        new Vector3Int(50, 10, 30),
+        new Vector3Int(1, 1, 5),
     };
 
     public void SpawnWave(int zombieCount, int assaultCount, float waveDuration) {

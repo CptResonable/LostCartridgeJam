@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour {
     [SerializeField] private GameObject goControlsPanel;
     [SerializeField] private GameObject goPausePanel;
     [SerializeField] private GameObject goGameOverPanel;
+    [SerializeField] private GameObject goGameWonPanel;
 
     [SerializeField] private TMP_Text txtSens;
     [SerializeField] private Slider sensSlider;
@@ -53,7 +54,7 @@ public class GameManager : MonoBehaviour {
         Time.timeScale = 0;
 
         wave = 1;
-        StartCoroutine(StartWaveCorutine());
+        //StartCoroutine(StartWaveCorutine());
         //enemySpawnManager.SpawnWave(6, 2, 15);
     }
 
@@ -185,6 +186,15 @@ public class GameManager : MonoBehaviour {
 
     private void WaveCompleted() {
         wave++;
+
+        if (wave == 11) {
+            gameState = GameState.GameOver;
+            Cursor.lockState = CursorLockMode.None;
+            goGameWonPanel.SetActive(true);
+            goControlsPanel.SetActive(true);
+            Time.timeScale = 0;
+        }
+
         txtWave.text = "WAVE: " + wave.ToString() + " / 10";
 
         txtInfo.text = "WAVE " + (wave - 1).ToString() + " DEFEATED";

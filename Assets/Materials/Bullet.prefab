@@ -140,7 +140,7 @@ MonoBehaviour:
     type: 3}
   bloodColor: {r: 0.2924528, g: 0, b: 0, a: 0}
   groundColor: {r: 0.2509804, g: 0.16078432, b: 0.019607844, a: 0}
-  wallColor: {r: 0.3490566, g: 0.3490566, b: 0.3490566, a: 0}
+  wallColor: {r: 0.18867922, g: 0.18492465, b: 0.15930934, a: 0}
 --- !u!114 &658237997999191081
 MonoBehaviour:
   m_ObjectHideFlags: 0
