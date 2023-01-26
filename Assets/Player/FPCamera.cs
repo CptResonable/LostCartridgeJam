@@ -14,7 +14,7 @@ public class FPCamera {
     private Character character;
     public void Initialize(Character character) {
         this.character = character;
-        tCameraTarget.TryGetComponent<Camera>(out camera);
+        tCamera.TryGetComponent<Camera>(out camera);
 
         character.updateEvent += character_updateEvent;
         character.fixedUpdateEvent += character_fixedUpdateEvent;
