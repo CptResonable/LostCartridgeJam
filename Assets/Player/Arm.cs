@@ -32,14 +32,14 @@ public class Arm {
     }
 
     private void Player_fixedUpdateEvent() {
-        tBase.position = character.fpCamera.tHead.position;
-        tBase.rotation = Quaternion.Lerp(tBase.rotation, character.fpCamera.tHead.rotation, Time.fixedDeltaTime * 20);
+        tBase.position = character.fpCamera.tCamera.position;
+        tBase.rotation = Quaternion.Lerp(tBase.rotation, character.fpCamera.tCamera.rotation, Time.fixedDeltaTime * 12);
 
         handRotationOffset = new Vector3(handRotationOffset.x, handRotationOffset.y, Mathf.Lerp(handRotationOffset.z, -character.characterInput.moveInput.x * 25 + character.rb.angularVelocity.y * -2, Time.deltaTime * 8));
 
         if (character.weaponController.equipedGun != null)
             tHandTarget.localPosition = Vector3.Lerp(character.weaponController.equipedGun.targetHandPosition, character.weaponController.equipedGun.targetAdsHandPosition, hipAdsInterpolator.t);
-        tHandTarget.rotation = character.fpCamera.tHead.rotation;
+        tHandTarget.rotation = character.fpCamera.tCamera.rotation;
         tHandTarget.Rotate(handRotationOffset);
         if (reloadSpinPitch != 0) {
             tHandTarget.Rotate(new Vector3(0, 0, -50), Space.Self);
