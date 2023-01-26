@@ -4,7 +4,7 @@ using UnityEngine;
 
 [System.Serializable]
 public class FPCamera {
-    public Transform tHead;
+    public Transform tCameraTarget;
     public Transform tCamera;
 
     public float yaw, pitch;
@@ -14,7 +14,7 @@ public class FPCamera {
     private Character character;
     public void Initialize(Character character) {
         this.character = character;
-        tHead.TryGetComponent<Camera>(out camera);
+        tCameraTarget.TryGetComponent<Camera>(out camera);
 
         character.updateEvent += character_updateEvent;
         character.fixedUpdateEvent += character_fixedUpdateEvent;
@@ -38,7 +38,6 @@ public class FPCamera {
         }
 
         pitch = Mathf.Clamp(pitch, -89, 89);
-        tHead.parent.rotation = Quaternion.Euler(pitch, yaw, 0);
         tCamera.rotation = Quaternion.Euler(pitch, yaw, 0); ;
     }
 
@@ -47,7 +46,7 @@ public class FPCamera {
     }
 
     public void SetRotation() {
-        tHead.parent.rotation = Quaternion.Euler(pitch, yaw, 0);
+        tCameraTarget.parent.rotation = Quaternion.Euler(pitch, yaw, 0);
     }
 
     //public IEnumerator ApplyRecoilCorutine(float pitch, float yaw, float time) {

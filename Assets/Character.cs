@@ -49,7 +49,6 @@ public class Character : MonoBehaviour {
         UpdateAnimator();
 
         updateEvent?.Invoke();
-        //fpCamera.SetRotation();
     }
 
     protected void FixedUpdate() {

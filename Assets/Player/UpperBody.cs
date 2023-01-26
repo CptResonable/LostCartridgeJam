@@ -25,7 +25,7 @@ public class UpperBody {
         }
 
         character.body.tHead.rotation = character.fpCamera.tCamera.rotation; // Set head rotation to camera rotation
-        character.fpCamera.tCamera.position = character.fpCamera.tHead.position; // Set camera position
+        character.fpCamera.tCamera.position = character.fpCamera.tCameraTarget.position; // Set camera position
     }
     //private void Character_updateEvent() {
     //    Quaternion t2Rot = Quaternion.Slerp(character.transform.rotation, character.body.tHead.rotation, 0.7f);
