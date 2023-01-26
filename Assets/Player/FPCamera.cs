@@ -5,6 +5,7 @@ using UnityEngine;
 [System.Serializable]
 public class FPCamera {
     public Transform tHead;
+    public Transform tCamera;
 
     public float yaw, pitch;
 
@@ -38,6 +39,7 @@ public class FPCamera {
 
         pitch = Mathf.Clamp(pitch, -89, 89);
         tHead.parent.rotation = Quaternion.Euler(pitch, yaw, 0);
+        tCamera.rotation = Quaternion.Euler(pitch, yaw, 0); ;
     }
 
     private void EquipedGun_gunFiredEvent(Vector3 rotationalRecoil, Vector3 translationalRecoil) {

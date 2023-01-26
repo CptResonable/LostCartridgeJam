@@ -33,9 +33,9 @@ public class Character : MonoBehaviour {
 
         fpCamera.Initialize(this);
         playerController.Initialize(this);
-        arm.Init(this);
         weaponController.Init(this);
         upperBody.Init(this);
+        arm.Init(this);
         health.Init(this);
         body.Init(this);
 
@@ -49,7 +49,7 @@ public class Character : MonoBehaviour {
         UpdateAnimator();
 
         updateEvent?.Invoke();
-        fpCamera.SetRotation();
+        //fpCamera.SetRotation();
     }
 
     protected void FixedUpdate() {

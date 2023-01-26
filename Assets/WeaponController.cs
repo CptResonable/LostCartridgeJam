@@ -57,7 +57,7 @@ public class WeaponController {
         tOffHandPosition.position = gun.tOffHandTarget.position;
 
         character.handMovement.SetCOM();
-        weaponEquipedEvent.Invoke();
+        weaponEquipedEvent?.Invoke();
     }
 
     private void Action_attack_keyDownEvent() {

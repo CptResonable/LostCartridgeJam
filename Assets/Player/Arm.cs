@@ -35,7 +35,7 @@ public class Arm {
         tBase.position = character.fpCamera.tHead.position;
         tBase.rotation = Quaternion.Lerp(tBase.rotation, character.fpCamera.tHead.rotation, Time.fixedDeltaTime * 20);
 
-        handRotationOffset = new Vector3(handRotationOffset.x, handRotationOffset.y, Mathf.Lerp(handRotationOffset.z, -character.characterInput.moveInput.x * 25 + character.rb.angularVelocity.y * 200, Time.deltaTime * 8));
+        handRotationOffset = new Vector3(handRotationOffset.x, handRotationOffset.y, Mathf.Lerp(handRotationOffset.z, -character.characterInput.moveInput.x * 25 + character.rb.angularVelocity.y * -2, Time.deltaTime * 8));
 
         if (character.weaponController.equipedGun != null)
             tHandTarget.localPosition = Vector3.Lerp(character.weaponController.equipedGun.targetHandPosition, character.weaponController.equipedGun.targetAdsHandPosition, hipAdsInterpolator.t);

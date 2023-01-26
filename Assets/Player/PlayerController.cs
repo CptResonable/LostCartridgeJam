@@ -55,6 +55,11 @@ public class PlayerController {
         inputDir = character.transform.TransformDirection(character.characterInput.moveInput);
     }
 
+    private float yRotationError;
+    private float yDeltaError;
+    [SerializeField] private float rotateForce;
+    [SerializeField] private float rotateDamperCoef;
+    [SerializeField] private Transform tTargetRoation;
     private void Character_fixedUpdateEvent() {
         if (isGrounded)
             airTime = 0;
@@ -72,7 +77,17 @@ public class PlayerController {
 
 
         HorizontalMovement();
-        character.rb.rotation = Quaternion.Euler(0, character.fpCamera.yaw, 0);
+        //character.rb.rotation = Quaternion.Euler(0, character.fpCamera.yaw, 0);
+
+        //// Character rotation
+        //float newYRotationError = -Vector3.SignedAngle(Vector3.ProjectOnPlane(character.fpCamera.tHead.forward, Vector3.up).normalized, Vector3.ProjectOnPlane(character.transform.forward, Vector3.up).normalized, Vector3.up);
+        ////newYRotationError = -Vector3.SignedAngle(Vector3.ProjectOnPlane(character.head.tTarget.forward, Vector3.up).normalized, Vector3.ProjectOnPlane(character.transform.forward, Vector3.up).normalized, Vector3.up);
+
+        //yDeltaError = (newYRotationError - yRotationError) / Time.fixedDeltaTime;
+        //yRotationError = newYRotationError;
+        //float damper = yDeltaError * rotateDamperCoef;
+        tTargetRoation.rotation = Quaternion.Euler(0, character.fpCamera.yaw, 0);
+        //character.rb.AddTorque(Vector3.up * (yRotationError + damper) * rotateForce);
     }
 
     private void Action_jump_keyDownEvent() {
