@@ -72,7 +72,6 @@ public class WeaponController {
     }
 
     private void Action_reload_keyDownEvent() {
-        Debug.Log("RELOAD!");
         equipedGun.Reload();
     }
 

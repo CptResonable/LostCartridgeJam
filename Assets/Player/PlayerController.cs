@@ -52,6 +52,8 @@ public class PlayerController {
         else 
             isSprining = false;
 
+        //isSprining = true;
+
         inputDir = character.transform.TransformDirection(character.characterInput.moveInput);
     }
 

@@ -45,6 +45,11 @@ public class Arm {
             tHandTarget.Rotate(new Vector3(0, 0, -50), Space.Self);
             tHandTarget.Rotate(new Vector3(-reloadSpinPitch, 0, 0), Space.Self);
         }
+
+        if (character.playerController.isSprining) {
+            tHandTarget.position = character.body.rHandR.position;
+            tHandTarget.rotation = character.body.rHandR.rotation;
+        }
     }
 
     private void WeaponController_adsEnteredEvent() {
