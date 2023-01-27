@@ -47,8 +47,8 @@ public class Arm {
         }
 
         if (character.playerController.isSprining) {
-            tHandTarget.position = character.body.rHandR.position;
-            tHandTarget.rotation = character.body.rHandR.rotation;
+            tHandTarget.position = character.body.postAnimationState.GetBoneState(Body.BoneEnums.rHandR).position;
+            tHandTarget.rotation = character.body.postAnimationState.GetBoneState(Body.BoneEnums.rHandR).rotation;
         }
     }
 

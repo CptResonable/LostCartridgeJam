@@ -38,7 +38,7 @@ public class FPCamera {
         }
 
         pitch = Mathf.Clamp(pitch, -89, 89);
-        tCamera.rotation = Quaternion.Euler(pitch, yaw, 0); ;
+        tCamera.rotation = Quaternion.Euler(pitch, yaw, 0);
     }
 
     private void EquipedGun_gunFiredEvent(Vector3 rotationalRecoil, Vector3 translationalRecoil) {
