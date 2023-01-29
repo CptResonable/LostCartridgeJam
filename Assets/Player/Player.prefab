@@ -239,7 +239,7 @@ ConfigurableJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0.01699999, y: -0.12600008, z: 0.138}
+  m_ConnectedAnchor: {x: 0.016999766, y: -0.12600005, z: 0.13800019}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 1, z: 0}
   m_XMotion: 2
@@ -3038,7 +3038,7 @@ PrefabInstance:
     - target: {fileID: 1756045621161936768, guid: 527f4e4f17666ca469dfffeac44cfa13,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.056
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1756045621161936768, guid: 527f4e4f17666ca469dfffeac44cfa13,
         type: 3}
@@ -3079,11 +3079,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Gun 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3772797300618754255, guid: 527f4e4f17666ca469dfffeac44cfa13,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_AddedGameObjects: []

@@ -122,10 +122,10 @@ public class Gun : MonoBehaviour {
             //rb.AddForce(transform.right * horizontalForceScale * 5, ForceMode.Impulse);
             //rb.AddTorque(transform.right * -((force * 1.25f) + 0.75f), ForceMode.Impulse);
             //rb.AddTorque(transform.up * horizontalForceScale * 1.25f, ForceMode.Impulse);
-            rb.AddForce(-transform.forward * ((force * 5) + 5), ForceMode.Impulse);
-            rb.AddForce(transform.right * horizontalForceScale * 4, ForceMode.Impulse);
-            rb.AddTorque(transform.right * -((force * 2f) + 0.0f), ForceMode.Impulse);
-            rb.AddTorque(transform.up * horizontalForceScale * 1.25f, ForceMode.Impulse);
+            rb.AddForce(-tMuzzle.forward * ((force * 5) + 5), ForceMode.Impulse);
+            rb.AddForce(tMuzzle.right * horizontalForceScale * 4, ForceMode.Impulse);
+            rb.AddTorque(tMuzzle.right * -((force * 2f) + 0.0f), ForceMode.Impulse);
+            rb.AddTorque(tMuzzle.up * horizontalForceScale * 1.25f, ForceMode.Impulse);
             //rb.AddTorque(transform.up * ((force * 1) + 0.25f) * horizontalForceScale, ForceMode.Impulse);
 
             gunFiredEvent?.Invoke(new Vector3((force * 3) + 2, horizontalForceScale * 5.5f), Vector3.zero);
@@ -137,10 +137,10 @@ public class Gun : MonoBehaviour {
 
             float force = recoilCurve.Evaluate(recoilT);
             float horizontalForceScale = (Mathf.PerlinNoise(recoilT * horizontalChangeSpeed, 321.43f) - 0.2f) * 2 * horizontalRecoilCurve.Evaluate(recoilT);
-            rb.AddForce(-transform.forward * ((force * 5) + 4), ForceMode.Impulse);
-            rb.AddForce(transform.right * (horizontalForceScale * 4 + 0.2f), ForceMode.Impulse);
-            rb.AddTorque(transform.right * -((force * 1f) + 0.7f), ForceMode.Impulse);
-            rb.AddTorque(transform.up * ((horizontalForceScale * 0.5f) + Random.Range(-0.1f, 0.1f)), ForceMode.Impulse);
+            rb.AddForce(-tMuzzle.forward * ((force * 5) + 4), ForceMode.Impulse);
+            rb.AddForce(tMuzzle.right * (horizontalForceScale * 4 + 0.2f), ForceMode.Impulse);
+            rb.AddTorque(tMuzzle.right * -((force * 1f) + 0.7f), ForceMode.Impulse);
+            rb.AddTorque(tMuzzle.up * ((horizontalForceScale * 0.5f) + Random.Range(-0.1f, 0.1f)), ForceMode.Impulse);
 
             gunFiredEvent?.Invoke(new Vector3((force * 6) + 4, horizontalForceScale * 10.5f), Vector3.zero);
 
