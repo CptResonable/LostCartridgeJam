@@ -5,7 +5,10 @@ using UnityEngine;
 [System.Serializable]
 public class Arm {
     [SerializeField] private Transform tBase;
-    [SerializeField] private Transform tHandTarget;
+    [SerializeField] private Transform tHandTarget_R;
+    [SerializeField] private Transform tWeaponTarget_R;
+    //[SerializeField] private Transform fuck;
+    [SerializeField] private Vector3 ehh;
 
     //public Vector3 hipHandPosition;
     //public Vector3 adsHandPosition;
@@ -32,6 +35,19 @@ public class Arm {
     }
 
     private void Player_fixedUpdateEvent() {
+        WeaponHandUpdate();
+
+        if (character.playerController.isSprining) {
+            tHandTarget_R.position = character.body.postAnimationState.GetBoneState(Body.BoneEnums.rHandR).position;
+            tHandTarget_R.rotation = character.body.postAnimationState.GetBoneState(Body.BoneEnums.rHandR).rotation;
+        }
+        else {
+            tHandTarget_R.position = tWeaponTarget_R.position;
+            tHandTarget_R.rotation = tWeaponTarget_R.rotation;
+        }
+    }
+
+    private void WeaponHandUpdate() {
         tBase.position = character.fpCamera.tCamera.position;
         tBase.rotation = Quaternion.Lerp(tBase.rotation, character.fpCamera.tCamera.rotation, Time.fixedDeltaTime * 12);
 
@@ -39,17 +55,15 @@ public class Arm {
         handRotationOffset = new Vector3(handRotationOffset.x, handRotationOffset.y, Mathf.Lerp(handRotationOffset.z, -character.characterInput.moveInput.x * 25 + character.rb.angularVelocity.y * -2, Time.fixedDeltaTime * 8));
 
         if (character.weaponController.equipedGun != null)
-            tHandTarget.localPosition = Vector3.Lerp(character.weaponController.equipedGun.targetHandPosition, character.weaponController.equipedGun.targetAdsHandPosition, hipAdsInterpolator.t);
-        tHandTarget.rotation = character.fpCamera.tCamera.rotation;
-        tHandTarget.Rotate(handRotationOffset);
-        if (reloadSpinPitch != 0) {
-            tHandTarget.Rotate(new Vector3(0, 0, -50), Space.Self);
-            tHandTarget.Rotate(new Vector3(-reloadSpinPitch, 0, 0), Space.Self);
-        }
+            tWeaponTarget_R.localPosition = Vector3.Lerp(character.weaponController.equipedGun.targetHandPosition, character.weaponController.equipedGun.targetAdsHandPosition, hipAdsInterpolator.t);
+        tWeaponTarget_R.rotation = character.fpCamera.tCamera.rotation;
+        tWeaponTarget_R.Rotate(handRotationOffset);
+        tWeaponTarget_R.Rotate(ehh);
+        //tWeaponTarget_R.Rotate(new Vector3(-90, 0, 180));
 
-        if (character.playerController.isSprining) {
-            tHandTarget.position = character.body.postAnimationState.GetBoneState(Body.BoneEnums.rHandR).position;
-            tHandTarget.rotation = character.body.postAnimationState.GetBoneState(Body.BoneEnums.rHandR).rotation;
+        if (reloadSpinPitch != 0) {
+            tWeaponTarget_R.Rotate(new Vector3(0, 0, -50), Space.Self);
+            tWeaponTarget_R.Rotate(new Vector3(-reloadSpinPitch, 0, 0), Space.Self);
         }
     }
 

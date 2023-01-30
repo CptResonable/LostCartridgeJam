@@ -571,7 +571,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2925393505618189473}
-  - {fileID: 5108803204374245236}
   m_Father: {fileID: 7386630257032044851}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -774,11 +773,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3687472273389427665}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.13500023, y: -0.22500002, z: 0.19999981}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2925393505612606320}
+  m_Father: {fileID: 7386630257032044851}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5397070528236997315
@@ -1016,6 +1015,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 5108803204374245236}
   - {fileID: 7386630257519315589}
   - {fileID: 2925393505867738240}
   - {fileID: 7458831216974441010}
@@ -1231,7 +1231,9 @@ MonoBehaviour:
     isADS: 0
   arm:
     tBase: {fileID: 2925393505612606320}
-    tHandTarget: {fileID: 2925393505618189473}
+    tHandTarget_R: {fileID: 0}
+    tWeaponTarget_R: {fileID: 0}
+    ehh: {x: 0, y: 0, z: 0}
     handRotationOffset: {x: 0, y: 0, z: 0}
   health:
     maxHP: 100
