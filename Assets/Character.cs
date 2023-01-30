@@ -8,7 +8,8 @@ public class Character : MonoBehaviour {
     public FPCamera fpCamera;
     public UpperBody upperBody;
     public PlayerController playerController;
-    public HandMovement handMovement;
+    public HandMovement handMovement_R;
+    public HandMovement handMovement_L;
     public WeaponController weaponController;
     public Arm arm;
     public Health health;
@@ -40,6 +41,8 @@ public class Character : MonoBehaviour {
         health.Init(this);
         body.Init(this);
 
+        handMovement_L.SetInertiaTensor(handMovement_R.GetComponent<Rigidbody>().inertiaTensor);
+
         health.diedEvent += Health_diedEvent;
     }
 
@@ -57,7 +60,8 @@ public class Character : MonoBehaviour {
             return;
 
         fixedUpdateEvent?.Invoke();
-        handMovement.DoUpdate();
+        handMovement_R.DoUpdate();
+        handMovement_L.DoUpdate();
     }
 
     protected void LateUpdate() {

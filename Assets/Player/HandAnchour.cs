@@ -6,6 +6,6 @@ public class HandAnchour : MonoBehaviour {
     [SerializeField] private Character character;
 
     private void Update() {
-        transform.position = character.transform.position - character.handMovement.targetDeltaPos;
+        transform.position = character.transform.position - character.handMovement_R.targetDeltaPos;
     }
 }

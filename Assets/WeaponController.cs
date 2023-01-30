@@ -56,7 +56,8 @@ public class WeaponController {
         tHandTarget.localPosition = Vector3.zero;
         tOffHandPosition.position = gun.tOffHandTarget.position;
 
-        character.handMovement.SetCOM();
+        character.handMovement_R.SetCOM();
+        character.handMovement_L.SetCOM();
         weaponEquipedEvent?.Invoke();
     }
 

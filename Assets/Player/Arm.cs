@@ -1,12 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using RootMotion.FinalIK;
 
 [System.Serializable]
 public class Arm {
     [SerializeField] private Transform tBase;
     [SerializeField] private Transform tHandTarget_R;
+    [SerializeField] private Transform tHandTarget_L;
     [SerializeField] private Transform tWeaponTarget_R;
+    [SerializeField] private Transform tIkTarget_L;
+    [SerializeField] private Transform tIkTarget_R;
+
+    [SerializeField] private LimbIK armIK_R;
+    [SerializeField] private IK armIK_L;
     //[SerializeField] private Transform fuck;
     [SerializeField] private Vector3 ehh;
 
@@ -40,10 +47,14 @@ public class Arm {
         if (character.playerController.isSprining) {
             tHandTarget_R.position = character.body.postAnimationState.GetBoneState(Body.BoneEnums.rHandR).position;
             tHandTarget_R.rotation = character.body.postAnimationState.GetBoneState(Body.BoneEnums.rHandR).rotation;
+            tHandTarget_L.position = character.body.postAnimationState.GetBoneState(Body.BoneEnums.rHandL).position;
+            tHandTarget_L.rotation = character.body.postAnimationState.GetBoneState(Body.BoneEnums.rHandL).rotation;
         }
         else {
             tHandTarget_R.position = tWeaponTarget_R.position;
             tHandTarget_R.rotation = tWeaponTarget_R.rotation;
+            tHandTarget_L.position = tWeaponTarget_R.position;
+            tHandTarget_L.rotation = tWeaponTarget_R.rotation;
         }
     }
 
