@@ -5,10 +5,9 @@ using UnityEngine;
 public class Hand : MonoBehaviour {
 
     public Transform tWeaponTarget; // Target position and rotation when holding a gun
-    public Transform tTarget; // Target position and rotation, it is the target after blending between diffrent states. Updates in fixedUpdate
+    public Transform tPhysicalTarget; // Target position and rotation, it is the target after blending between diffrent states. Updates in fixedUpdate
     public Transform tIkTarget; // The ik target tarnsform
 
-    [SerializeField] protected KinematicMeasures kmTarget;
     [SerializeField] private Transform tCOM;
 
     [SerializeField] protected float errorAdjustmentCoef;
@@ -16,6 +15,7 @@ public class Hand : MonoBehaviour {
 
     protected Character character;
     protected Arms arms;
+    protected KinematicMeasures kmTarget;
     public Rigidbody rb;
 
     protected Vector3 velocity;
@@ -26,6 +26,7 @@ public class Hand : MonoBehaviour {
         this.character = character;
         this.arms = character.arms;
 
+        kmTarget = tPhysicalTarget.GetComponent<KinematicMeasures>();
         rb = GetComponent<Rigidbody>();
     }
 

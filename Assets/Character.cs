@@ -8,8 +8,6 @@ public class Character : MonoBehaviour {
     public FPCamera fpCamera;
     public UpperBody upperBody;
     public Locomotion locomotion;
-    public HandMovement handMovement_R;
-    public HandMovement handMovement_L;
     public WeaponController weaponController;
     public Arms arms;
     public Health health;

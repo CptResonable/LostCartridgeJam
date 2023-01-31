@@ -8,7 +8,15 @@ public class RightHand : Hand {
     private Coroutine reloadCorutine;
     private float reloadSpinPitch;
 
+    public override void Init(Character character) {
+        base.Init(character);
+
+        character.weaponController.reloadStartedEvent += WeaponController_reloadStartedEvent;
+    }
+
     public override void Update() {
+
+        // Set ik target to physical hand
         tIkTarget.position = transform.position;
         tIkTarget.rotation = transform.rotation;
     }
@@ -16,8 +24,9 @@ public class RightHand : Hand {
     public override void ManualFixedUpdate() {
         WeaponTargetUpdate();
 
-        tTarget.position = Vector3.Lerp(tWeaponTarget.position, character.body.postAnimationState.GetBoneState(Body.BoneEnums.rHandR).position, arms.animationWeightInterpolator.t);
-        tTarget.rotation = Quaternion.Slerp(tWeaponTarget.rotation, character.body.postAnimationState.GetBoneState(Body.BoneEnums.rHandR).rotation, arms.animationWeightInterpolator.t);
+        // Interpolate physics target pos/rot between weapon grip and animation
+        tPhysicalTarget.position = Vector3.Lerp(tWeaponTarget.position, character.body.postAnimationState.GetBoneState(Body.BoneEnums.rHandR).position, arms.animationWeightInterpolator.t);
+        tPhysicalTarget.rotation = Quaternion.Slerp(tWeaponTarget.rotation, character.body.postAnimationState.GetBoneState(Body.BoneEnums.rHandR).rotation, arms.animationWeightInterpolator.t);
 
         PhysicalHandUpdate();
     }

@@ -5,18 +5,17 @@ using UnityEngine;
 public class LeftHand : Hand {
 
     public override void Update() {
-        //tIkTarget.position = Vector3.Lerp(tTarget.position, tWeaponTarget.position, arms.animationWeightInterpolator.t);
-        //tIkTarget.rotation = Quaternion.Slerp(tTarget.rotation, tWeaponTarget.rotation, arms.animationWeightInterpolator.t);
-        //tIkTarget.position = Vector3.Lerp(transform.position, tWeaponTarget.position, arms.animationWeightInterpolator.t);
-        //tIkTarget.rotation = Quaternion.Slerp(transform.rotation, tWeaponTarget.rotation, arms.animationWeightInterpolator.t);
+
+        // Interpolate between physical hand and weapon grip, reason is i don't want grip hand to wobble
         tIkTarget.position = Vector3.Lerp(tWeaponTarget.position, transform.position, arms.animationWeightInterpolator.t);
         tIkTarget.rotation = Quaternion.Slerp(tWeaponTarget.rotation, transform.rotation, arms.animationWeightInterpolator.t);
     }
 
     public override void ManualFixedUpdate() {
-        Debug.Log(arms.animationWeightInterpolator.t);
-        tTarget.position = Vector3.Lerp(tWeaponTarget.position, character.body.postAnimationState.GetBoneState(Body.BoneEnums.rHandL).position, arms.animationWeightInterpolator.t);
-        tTarget.rotation = Quaternion.Slerp(tWeaponTarget.rotation, character.body.postAnimationState.GetBoneState(Body.BoneEnums.rHandL).rotation, arms.animationWeightInterpolator.t);
+
+        // Interpolate physics target pos/rot between weapon grip and animation
+        tPhysicalTarget.position = Vector3.Lerp(tWeaponTarget.position, character.body.postAnimationState.GetBoneState(Body.BoneEnums.rHandL).position, arms.animationWeightInterpolator.t);
+        tPhysicalTarget.rotation = Quaternion.Slerp(tWeaponTarget.rotation, character.body.postAnimationState.GetBoneState(Body.BoneEnums.rHandL).rotation, arms.animationWeightInterpolator.t);
 
         PhysicalHandUpdate();
     }
