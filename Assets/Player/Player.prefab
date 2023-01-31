@@ -133,6 +133,7 @@ MonoBehaviour:
   tCOM: {fileID: 1905549669}
   character: {fileID: 7386630257519315610}
   tIkTarget: {fileID: 899840614152652973}
+  tLeftHandTarget: {fileID: 2925393505419985796}
   side: 0
   velocity: {x: 0, y: 0, z: 0}
   targetVelocity: {x: 0, y: 0, z: 0}
@@ -567,6 +568,7 @@ MonoBehaviour:
   tCOM: {fileID: 2925393505589397855}
   character: {fileID: 0}
   tIkTarget: {fileID: 6866139436226469841}
+  tLeftHandTarget: {fileID: 0}
   side: 1
   velocity: {x: 0, y: 0, z: 0}
   targetVelocity: {x: 0, y: 0, z: 0}
@@ -835,7 +837,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2925393505419985797}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0, y: 0.008, z: 0.175}
+  m_LocalPosition: {x: -0, y: 0.0257, z: 0.0232}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

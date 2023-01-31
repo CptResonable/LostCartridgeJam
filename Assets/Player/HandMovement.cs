@@ -9,6 +9,7 @@ public class HandMovement : MonoBehaviour {
     [SerializeField] private Transform tCOM;
     [SerializeField] private Character character;
     [SerializeField] private Transform tIkTarget;
+    [SerializeField] private Transform tLeftHandTarget;
 
     public Enums.Side side;
 
@@ -31,8 +32,14 @@ public class HandMovement : MonoBehaviour {
     }
 
     private void Update() {
-        tIkTarget.position = transform.position;
-        tIkTarget.rotation = transform.rotation;
+        if (side == Enums.Side.left && !character.playerController.isSprining) {
+            tIkTarget.position = tLeftHandTarget.position;
+            tIkTarget.rotation = tLeftHandTarget.rotation;
+        }
+        else {
+            tIkTarget.position = transform.position;
+            tIkTarget.rotation = transform.rotation;
+        }
     }
 
     public void SetCOM() {
@@ -72,9 +79,6 @@ public class HandMovement : MonoBehaviour {
         kmTarget.DoUpdate();
 
         if (character.playerController.isSprining) {
-            //joint.angularXMotion = ConfigurableJointMotion.Locked;
-            //joint.angularYMotion = ConfigurableJointMotion.Locked;
-            //joint.angularZMotion = ConfigurableJointMotion.Locked;
 
             ////rb.isKinematic = true;
             //transform.position = kmTarget.transform.position;
@@ -86,13 +90,12 @@ public class HandMovement : MonoBehaviour {
             targetVelocity = kmTarget.velocity + targetDeltaPos * errorAdjustmentCoef;
             velocity = Vector3.Lerp(velocity, targetVelocity, Time.fixedDeltaTime * velocityChangeCoef);
             rb.velocity = velocity;
+
+            //transform.position = kmTarget.transform.position;
+            //transform.rotation = kmTarget.transform.rotation;
         }
         else {
             //rb.isKinematic = false;
-
-            //joint.angularXMotion = ConfigurableJointMotion.Limited;
-            //joint.angularYMotion = ConfigurableJointMotion.Limited;
-            //joint.angularZMotion = ConfigurableJointMotion.Limited;
             velocity = rb.velocity;
             targetDeltaPos = VectorUtils.FromToVector(transform.position, kmTarget.transform.position);
 
