@@ -13,18 +13,12 @@ public class HandMovement : MonoBehaviour {
 
     public Enums.Side side;
 
-    public Vector3 velocity;
-    public Vector3 targetVelocity;
-
-    public Vector3 angularVelocity;
-    public Vector3 targetAngularVelocity;
-
-    public Vector3 rotationOffset;
-
-    public Vector3 targetDeltaPos;
-
     private Rigidbody rb;
     private ConfigurableJoint joint;
+
+    private Vector3 velocity;
+    private Vector3 targetVelocity;
+    public Vector3 targetDeltaPos;
 
     private void Awake() {
         rb = GetComponent<Rigidbody>();
@@ -32,7 +26,7 @@ public class HandMovement : MonoBehaviour {
     }
 
     private void Update() {
-        if (side == Enums.Side.left && !character.playerController.isSprining) {
+        if (side == Enums.Side.left && !character.locomotion.isSprinting) {
             tIkTarget.position = tLeftHandTarget.position;
             tIkTarget.rotation = tLeftHandTarget.rotation;
         }
@@ -78,44 +72,24 @@ public class HandMovement : MonoBehaviour {
     private void DoUpdateLeft() {
         kmTarget.DoUpdate();
 
-        if (character.playerController.isSprining) {
-
-            ////rb.isKinematic = true;
-            //transform.position = kmTarget.transform.position;
-            //transform.rotation = kmTarget.transform.rotation;
-
+        if (character.locomotion.isSprinting) {
             velocity = rb.velocity;
             targetDeltaPos = VectorUtils.FromToVector(transform.position, kmTarget.transform.position);
 
             targetVelocity = kmTarget.velocity + targetDeltaPos * errorAdjustmentCoef;
             velocity = Vector3.Lerp(velocity, targetVelocity, Time.fixedDeltaTime * velocityChangeCoef);
             rb.velocity = velocity;
-
-            //transform.position = kmTarget.transform.position;
-            //transform.rotation = kmTarget.transform.rotation;
         }
         else {
-            //rb.isKinematic = false;
             velocity = rb.velocity;
             targetDeltaPos = VectorUtils.FromToVector(transform.position, kmTarget.transform.position);
 
             targetVelocity = kmTarget.velocity + targetDeltaPos * errorAdjustmentCoef;
             velocity = Vector3.Lerp(velocity, targetVelocity, Time.fixedDeltaTime * velocityChangeCoef);
             rb.velocity = velocity;
-
-            //tIkTarget.position = kmTarget.transform.position;
-            //tIkTarget.rotation = kmTarget.transform.rotation;
         }
 
         Debug.Log(name + " it " + rb.inertiaTensor);
         Debug.Log(name + " com " + rb.centerOfMass);
-
-        //velocity = rb.velocity;
-        //targetDeltaPos = VectorUtils.FromToVector(transform.position, kmTarget.transform.position);
-
-        //targetVelocity = kmTarget.velocity + targetDeltaPos * errorAdjustmentCoef;
-        //velocity = Vector3.Lerp(velocity, targetVelocity, Time.fixedDeltaTime * velocityChangeCoef);
-        //rb.velocity = velocity;
-
     }
 }

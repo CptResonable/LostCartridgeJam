@@ -76,6 +76,7 @@ GameObject:
   - component: {fileID: 516568721}
   - component: {fileID: 516568720}
   - component: {fileID: 516568719}
+  - component: {fileID: 3438967135199304485}
   m_Layer: 6
   m_Name: Hand_L
   m_TagString: Untagged
@@ -135,11 +136,6 @@ MonoBehaviour:
   tIkTarget: {fileID: 899840614152652973}
   tLeftHandTarget: {fileID: 2925393505419985796}
   side: 0
-  velocity: {x: 0, y: 0, z: 0}
-  targetVelocity: {x: 0, y: 0, z: 0}
-  angularVelocity: {x: 0, y: 0, z: 0}
-  targetAngularVelocity: {x: 0, y: 0, z: 0}
-  rotationOffset: {x: 0, y: 0, z: 0}
   targetDeltaPos: {x: 0, y: 0, z: 0}
 --- !u!153 &516568720
 ConfigurableJoint:
@@ -252,6 +248,26 @@ MonoBehaviour:
   deltaRot: {x: 0, y: 0, z: 0, w: 0}
   target: {fileID: 402087907}
   configuredInWorldSpace: 0
+--- !u!114 &3438967135199304485
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 516568717}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96c6f716b95750340bf67778cc940520, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tWeaponTarget: {fileID: 2925393505419985796}
+  tTarget: {fileID: 402087907}
+  tIkTarget: {fileID: 899840614152652973}
+  kmTarget: {fileID: 402087908}
+  tCOM: {fileID: 1905549669}
+  errorAdjustmentCoef: 20
+  velocityChangeCoef: 40
+  rb: {fileID: 0}
 --- !u!1 &1104308677
 GameObject:
   m_ObjectHideFlags: 0
@@ -508,6 +524,7 @@ GameObject:
   - component: {fileID: 2925393504390165885}
   - component: {fileID: 1285744482911927165}
   - component: {fileID: 1059132875}
+  - component: {fileID: 606353170068321554}
   m_Layer: 6
   m_Name: Hand_R
   m_TagString: Untagged
@@ -570,11 +587,6 @@ MonoBehaviour:
   tIkTarget: {fileID: 6866139436226469841}
   tLeftHandTarget: {fileID: 0}
   side: 1
-  velocity: {x: 0, y: 0, z: 0}
-  targetVelocity: {x: 0, y: 0, z: 0}
-  angularVelocity: {x: 0, y: 0, z: 0}
-  targetAngularVelocity: {x: 0, y: 0, z: 0}
-  rotationOffset: {x: 0, y: 0, z: 0}
   targetDeltaPos: {x: 0, y: 0, z: 0}
 --- !u!153 &1285744482911927165
 ConfigurableJoint:
@@ -687,6 +699,26 @@ MonoBehaviour:
   deltaRot: {x: 0, y: 0, z: 0, w: 0}
   target: {fileID: 5108803204374245236}
   configuredInWorldSpace: 0
+--- !u!114 &606353170068321554
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2742565614746580896}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e591c54b56547849a1ed75c68e1c022, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tWeaponTarget: {fileID: 2925393505618189473}
+  tTarget: {fileID: 5108803204374245236}
+  tIkTarget: {fileID: 6866139436226469841}
+  kmTarget: {fileID: 394734908}
+  tCOM: {fileID: 2925393505589397855}
+  errorAdjustmentCoef: 20
+  velocityChangeCoef: 40
+  rb: {fileID: 0}
 --- !u!1 &2925393504685623569
 GameObject:
   m_ObjectHideFlags: 0
@@ -1521,7 +1553,7 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-  playerController:
+  locomotion:
     moveSpeed: 3.5
     sprintSpeed: 5
     moveAcceleration: 10
@@ -1597,9 +1629,9 @@ MonoBehaviour:
     targetHeight: 0.8
     layerMask:
       serializedVersion: 2
-      m_Bits: 55
-    isSprining: 0
-    rotateForce: 0.02
+      m_Bits: 23
+    isSprinting: 0
+    rotateForce: 0.2
     rotateDamperCoef: 0.1
     tTargetRoation: {fileID: 1104308678}
   handMovement_R: {fileID: 2925393504390165885}
@@ -1612,16 +1644,10 @@ MonoBehaviour:
     tOffHandPosition: {fileID: 2925393505419985796}
     handJoint: {fileID: 1285744482911927165}
     isADS: 0
-  arm:
+  arms:
+    hand_R: {fileID: 606353170068321554}
+    hand_L: {fileID: 3438967135199304485}
     tBase: {fileID: 2925393505612606320}
-    tHandTarget_R: {fileID: 5108803204374245236}
-    tHandTarget_L: {fileID: 402087907}
-    tWeaponTarget_R: {fileID: 1119527977}
-    tIkTarget_L: {fileID: 0}
-    tIkTarget_R: {fileID: 6866139436226469841}
-    armIK_R: {fileID: 0}
-    armIK_L: {fileID: 0}
-    ehh: {x: -90, y: 0, z: 180}
     handRotationOffset: {x: 0, y: 0, z: 0}
   health:
     maxHP: 100

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class PlayerController {
+public class Locomotion {
     [SerializeField] private float moveSpeed;
     [SerializeField] private float sprintSpeed;
     [SerializeField] private float moveAcceleration;
@@ -19,7 +19,9 @@ public class PlayerController {
 
     [SerializeField] private LayerMask layerMask;
 
-    public bool isSprining;
+    public bool isSprinting;
+    public event Delegates.EmptyDelegate sprintStartedEvent;
+    public event Delegates.EmptyDelegate sprintEndedEvent;
 
     private float currentHeight = 1;
 
@@ -42,17 +44,22 @@ public class PlayerController {
         character.updateEvent += Character_updateEvent;
         character.fixedUpdateEvent += Character_fixedUpdateEvent;
         character.characterInput.action_jump.keyDownEvent += Action_jump_keyDownEvent;
+        character.characterInput.action_sprint.keyDownEvent += Action_sprint_keyDownEvent;
+        character.characterInput.action_sprint.keyUpEvent += Action_sprint_keyUpEvent;
+    }
+
+    private void Action_sprint_keyDownEvent() {
+        isSprinting = true;
+        sprintStartedEvent?.Invoke();
+    }
+
+    private void Action_sprint_keyUpEvent() {
+        isSprinting = false;
+        sprintEndedEvent?.Invoke();
     }
 
     private void Character_updateEvent() {
         VerticalMovement();
-
-        if (character.characterInput.action_sprint.isDown)
-            isSprining = true;
-        else 
-            isSprining = false;
-
-        //isSprining = true;
 
         inputDir = character.transform.TransformDirection(character.characterInput.moveInput);
     }
@@ -123,7 +130,7 @@ public class PlayerController {
         Vector3 moveDir_otherPart = inputDir - moveDir_forwardPart;
         Vector3 moveVector = moveDir_otherPart * moveSpeed;
 
-        if (isSprining)
+        if (isSprinting)
             moveVector += moveDir_forwardPart * sprintSpeed;
         else
             moveVector += moveDir_forwardPart * moveSpeed;

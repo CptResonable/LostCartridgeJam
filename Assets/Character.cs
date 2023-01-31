@@ -7,11 +7,11 @@ public class Character : MonoBehaviour {
     public CharacterInput characterInput;
     public FPCamera fpCamera;
     public UpperBody upperBody;
-    public PlayerController playerController;
+    public Locomotion locomotion;
     public HandMovement handMovement_R;
     public HandMovement handMovement_L;
     public WeaponController weaponController;
-    public Arm arm;
+    public Arms arms;
     public Health health;
     public Body body;
 
@@ -34,14 +34,12 @@ public class Character : MonoBehaviour {
         capColider = GetComponent<CapsuleCollider>();
 
         fpCamera.Initialize(this);
-        playerController.Initialize(this);
+        locomotion.Initialize(this);
         weaponController.Init(this);
         upperBody.Init(this);
-        arm.Init(this);
+        arms.Init(this);
         health.Init(this);
         body.Init(this);
-
-        handMovement_L.SetInertiaTensor(handMovement_R.GetComponent<Rigidbody>().inertiaTensor);
 
         health.diedEvent += Health_diedEvent;
     }
@@ -60,8 +58,6 @@ public class Character : MonoBehaviour {
             return;
 
         fixedUpdateEvent?.Invoke();
-        handMovement_R.DoUpdate();
-        handMovement_L.DoUpdate();
     }
 
     protected void LateUpdate() {

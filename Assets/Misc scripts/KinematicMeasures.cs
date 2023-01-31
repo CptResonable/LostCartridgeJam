@@ -8,7 +8,6 @@ public class KinematicMeasures : MonoBehaviour {
 
     private Vector3 lastPosition;
     private Quaternion lastRotation;
-    private Vector3 lastForwardDirection;
 
     private void Awake() {
         lastPosition = transform.position;

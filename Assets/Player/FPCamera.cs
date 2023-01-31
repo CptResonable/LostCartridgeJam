@@ -34,7 +34,7 @@ public class FPCamera {
         yaw += character.characterInput.mouseMovement.xDelta * Settings.MOUSE_SENSITIVITY;
 
         if (camera != null) {
-            camera.fieldOfView = Mathf.Lerp(Settings.FOV_HIP, Settings.FOV_ADS, character.arm.hipAdsInterpolator.t);
+            camera.fieldOfView = Mathf.Lerp(Settings.FOV_HIP, Settings.FOV_ADS, character.arms.hipAdsInterpolator.t);
         }
 
         pitch = Mathf.Clamp(pitch, -89, 89);

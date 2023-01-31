@@ -31,7 +31,7 @@ public class NPC : Character {
 
     public void DashAttack(Vector3 dashVector) {
         dashTrigger.DashAttack(0.15f);
-        playerController.Dash(0.15f, dashVector);
+        locomotion.Dash(0.15f, dashVector);
     }
 
     private void Health_diedEvent() {
