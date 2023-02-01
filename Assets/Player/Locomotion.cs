@@ -18,6 +18,7 @@ public class Locomotion {
     [SerializeField] private float targetHeight = 0.8f;
 
     [SerializeField] private LayerMask layerMask;
+    [SerializeField] public WallrunController wallrunController;
 
     public bool isSprinting;
     public event Delegates.EmptyDelegate sprintStartedEvent;
@@ -59,8 +60,6 @@ public class Locomotion {
     }
 
     private void Character_updateEvent() {
-        VerticalMovement();
-
         inputDir = character.transform.TransformDirection(character.characterInput.moveInput);
     }
 
@@ -84,19 +83,34 @@ public class Locomotion {
             rb.AddForce(Vector3.down * 9.81f, ForceMode.Acceleration);
         }
 
+        if (wallrunController.isWallRunning) {
+            character.rb.velocity = wallrunController.runVelocity;
+        }
+        else {
+            HorizontalMovement();
+        }
 
-        HorizontalMovement();
-        //character.rb.rotation = Quaternion.Euler(0, character.fpCamera.yaw, 0);
+        VerticalMovement();
 
-        //// Character rotation
-        //float newYRotationError = -Vector3.SignedAngle(Vector3.ProjectOnPlane(character.fpCamera.tHead.forward, Vector3.up).normalized, Vector3.ProjectOnPlane(character.transform.forward, Vector3.up).normalized, Vector3.up);
-        ////newYRotationError = -Vector3.SignedAngle(Vector3.ProjectOnPlane(character.head.tTarget.forward, Vector3.up).normalized, Vector3.ProjectOnPlane(character.transform.forward, Vector3.up).normalized, Vector3.up);
+        Quaternion targetRotation;
+        if (wallrunController.isWallRunning)
+            targetRotation = Quaternion.LookRotation(Vector3.ProjectOnPlane(-wallrunController.wallHit.normal, Vector3.up).normalized, Vector3.up);
+        else
+            targetRotation = Quaternion.Euler(0, character.fpCamera.yaw, 0);
 
-        //yDeltaError = (newYRotationError - yRotationError) / Time.fixedDeltaTime;
-        //yRotationError = newYRotationError;
-        //float damper = yDeltaError * rotateDamperCoef;
-        tTargetRoation.rotation = Quaternion.Euler(0, character.fpCamera.yaw, 0);
-        //character.rb.AddTorque(Vector3.up * (yRotationError + damper) * rotateForce);
+        tTargetRoation.rotation = targetRotation;
+    }
+
+    private void Rotation() {
+
+        // Character rotation
+        float newYRotationError = -Vector3.SignedAngle(Vector3.ProjectOnPlane(character.fpCamera.tCameraTarget.forward, Vector3.up).normalized, Vector3.ProjectOnPlane(character.transform.forward, Vector3.up).normalized, Vector3.up);
+        //newYRotationError = -Vector3.SignedAngle(Vector3.ProjectOnPlane(character.head.tTarget.forward, Vector3.up).normalized, Vector3.ProjectOnPlane(character.transform.forward, Vector3.up).normalized, Vector3.up);
+
+        yDeltaError = (newYRotationError - yRotationError) / Time.fixedDeltaTime;
+        yRotationError = newYRotationError;
+        float damper = yDeltaError * rotateDamperCoef;
+        character.rb.AddTorque(Vector3.up * (yRotationError + damper) * rotateForce);
     }
 
     private void Action_jump_keyDownEvent() {

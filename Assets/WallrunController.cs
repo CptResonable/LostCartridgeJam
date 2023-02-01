@@ -41,17 +41,6 @@ public class WallrunController : MonoBehaviour {
         smoothCharacterVelocity = Vector3.Lerp(smoothCharacterVelocity, character.rb.velocity, Time.deltaTime * 8);
         smoothCharacterHorizontalVelocity = Vector3.ProjectOnPlane(smoothCharacterVelocity, Vector3.up);
 
-        //if (isWallRunning) {
-        //    float newAngle = Vector3.SignedAngle(wallHit.normal, Quaternion.Euler(0, character.head.yaw, 0) * Vector3.forward, Vector3.up);
-        //    if (Mathf.Sign(newAngle) != Mathf.Sign(angle) && Mathf.Abs(angle) < 30) {
-        //        character.head.yaw += Mathf.Sign(newAngle) * (Mathf.Abs(newAngle + 1));
-        //        angle = Vector3.SignedAngle(wallHit.normal, Quaternion.Euler(0, character.head.yaw, 0) * Vector3.forward, Vector3.up);
-        //    }
-        //    else {
-        //        angle = newAngle;
-        //    }
-        //}
-
         if (!wallDetected && isWallRunning) {
             StopWallRun();
         }
@@ -85,16 +74,29 @@ public class WallrunController : MonoBehaviour {
     }
 
     private void OnTriggerStay(Collider other) {
-        Vector3 closestPoint = other.ClosestPointOnBounds(transform.position);
-        tClosestPointMarker.gameObject.SetActive(true);
-        tClosestPointMarker.position = closestPoint;
-
-        Vector3 characterToPointVector = VectorUtils.FromToVector(transform.position, closestPoint);
-
-        if (Physics.Raycast(transform.position, characterToPointVector.normalized, out wallHit, 1, layerMask)) {
-            wallDetected = true;
+        if (Physics.Raycast(transform.position, character.transform.forward, out wallHit, 2, layerMask)) {
+            if (Physics.Raycast(transform.position, -wallHit.normal, out wallHit, 1, layerMask)) {
+                wallDetected = true;
+                Debug.Log("Detected2!");
+            }
         }
     }
+    //private void OnTriggerStay(Collider other) {
+    //    Debug.Log("other: " + other.name);
+    //    Vector3 closestPoint = other.ClosestPoint(transform.position);
+    //    tClosestPointMarker.gameObject.SetActive(true);
+    //    tClosestPointMarker.position = closestPoint;
+
+    //    Vector3 characterToPointVector = VectorUtils.FromToVector(transform.position, closestPoint);
+    //    Debug.Log("Trigger!");
+
+    //    Debug.DrawRay(transform.position, characterToPointVector.normalized, Color.red, Time.deltaTime);
+
+    //    if (Physics.Raycast(transform.position, characterToPointVector.normalized, out wallHit, 2, layerMask)) {
+    //        wallDetected = true;
+    //        Debug.Log("Detected!");
+    //    }
+    //}
 
     private void StartVerticalRun() {
         angle = Vector3.SignedAngle(wallHit.normal, Quaternion.Euler(0, character.fpCamera.yaw, 0) * Vector3.forward, Vector3.up);
