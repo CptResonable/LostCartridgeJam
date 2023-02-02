@@ -49,7 +49,7 @@ public class Body {
             new RagdollBone(tHandR, rHandR),
         };
 
-        character.animatorUpdatedEvent += Character_animatorUpdatedEvent;
+        character.animatorController.animatorUpdatedEvent += Character_animatorUpdatedEvent;
     }
 
     private void Character_animatorUpdatedEvent() {

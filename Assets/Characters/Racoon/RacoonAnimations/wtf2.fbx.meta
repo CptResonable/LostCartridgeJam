@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 5df94392cf7963e4bbe22163e26ae499
+guid: f0e6b50c27921a44cb8da94ec2660e94
 ModelImporter:
   serializedVersion: 22103
   internalIDToNameTable: []
@@ -33,11 +33,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Armature|Armature|WallClimb_01|Anima_Layer
-      takeName: Armature|Armature|WallClimb_01|Anima_Layer
-      internalID: -3491907884494847394
+      name: Armature|Armature|WallClimCasc_02|Anima_Layer
+      takeName: Armature|Armature|WallClimCasc_02|Anima_Layer
+      internalID: 8299926061128745702
       firstFrame: 0
-      lastFrame: 15
+      lastFrame: 45
       wrapMode: 0
       orientationOffsetY: 0
       level: 0

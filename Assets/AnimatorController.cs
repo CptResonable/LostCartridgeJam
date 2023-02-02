@@ -6,6 +6,8 @@ using UnityEngine;
 public class AnimatorController {
     public Animator animator;
 
+    public event Delegates.EmptyDelegate animatorUpdatedEvent;
+
     private Vector3 localVelocity;
 
     private Character character;
@@ -27,6 +29,7 @@ public class AnimatorController {
         animator.SetFloat("VelocityY", localVelocity.y / 6);
         //animator.SetBool("IsHanging", character.locomotion.hand_R.grabingLedge);
         animator.Update(Time.deltaTime);
+        animatorUpdatedEvent?.Invoke();
     }
 
     private void WallrunController_verticalRunStarted() {

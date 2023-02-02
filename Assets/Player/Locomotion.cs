@@ -62,7 +62,7 @@ public class Locomotion {
     private void Character_updateEvent() {
         inputDir = character.transform.TransformDirection(character.characterInput.moveInput);
 
-        //BodyTilt();
+        BodyTilt();
     }
 
     private float yRotationError;
@@ -102,6 +102,7 @@ public class Locomotion {
             targetRotation = Quaternion.Euler(0, character.fpCamera.yaw, 0);
 
         tTargetRoation.rotation = targetRotation;
+        //character.rb.rotation = targetRotation;
     }
 
     private void Rotation() {
@@ -184,7 +185,7 @@ public class Locomotion {
     private Vector3 tiltAxel;
     private void BodyTilt() {
         if (wallrunController.isWallRunning) {
-            tiltAmount = Mathf.Lerp(tiltAmount, 55, Time.deltaTime * 3);
+            tiltAmount = Mathf.Lerp(tiltAmount, 10, Time.deltaTime * 3);
             tiltAxel = Vector3.Cross(-wallrunController.wallHit.normal, Vector3.up);
         }
         else {
