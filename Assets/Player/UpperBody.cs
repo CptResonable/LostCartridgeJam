@@ -17,12 +17,41 @@ public class UpperBody {
     private void Character_updateEvent() {
         float deltaPitch = Vector3.SignedAngle(character.transform.forward, Vector3.ProjectOnPlane(character.transform.forward, character.fpCamera.tCamera.up), character.transform.right);
         float deltaYaw = Vector3.SignedAngle(Vector3.ProjectOnPlane(character.transform.forward, Vector3.up), Vector3.ProjectOnPlane(character.fpCamera.tCamera.forward, Vector3.up), Vector3.up);
+        float deltaRoll = Vector3.SignedAngle(character.transform.right, Vector3.ProjectOnPlane(character.transform.right, character.fpCamera.tCamera.up), character.transform.forward);
+
+        RaycastHit pitchHit;
+        if (deltaPitch > 0) {
+            if (Physics.Raycast(character.fpCamera.tCameraTarget.transform.position, character.fpCamera.tCameraTarget.transform.forward, out pitchHit, 1, LayerMasks.i.environment)) {
+                deltaPitch *= (pitchHit.distance - 0.25f) * 1.333333333333333f;
+            }
+        }
+        else if (deltaPitch < 0) {
+            if (Physics.Raycast(character.fpCamera.tCameraTarget.transform.position, -character.fpCamera.tCameraTarget.transform.forward, out pitchHit, 1, LayerMasks.i.environment)) {
+                deltaPitch *= (pitchHit.distance - 0.25f) * 1.333333333333333f;
+            }
+        }
+
+        RaycastHit rollHit;
+        if (deltaRoll > 0) {
+            if (Physics.Raycast(character.fpCamera.tCameraTarget.transform.position, -character.fpCamera.tCameraTarget.transform.right, out rollHit, 1, LayerMasks.i.environment)) {
+                deltaRoll *= (rollHit.distance - 0.25f) * 1.333333333333333f;
+            }
+        }
+        else if (deltaRoll < 0) {
+            if (Physics.Raycast(character.fpCamera.tCameraTarget.transform.position, character.fpCamera.tCameraTarget.transform.right, out rollHit, 1, LayerMasks.i.environment)) {
+                deltaRoll *= (rollHit.distance - 0.25f) * 1.333333333333333f;
+            }
+        }
+
 
         character.body.tTorso_1.Rotate(Vector3.up, deltaYaw * 0.35f, Space.Self);
         character.body.tTorso_2.Rotate(Vector3.up, deltaYaw * 0.35f, Space.Self);
 
         character.body.tTorso_1.Rotate(Vector3.right, deltaPitch * 0.35f, Space.Self);
         character.body.tTorso_2.Rotate(Vector3.right, deltaPitch * 0.35f, Space.Self);
+
+        character.body.tTorso_1.Rotate(Vector3.forward, deltaRoll * 0.5f, Space.Self);
+        character.body.tTorso_2.Rotate(Vector3.forward, deltaRoll * 0.5f, Space.Self);
 
         // Rotate torso when aimng guns
         if (character.weaponController.equipedGun != null) {

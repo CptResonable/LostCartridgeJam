@@ -62,7 +62,7 @@ public class Locomotion {
     private void Character_updateEvent() {
         inputDir = character.transform.TransformDirection(character.characterInput.moveInput);
 
-        BodyTilt();
+        //BodyTilt();
     }
 
     private float yRotationError;

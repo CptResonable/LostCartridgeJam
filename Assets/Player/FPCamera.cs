@@ -7,7 +7,7 @@ public class FPCamera {
     public Transform tCameraTarget;
     public Transform tCamera;
 
-    public float yaw, pitch;
+    public float yaw, pitch, roll;
 
     private Camera camera;
 
@@ -33,12 +33,20 @@ public class FPCamera {
         pitch -= character.characterInput.mouseMovement.yDelta * Settings.MOUSE_SENSITIVITY;
         yaw += character.characterInput.mouseMovement.xDelta * Settings.MOUSE_SENSITIVITY;
 
+        float targetRoll = 0;
+        if (Input.GetKey(KeyCode.Q))
+            targetRoll += 30;
+        else if (Input.GetKey(KeyCode.E))
+            targetRoll -= 30;
+
+        roll = Mathf.Lerp(roll, targetRoll, Time.deltaTime * 12);
+
         if (camera != null) {
             camera.fieldOfView = Mathf.Lerp(Settings.FOV_HIP, Settings.FOV_ADS, character.arms.hipAdsInterpolator.t);
         }
 
         pitch = Mathf.Clamp(pitch, -89, 89);
-        tCamera.rotation = Quaternion.Euler(pitch, yaw, 0);
+        tCamera.rotation = Quaternion.Euler(pitch, yaw, roll);
     }
 
     private void EquipedGun_gunFiredEvent(Vector3 rotationalRecoil, Vector3 translationalRecoil) {
