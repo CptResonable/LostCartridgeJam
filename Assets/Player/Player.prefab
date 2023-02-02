@@ -772,7 +772,7 @@ GameObject:
   - component: {fileID: 2925393505248139765}
   - component: {fileID: 2925393505248139764}
   - component: {fileID: 1648869761888032421}
-  m_Layer: 6
+  m_Layer: 11
   m_Name: WallDetector
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -878,6 +878,7 @@ MonoBehaviour:
   verticalRunDuration: 1
   maxVerticalVelocity: 7
   isWallRunning: 0
+  wallRunUsed: 0
   isReaching: 0
   runVelocity: {x: 0, y: 0, z: 0}
   wallCameraAngle: 0
@@ -1237,7 +1238,7 @@ GameObject:
   - component: {fileID: 1474882338282038457}
   - component: {fileID: 500910874788441348}
   - component: {fileID: 5302230317103125062}
-  m_Layer: 6
+  m_Layer: 11
   m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1552,7 +1553,7 @@ Transform:
   - {fileID: 3878172958553687629}
   - {fileID: 8156727987830086456}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7386630257519315590
 GameObject:
@@ -1745,7 +1746,9 @@ MonoBehaviour:
     layerMask:
       serializedVersion: 2
       m_Bits: 23
+    wallrunController: {fileID: 1648869761888032421}
     isSprinting: 0
+    isGrounded: 1
     rotateForce: 0.2
     rotateDamperCoef: 0.1
     tTargetRoation: {fileID: 1104308678}
@@ -1805,6 +1808,7 @@ MonoBehaviour:
     rHandR: {fileID: 1809767101162193668}
   rb: {fileID: 0}
   animator: {fileID: 2925393506036200914}
+  tRig: {fileID: 3392244719839400506}
   goAliveModel: {fileID: 2618979750785878144}
   goDeadModel: {fileID: 2618979752427033705}
   capColider: {fileID: 0}

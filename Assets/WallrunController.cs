@@ -10,6 +10,7 @@ public class WallrunController : MonoBehaviour {
     [SerializeField] private float maxVerticalVelocity;
 
     public bool isWallRunning;
+    public bool wallRunUsed = false;
     public bool isReaching;
     public Vector3 runVelocity;
     public float wallCameraAngle;
@@ -41,6 +42,9 @@ public class WallrunController : MonoBehaviour {
         smoothCharacterVelocity = Vector3.Lerp(smoothCharacterVelocity, character.rb.velocity, Time.deltaTime * 8);
         smoothCharacterHorizontalVelocity = Vector3.ProjectOnPlane(smoothCharacterVelocity, Vector3.up);
 
+        if (character.locomotion.isGrounded && !isWallRunning)
+            wallRunUsed = false;
+
         if (!wallDetected && isWallRunning) {
             StopWallRun();
         }
@@ -49,7 +53,7 @@ public class WallrunController : MonoBehaviour {
             return;
 
         if (!isWallRunning) {
-            if (Input.GetKey(KeyCode.Space)) {
+            if (Input.GetKey(KeyCode.Space) && !wallRunUsed) {
                 velocityWallAngle = Vector3.SignedAngle(-wallHit.normal, smoothCharacterHorizontalVelocity, Vector3.up);
 
                 if (Mathf.Abs(velocityWallAngle) < 15)
@@ -77,7 +81,6 @@ public class WallrunController : MonoBehaviour {
         if (Physics.Raycast(transform.position, character.transform.forward, out wallHit, 2, layerMask)) {
             if (Physics.Raycast(transform.position, -wallHit.normal, out wallHit, 1, layerMask)) {
                 wallDetected = true;
-                Debug.Log("Detected2!");
             }
         }
     }
@@ -102,6 +105,7 @@ public class WallrunController : MonoBehaviour {
         angle = Vector3.SignedAngle(wallHit.normal, Quaternion.Euler(0, character.fpCamera.yaw, 0) * Vector3.forward, Vector3.up);
         isWallRunning = true;
         wallRunCorutine = StartCoroutine(VerticalRunCorutine(verticalRunDuration));
+        wallRunUsed = true;
         verticalRunStarted?.Invoke();
     }
 

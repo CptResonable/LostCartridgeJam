@@ -9,6 +9,7 @@ public class Character : MonoBehaviour {
     public UpperBody upperBody;
     public Locomotion locomotion;
     public WeaponController weaponController;
+    public AnimatorController animatorController;
     public Arms arms;
     public Health health;
     public Body body;
@@ -16,6 +17,7 @@ public class Character : MonoBehaviour {
     public Rigidbody rb;
     public Animator animator;
 
+    public Transform tRig;
     public GameObject goAliveModel;
     public GameObject goDeadModel;
     public CapsuleCollider capColider;
@@ -31,6 +33,7 @@ public class Character : MonoBehaviour {
         rb = GetComponent<Rigidbody>();
         capColider = GetComponent<CapsuleCollider>();
 
+        //animatorController.Init(this);
         fpCamera.Initialize(this);
         locomotion.Initialize(this);
         weaponController.Init(this);
@@ -76,8 +79,8 @@ public class Character : MonoBehaviour {
     private void UpdateAnimator() {
         Vector3 preAnimPelvisPos = body.tPelvis.position;
         localVelocity = Vector3.Lerp(localVelocity, transform.InverseTransformVector(rb.velocity), Time.deltaTime * 4);
-        animator.SetFloat("velForward", localVelocity.z / 6);
-        animator.SetFloat("velSide", localVelocity.x / 6);
+        animator.SetFloat("VelocityZ", localVelocity.z / 6);
+        animator.SetFloat("VelocityX", localVelocity.x / 6);
         animator.Update(Time.deltaTime);
         animatorUpdatedEvent?.Invoke();
         body.tPelvis.position = Vector3.Lerp(body.tPelvis.position, new Vector3(preAnimPelvisPos.x, body.tPelvis.position.y, preAnimPelvisPos.z), 0.5f);
