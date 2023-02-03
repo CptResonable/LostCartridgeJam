@@ -89,8 +89,7 @@ public class Locomotion {
             character.rb.velocity = wallrunController.runVelocity;
         }
         else {
-            if (isGrounded)
-                HorizontalMovement();
+            HorizontalMovement();
         }
 
         VerticalMovement();
@@ -168,10 +167,14 @@ public class Locomotion {
         else
             moveVector += moveDir_forwardPart * moveSpeed;
 
+        float acc = moveAcceleration;
+        if (!isGrounded)
+            acc *= 0.075f;
+
         if (isDashing)
-            rb.velocity = Vector3.Lerp(rb.velocity, dashVector * moveSpeed + Vector3.up * rb.velocity.y, moveAcceleration * Time.deltaTime);
+            rb.velocity = Vector3.Lerp(rb.velocity, dashVector * moveSpeed + Vector3.up * rb.velocity.y, acc * Time.deltaTime);
         else
-            rb.velocity = Vector3.Lerp(rb.velocity, moveVector + Vector3.up * rb.velocity.y, moveAcceleration * Time.deltaTime);
+            rb.velocity = Vector3.Lerp(rb.velocity, moveVector + Vector3.up * rb.velocity.y, acc * Time.deltaTime);
     }
 
     private void Jump() {

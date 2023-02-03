@@ -19,6 +19,7 @@ public class UpperBody {
         float deltaYaw = Vector3.SignedAngle(Vector3.ProjectOnPlane(character.transform.forward, Vector3.up), Vector3.ProjectOnPlane(character.fpCamera.tCamera.forward, Vector3.up), Vector3.up);
         float deltaRoll = Vector3.SignedAngle(character.transform.right, Vector3.ProjectOnPlane(character.transform.right, character.fpCamera.tCamera.up), character.transform.forward);
 
+        // Scale down pitch if standing next to wall etc, this is to stop head/torso cliping into geometry
         RaycastHit pitchHit;
         if (deltaPitch > 0) {
             if (Physics.Raycast(character.fpCamera.tCameraTarget.transform.position, character.fpCamera.tCameraTarget.transform.forward, out pitchHit, 1, LayerMasks.i.environment)) {
@@ -31,6 +32,7 @@ public class UpperBody {
             }
         }
 
+        // Scale down roll if standing next to wall etc, this is to stop head/torso cliping into geometry
         RaycastHit rollHit;
         if (deltaRoll > 0) {
             if (Physics.Raycast(character.fpCamera.tCameraTarget.transform.position, -character.fpCamera.tCameraTarget.transform.right, out rollHit, 1, LayerMasks.i.environment)) {
