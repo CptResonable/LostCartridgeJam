@@ -34,6 +34,8 @@ public class Arms {
 
         character.locomotion.sprintStartedEvent += Locomotion_sprintStartedEvent;
         character.locomotion.sprintEndedEvent += Locomotion_sprintEndedEvent;
+        character.locomotion.wallrunController.verticalRunStarted += WallrunController_verticalRunStarted;
+        character.locomotion.wallrunController.verticalRunStopped += WallrunController_verticalRunStopped;
     }
 
     private void Player_fixedUpdateEvent() {
@@ -42,6 +44,18 @@ public class Arms {
 
         hand_R.ManualFixedUpdate();
         hand_L.ManualFixedUpdate();
+    }
+
+    private void EvanulateTargetAnimationWeight() {
+        if (hipAdsInterpolationCorutine != null)
+            character.StopCoroutine(hipAdsInterpolationCorutine);
+
+        if (character.locomotion.isSprinting || character.locomotion.wallrunController.isWallRunning) {
+            animationWeightCorutine = character.StartCoroutine(InterpolationUtils.i.SmoothStep(animationWeightInterpolator.t, 1, 4, animationWeightInterpolator));
+        }
+        else {
+            animationWeightCorutine = character.StartCoroutine(InterpolationUtils.i.SmoothStep(animationWeightInterpolator.t, 0, 4, animationWeightInterpolator));
+        }
     }
 
     private void WeaponController_adsEnteredEvent() {
@@ -59,16 +73,33 @@ public class Arms {
     }
 
     private void Locomotion_sprintStartedEvent() {
-        if (animationWeightCorutine != null)
-            character.StopCoroutine(animationWeightCorutine);
-
-        animationWeightCorutine = character.StartCoroutine(InterpolationUtils.i.SmoothStep(animationWeightInterpolator.t, 1, 4, animationWeightInterpolator));
+        EvanulateTargetAnimationWeight();
     }
 
     private void Locomotion_sprintEndedEvent() {
-        if (animationWeightCorutine != null)
-            character.StopCoroutine(animationWeightCorutine);
-
-        animationWeightCorutine = character.StartCoroutine(InterpolationUtils.i.SmoothStep(animationWeightInterpolator.t, 0, 4, animationWeightInterpolator));
+        EvanulateTargetAnimationWeight();
     }
+
+    private void WallrunController_verticalRunStarted() {
+        EvanulateTargetAnimationWeight();
+    }
+
+    private void WallrunController_verticalRunStopped() {
+        EvanulateTargetAnimationWeight();
+    }
+
+
+    //private void Locomotion_sprintStartedEvent() {
+    //    if (animationWeightCorutine != null)
+    //        character.StopCoroutine(animationWeightCorutine);
+
+    //    animationWeightCorutine = character.StartCoroutine(InterpolationUtils.i.SmoothStep(animationWeightInterpolator.t, 1, 4, animationWeightInterpolator));
+    //}
+
+    //private void Locomotion_sprintEndedEvent() {
+    //    if (animationWeightCorutine != null)
+    //        character.StopCoroutine(animationWeightCorutine);
+
+    //    animationWeightCorutine = character.StartCoroutine(InterpolationUtils.i.SmoothStep(animationWeightInterpolator.t, 0, 4, animationWeightInterpolator));
+    //}
 }

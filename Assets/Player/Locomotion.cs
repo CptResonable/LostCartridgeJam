@@ -16,6 +16,7 @@ public class Locomotion {
     [SerializeField] private AnimationCurve handDistanceForceCurve;
 
     [SerializeField] private float targetHeight = 0.8f;
+    [SerializeField] private float crouchTargetHeight = 0.45f;
 
     [SerializeField] private LayerMask layerMask;
     [SerializeField] public WallrunController wallrunController;
@@ -23,6 +24,10 @@ public class Locomotion {
     public bool isSprinting;
     public event Delegates.EmptyDelegate sprintStartedEvent;
     public event Delegates.EmptyDelegate sprintEndedEvent;
+
+    public bool isCrouching;
+    public event Delegates.EmptyDelegate crouchStartedEvent;
+    public event Delegates.EmptyDelegate crouchEndedEvent;
 
     private float currentHeight = 1;
 
@@ -61,6 +66,19 @@ public class Locomotion {
 
     private void Character_updateEvent() {
         inputDir = character.transform.TransformDirection(character.characterInput.moveInput);
+
+        if (character.characterInput.action_crouch.isDown) {
+            if (!isCrouching) {
+                isCrouching = true;
+                crouchStartedEvent?.Invoke();
+            }
+        }
+        else {
+            if (isCrouching) {
+                isCrouching = false;
+                crouchEndedEvent?.Invoke();
+            }
+        }
 
         //BodyTilt();
     }
@@ -142,7 +160,11 @@ public class Locomotion {
             currentHeight = downHit.distance;
         }
 
-        float deltaHeight = currentHeight - targetHeight;
+        float finalTargetHeight = targetHeight;
+        if (isCrouching)
+            finalTargetHeight = crouchTargetHeight;
+
+        float deltaHeight = currentHeight - finalTargetHeight;
 
         if (deltaHeight < 0 && !jumpOnCooldown) {
             isGrounded = true;
