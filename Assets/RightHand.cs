@@ -8,6 +8,9 @@ public class RightHand : Hand {
     private Coroutine reloadCorutine;
     private float reloadSpinPitch;
 
+    private RaycastHit hit;
+    [SerializeField] private LayerMask layerMask;
+
     public override void Init(Character character) {
         base.Init(character);
 
@@ -28,24 +31,10 @@ public class RightHand : Hand {
 
         if (arms.animationWeightInterpolator.t < 0.01f)
             grabingLedge = false;
-
-        if (Input.GetKey(KeyCode.Mouse4))
-            if (LookForGrip())
-                GrabLedge();
     }
 
     public override void ManualFixedUpdate() {
         WeaponTargetUpdate();
-
-        // Interpolate physics target pos/rot between weapon grip and animation
-
-        //    tPhysicalTarget.position = Vector3.Lerp(tWeaponTarget.position, WallClimbUpdate(), arms.animationWeightInterpolator.t);
-        //else
-        //if (character.locomotion.wallrunController.isWallRunning) {
-        //    if (!LookForGrip())
-        //        tPhysicalTarget.position = Vector3.Lerp(tWeaponTarget.position, character.body.postAnimationState.GetBoneState(Body.BoneEnums.rHandR).position, arms.animationWeightInterpolator.t);
-        //}
-        //else
 
         Vector3 wallRunPosition = character.body.postAnimationState.GetBoneState(Body.BoneEnums.rHandR).position;
         Quaternion wallRunRotation = character.body.postAnimationState.GetBoneState(Body.BoneEnums.rHandR).rotation;
@@ -55,22 +44,13 @@ public class RightHand : Hand {
             wallRunRotation = grabRotation;
         }
 
-        //if (grabingLedge) {
-        //    tPhysicalTarget.position = grabPoint;
-        //    tPhysicalTarget.rotation = grabRotation;
-        //}
-        //else {
-        //    tPhysicalTarget.position = Vector3.Lerp(tWeaponTarget.position, character.body.postAnimationState.GetBoneState(Body.BoneEnums.rHandR).position, arms.animationWeightInterpolator.t);
-        //    tPhysicalTarget.rotation = Quaternion.Slerp(tWeaponTarget.rotation, character.body.postAnimationState.GetBoneState(Body.BoneEnums.rHandR).rotation, arms.animationWeightInterpolator.t);
-        //}
-
         tPhysicalTarget.position = Vector3.Lerp(tWeaponTarget.position, wallRunPosition, arms.animationWeightInterpolator.t);
         tPhysicalTarget.rotation = Quaternion.Slerp(tWeaponTarget.rotation, wallRunRotation, arms.animationWeightInterpolator.t);
 
+        //WallAvoidance();
+
         if (character.locomotion.wallrunController.isWallRunning)
             LookForGrip();
-        //if (character.locomotion.wallrunController.isWallRunning)
-        //    Test();
 
         PhysicalHandUpdate();
     }
@@ -91,95 +71,14 @@ public class RightHand : Hand {
         }
     }
 
-    private void Test() {
-        RaycastHit wallHit = character.locomotion.wallrunController.wallHit;
-        Vector3 wallUp = Vector3.ProjectOnPlane(Vector3.up, wallHit.normal);
-        Vector3 startPos = wallHit.point + wallUp * 2 - wallHit.normal * 0.05f;
-
-        RaycastHit hit;
-        if (Physics.Raycast(startPos, -wallUp, out hit, 2, LayerMasks.i.environment)) {
-            if (tPhysicalTarget.transform.position.y > hit.point.y)
-                tPhysicalTarget.transform.position = hit.point;
-        }
-
-        //RaycastHit hit;
-        //if (Physics.Raycast(position, -wallHit.normal, out hit, 1, LayerMasks.i.environment)) {
-        //    position = hit.point;
-        //    Debug.Log("HIT");
-        //}
-    }
-
-    private Vector3 WallClimbUpdate() {
-
-        Vector3 position = new Vector3(character.transform.position.x, character.body.postAnimationState.GetBoneState(Body.BoneEnums.rHandR).position.y, character.transform.position.z);
+    private void WallAvoidance() {
         RaycastHit wallHit = character.locomotion.wallrunController.wallHit;
 
         // Raycast down from foot
-        RaycastHit hit;
-        if (Physics.Raycast(position, -wallHit.normal, out hit, 1, LayerMasks.i.environment)) {
-            position = hit.point;
-            Debug.Log("HIT");
+        if (Physics.Raycast(tPhysicalTarget.position + wallHit.normal, -wallHit.normal, out hit, 4, layerMask)) {
+            tPhysicalTarget.position = hit.point;
         }
-        Debug.Log("MISS");
-
-        return position;
-
-        //tPhysicalTarget.rotation = tHand.rotation;
-
-        //// Looking left or right
-        //if (character.locomotion.wallrunController.wallCameraAngle < -10 && side == Enums.Side.right || character.locomotion.wallrunController.wallCameraAngle > 10 && side == Enums.Side.left) {
-
-        //    Vector3 sideLookHandPosition = character.head.tCamera.position + character.head.tCamera.TransformVector(handCameraPosition);
-        //    Quaternion sideLookHandRotation = character.head.tCamera.rotation * Quaternion.Euler(handCameraRotation);
-
-        //    float t = wallAngleToHandLookCurve.Evaluate(Mathf.Abs(character.locomotion.wallrunController.wallCameraAngle));
-        //    transform.position = Vector3.Lerp(transform.position, sideLookHandPosition, t);
-        //    transform.rotation = Quaternion.Slerp(transform.rotation, sideLookHandRotation, t);
-        //}
-
-        //if (!grabingLedge) {
-        //    if (Input.GetKey(KeyCode.Mouse1)) {
-        //        if (LookForGrip())
-        //            GrabLedge();
-        //    }
-        //}
     }
-
-    //private Vector3 WallClimbUpdate() {
-
-    //    Vector3 position = tIkTarget.position;
-    //    RaycastHit wallHit = character.locomotion.wallrunController.wallHit;
-
-    //    // Raycast down from foot
-    //    RaycastHit hit;
-    //    if (Physics.Raycast(character.body.postAnimationState.GetBoneState(Body.BoneEnums.rHandR).position + wallHit.normal, -wallHit.normal, out hit, 4, LayerMasks.i.environment)) {
-    //        position = hit.point;
-    //        Debug.Log("HIT");
-    //    }
-    //    Debug.Log("MISS");
-
-    //    return position;
-
-    //    //tPhysicalTarget.rotation = tHand.rotation;
-
-    //    //// Looking left or right
-    //    //if (character.locomotion.wallrunController.wallCameraAngle < -10 && side == Enums.Side.right || character.locomotion.wallrunController.wallCameraAngle > 10 && side == Enums.Side.left) {
-
-    //    //    Vector3 sideLookHandPosition = character.head.tCamera.position + character.head.tCamera.TransformVector(handCameraPosition);
-    //    //    Quaternion sideLookHandRotation = character.head.tCamera.rotation * Quaternion.Euler(handCameraRotation);
-
-    //    //    float t = wallAngleToHandLookCurve.Evaluate(Mathf.Abs(character.locomotion.wallrunController.wallCameraAngle));
-    //    //    transform.position = Vector3.Lerp(transform.position, sideLookHandPosition, t);
-    //    //    transform.rotation = Quaternion.Slerp(transform.rotation, sideLookHandRotation, t);
-    //    //}
-
-    //    //if (!grabingLedge) {
-    //    //    if (Input.GetKey(KeyCode.Mouse1)) {
-    //    //        if (LookForGrip())
-    //    //            GrabLedge();
-    //    //    }
-    //    //}
-    //}
 
     private void PhysicalHandUpdate() {
         kmTarget.DoUpdate();
@@ -242,37 +141,4 @@ public class RightHand : Hand {
         else
             return false;
     }
-    //private bool LookForGrip() {
-    //    Vector3 direction = -character.locomotion.wallrunController.wallHit.normal;
-
-    //    RaycastHit hit1;
-    //    if (Physics.Raycast(tPhysicalTarget.position - Vector3.up * 0.025f - direction * 0.1f, direction, out hit1, 0.3f, LayerMasks.i.environment)) {
-    //        RaycastHit hit2;
-    //        if (Physics.Raycast(hit1.point + direction * 0.05f + Vector3.up * 0.1f, Vector3.down, out hit2, 0.2f, LayerMasks.i.environment)) {
-    //            if (Vector3.Angle(hit2.normal, Vector3.up) < 15f && Vector3.Angle(hit2.normal, direction) > 75f) {
-    //                Debug.Log("GRIP FOUND!");
-    //                tPhysicalTarget.position = hit2.point;
-    //                return true;
-    //            }
-    //        }
-
-    //        return false;
-    //    }
-    //    else
-    //        return false;
-    //}
-
-    private void GrabLedge() {
-        grabingLedge = true;
-        Debug.Log("Gripped");
-        //edgeGrabPoint = transform.position;
-        //goGripIndicator.SetActive(true);
-
-        ////SoftJointLimit limit = hangJoint.linearLimit;
-        ////limit.limit = 0.65f;
-        ////hangJoint.linearLimit = limit;
-
-        //ledgeGrabedEvent?.Invoke();
-    }
-
 }

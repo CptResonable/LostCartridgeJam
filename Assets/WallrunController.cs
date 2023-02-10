@@ -129,7 +129,7 @@ public class WallrunController : MonoBehaviour {
             yield return new WaitForFixedUpdate();
         }
 
-        if (character.arms.hand_R.grabingLedge) {
+        if (character.arms.hand_R.grabingLedge || character.arms.hand_L.grabingLedge) {
             float t2 = 0;
             while (t2 < 1) {
                 t2 += Time.fixedDeltaTime / 0.75f;
