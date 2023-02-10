@@ -25413,6 +25413,12 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!4 &564698455 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7458831216974441010, guid: b0a49345d2a43e644944d5f67068cf41,
+    type: 3}
+  m_PrefabInstance: {fileID: 2925393505217285473}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &567160027
 GameObject:
   m_ObjectHideFlags: 0
@@ -38642,12 +38648,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 912212266}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 0.00000008940697, y: 0.00000003951267, z: -0.000000023707605,
+    w: 1}
+  m_LocalPosition: {x: -0, y: 0.318, z: 0.444}
   m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1461269734}
+  m_Father: {fileID: 564698455}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &912212268
@@ -54639,6 +54646,81 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1648869761888032421, guid: b0a49345d2a43e644944d5f67068cf41,
+        type: 3}
+      propertyPath: mountCurve.m_Curve.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1648869761888032421, guid: b0a49345d2a43e644944d5f67068cf41,
+        type: 3}
+      propertyPath: mountCurve.m_Curve.Array.data[1].time
+      value: 0.2883637
+      objectReference: {fileID: 0}
+    - target: {fileID: 1648869761888032421, guid: b0a49345d2a43e644944d5f67068cf41,
+        type: 3}
+      propertyPath: mountCurve.m_Curve.Array.data[2].time
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1648869761888032421, guid: b0a49345d2a43e644944d5f67068cf41,
+        type: 3}
+      propertyPath: mountCurve.m_Curve.Array.data[1].value
+      value: 1.0015154
+      objectReference: {fileID: 0}
+    - target: {fileID: 1648869761888032421, guid: b0a49345d2a43e644944d5f67068cf41,
+        type: 3}
+      propertyPath: mountCurve.m_Curve.Array.data[2].value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1648869761888032421, guid: b0a49345d2a43e644944d5f67068cf41,
+        type: 3}
+      propertyPath: mountCurve.m_Curve.Array.data[0].inSlope
+      value: 1.2387456
+      objectReference: {fileID: 0}
+    - target: {fileID: 1648869761888032421, guid: b0a49345d2a43e644944d5f67068cf41,
+        type: 3}
+      propertyPath: mountCurve.m_Curve.Array.data[1].inSlope
+      value: -0.006960827
+      objectReference: {fileID: 0}
+    - target: {fileID: 1648869761888032421, guid: b0a49345d2a43e644944d5f67068cf41,
+        type: 3}
+      propertyPath: mountCurve.m_Curve.Array.data[2].inSlope
+      value: -0.08880659
+      objectReference: {fileID: 0}
+    - target: {fileID: 1648869761888032421, guid: b0a49345d2a43e644944d5f67068cf41,
+        type: 3}
+      propertyPath: mountCurve.m_Curve.Array.data[0].outSlope
+      value: 1.2387456
+      objectReference: {fileID: 0}
+    - target: {fileID: 1648869761888032421, guid: b0a49345d2a43e644944d5f67068cf41,
+        type: 3}
+      propertyPath: mountCurve.m_Curve.Array.data[1].inWeight
+      value: 0.33333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 1648869761888032421, guid: b0a49345d2a43e644944d5f67068cf41,
+        type: 3}
+      propertyPath: mountCurve.m_Curve.Array.data[1].outSlope
+      value: -0.006960827
+      objectReference: {fileID: 0}
+    - target: {fileID: 1648869761888032421, guid: b0a49345d2a43e644944d5f67068cf41,
+        type: 3}
+      propertyPath: mountCurve.m_Curve.Array.data[2].inWeight
+      value: 0.05820319
+      objectReference: {fileID: 0}
+    - target: {fileID: 1648869761888032421, guid: b0a49345d2a43e644944d5f67068cf41,
+        type: 3}
+      propertyPath: mountCurve.m_Curve.Array.data[2].outSlope
+      value: -0.08880659
+      objectReference: {fileID: 0}
+    - target: {fileID: 1648869761888032421, guid: b0a49345d2a43e644944d5f67068cf41,
+        type: 3}
+      propertyPath: mountCurve.m_Curve.Array.data[0].outWeight
+      value: 0.041174486
+      objectReference: {fileID: 0}
+    - target: {fileID: 1648869761888032421, guid: b0a49345d2a43e644944d5f67068cf41,
+        type: 3}
+      propertyPath: mountCurve.m_Curve.Array.data[1].outWeight
+      value: 0.06966706
+      objectReference: {fileID: 0}
     - target: {fileID: 2925393504196137143, guid: b0a49345d2a43e644944d5f67068cf41,
         type: 3}
       propertyPath: m_Enabled
@@ -54777,7 +54859,7 @@ PrefabInstance:
     - target: {fileID: 7386630257519315613, guid: b0a49345d2a43e644944d5f67068cf41,
         type: 3}
       propertyPath: m_LinearLimit.limit
-      value: 0.5
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7755853891988902356, guid: b0a49345d2a43e644944d5f67068cf41,
         type: 3}
@@ -54798,14 +54880,14 @@ PrefabInstance:
         type: 2}
     m_RemovedComponents: []
     m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 7458831216974441010, guid: b0a49345d2a43e644944d5f67068cf41,
+        type: 3}
+      insertIndex: 0
+      addedObject: {fileID: 912212267}
     - targetCorrespondingSourceObject: {fileID: 8156727987830086456, guid: b0a49345d2a43e644944d5f67068cf41,
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 47838939}
-    - targetCorrespondingSourceObject: {fileID: 8156727987830086456, guid: b0a49345d2a43e644944d5f67068cf41,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 912212267}
   m_SourcePrefab: {fileID: 100100000, guid: b0a49345d2a43e644944d5f67068cf41, type: 3}
 --- !u!65 &2925393505224707296
 BoxCollider:

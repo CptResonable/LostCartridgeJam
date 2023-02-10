@@ -6,6 +6,7 @@ public class WallrunController : MonoBehaviour {
     [SerializeField] private Transform tClosestPointMarker;
     [SerializeField] private LayerMask layerMask;
     [SerializeField] private AnimationCurve verticalRunCurve;
+    [SerializeField] private AnimationCurve mountCurve;
     [SerializeField] private float verticalRunDuration;
     [SerializeField] private float maxVerticalVelocity;
 
@@ -85,26 +86,18 @@ public class WallrunController : MonoBehaviour {
     }
 
     private void OnTriggerStay(Collider other) {
-        if (Physics.Raycast(transform.position, character.transform.forward, out wallHit, 2, layerMask)) {
-            if (Physics.Raycast(transform.position, -wallHit.normal, out wallHit, 1, layerMask)) {
+        if (Physics.Raycast(transform.position + Vector3.down * 0.4f, character.transform.forward, out wallHit, 2, layerMask)) {
+            if (Physics.Raycast(transform.position + Vector3.down * 0.4f, -wallHit.normal, out wallHit, 1, layerMask)) {
                 wallDetected = true;
             }
         }
     }
+
     //private void OnTriggerStay(Collider other) {
-    //    Debug.Log("other: " + other.name);
-    //    Vector3 closestPoint = other.ClosestPoint(transform.position);
-    //    tClosestPointMarker.gameObject.SetActive(true);
-    //    tClosestPointMarker.position = closestPoint;
-
-    //    Vector3 characterToPointVector = VectorUtils.FromToVector(transform.position, closestPoint);
-    //    Debug.Log("Trigger!");
-
-    //    Debug.DrawRay(transform.position, characterToPointVector.normalized, Color.red, Time.deltaTime);
-
-    //    if (Physics.Raycast(transform.position, characterToPointVector.normalized, out wallHit, 2, layerMask)) {
-    //        wallDetected = true;
-    //        Debug.Log("Detected!");
+    //    if (Physics.Raycast(transform.position, character.transform.forward, out wallHit, 2, layerMask)) {
+    //        if (Physics.Raycast(transform.position, -wallHit.normal, out wallHit, 1, layerMask)) {
+    //            wallDetected = true;
+    //        }
     //    }
     //}
 
@@ -134,6 +127,19 @@ public class WallrunController : MonoBehaviour {
             runVelocity += -wallHit.normal * 1f;
             wallCameraAngle = Vector3.SignedAngle(Vector3.ProjectOnPlane(character.fpCamera.tCameraTarget.forward, Vector3.up), Vector3.ProjectOnPlane(-wallHit.normal, Vector3.up), Vector3.up);
             yield return new WaitForFixedUpdate();
+        }
+
+        if (character.arms.hand_R.grabingLedge) {
+            float t2 = 0;
+            while (t2 < 1) {
+                t2 += Time.fixedDeltaTime / 0.75f;
+                runVelocity = Vector3.up * mountCurve.Evaluate(t2) * maxVerticalVelocity * 0.5f;
+                runVelocity += -wallHit.normal * 1f;
+                wallCameraAngle = Vector3.SignedAngle(Vector3.ProjectOnPlane(character.fpCamera.tCameraTarget.forward, Vector3.up), Vector3.ProjectOnPlane(-wallHit.normal, Vector3.up), Vector3.up);
+                float f = Mathf.Clamp01(1 - (Mathf.Abs(wallCameraAngle) / 45));
+                runVelocity *= f;
+                yield return new WaitForFixedUpdate();
+            }
         }
 
         isReaching = false;
