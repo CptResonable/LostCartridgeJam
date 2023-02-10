@@ -25,7 +25,7 @@ public class WallrunController : MonoBehaviour {
     private Vector3 smoothCharacterHorizontalVelocity;
     private float velocityWallAngle;
 
-    private float t; // 0 - 1, wall run progress
+    public float t; // 0 - 1, wall run progress
 
     private float lastYaw;
     private float angle;
@@ -47,6 +47,7 @@ public class WallrunController : MonoBehaviour {
 
         if (!wallDetected && isWallRunning) {
             StopWallRun();
+            //StartCoroutine(DelayedStop(0.1f));
         }
 
         if (!wallDetected)
@@ -70,6 +71,12 @@ public class WallrunController : MonoBehaviour {
         Vector3 lastYawVector = Quaternion.Euler(0, lastYaw, 0) * Vector3.forward;
 
         lastYaw = character.fpCamera.yaw;
+    }
+
+    private IEnumerator DelayedStop(float delay) {
+        yield return new WaitForSeconds(delay);
+        if (isWallRunning)
+            StopWallRun();
     }
 
     private void FixedUpdate() {

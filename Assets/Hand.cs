@@ -22,6 +22,10 @@ public class Hand : MonoBehaviour {
     protected Vector3 targetVelocity;
     public Vector3 targetDeltaPos;
 
+    public bool grabingLedge;
+    public Vector3 grabPoint;
+    public Quaternion grabRotation;
+
     public virtual void Init(Character character) {
         this.character = character;
         this.arms = character.arms;
