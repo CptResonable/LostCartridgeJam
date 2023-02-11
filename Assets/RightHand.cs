@@ -23,12 +23,6 @@ public class RightHand : Hand {
         tIkTarget.position = transform.position;
         tIkTarget.rotation = transform.rotation;
 
-        //if (!character.locomotion.wallrunController.isWallRunning)
-        //    grabingLedge = false;
-
-        //if (Input.GetKeyDown(KeyCode.Mouse4))
-        //    grabingLedge = false;
-
         if (arms.animationWeightInterpolator.t < 0.01f)
             grabingLedge = false;
     }
@@ -46,8 +40,6 @@ public class RightHand : Hand {
 
         tPhysicalTarget.position = Vector3.Lerp(tWeaponTarget.position, wallRunPosition, arms.animationWeightInterpolator.t);
         tPhysicalTarget.rotation = Quaternion.Slerp(tWeaponTarget.rotation, wallRunRotation, arms.animationWeightInterpolator.t);
-
-        //WallAvoidance();
 
         if (character.locomotion.wallrunController.isWallRunning)
             LookForGrip();
@@ -71,15 +63,6 @@ public class RightHand : Hand {
         }
     }
 
-    private void WallAvoidance() {
-        RaycastHit wallHit = character.locomotion.wallrunController.wallHit;
-
-        // Raycast down from foot
-        if (Physics.Raycast(tPhysicalTarget.position + wallHit.normal, -wallHit.normal, out hit, 4, layerMask)) {
-            tPhysicalTarget.position = hit.point;
-        }
-    }
-
     private void PhysicalHandUpdate() {
         kmTarget.DoUpdate();
 
@@ -87,15 +70,9 @@ public class RightHand : Hand {
 
         targetDeltaPos = VectorUtils.FromToVector(transform.position, kmTarget.transform.position);
 
-        //targetDeltaPos = VectorUtils.FromToVector(character.body.tHandR.position, kmTarget.transform.position);
-        //targetDeltaPos = VectorUtils.FromToVector(tWeaponTarget.position, kmTarget.transform.position);
-
         targetVelocity = kmTarget.velocity + targetDeltaPos * errorAdjustmentCoef;
         velocity = Vector3.Lerp(velocity, targetVelocity, Time.fixedDeltaTime * velocityChangeCoef);
         rb.velocity = velocity;
-
-        //if (grabingLedge)
-        //    targetDeltaPos = VectorUtils.FromToVector(transform.position, character.transform.position);
     }
 
     private void WeaponController_reloadStartedEvent(float reloadTime) {
@@ -116,22 +93,15 @@ public class RightHand : Hand {
 
     private bool LookForGrip() {
         Vector3 direction = -character.locomotion.wallrunController.wallHit.normal;
-        Vector3 position = new Vector3(character.transform.position.x, tPhysicalTarget.position.y, character.transform.position.z);
 
         RaycastHit hit1;
         if (Physics.Raycast(tPhysicalTarget.position - Vector3.up * 0.025f - direction * 0.5f, direction, out hit1, 1f, LayerMasks.i.environment)) {
             RaycastHit hit2;
             if (Physics.Raycast(hit1.point + direction * 0.05f + Vector3.up * 0.1f, Vector3.down, out hit2, 0.2f, LayerMasks.i.environment)) {
                 if (Vector3.Angle(hit2.normal, Vector3.up) < 15f && Vector3.Angle(hit2.normal, direction) > 75f) {
-                    Debug.Log("GRIP FOUND!");
-                    //if (!grabingLedge)
-                    //    character.locomotion.wallrunController.t = 0.0f;
                     grabingLedge = true;
                     grabPoint = hit2.point + Vector3.up * 0.005f;
                     grabRotation = Quaternion.LookRotation(-Vector3.Cross(hit1.normal, hit2.normal), -hit1.normal);
-
-                    //grabRotation = tPhysicalTarget.rotation;
-                    //tPhysicalTarget.position = hit2.point;
                     return true;
                 }
             }
