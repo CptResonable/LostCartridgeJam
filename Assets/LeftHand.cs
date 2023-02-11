@@ -67,15 +67,9 @@ public class LeftHand : Hand {
             RaycastHit hit2;
             if (Physics.Raycast(hit1.point + direction * 0.05f + Vector3.up * 0.1f, Vector3.down, out hit2, 0.2f, LayerMasks.i.environment)) {
                 if (Vector3.Angle(hit2.normal, Vector3.up) < 15f && Vector3.Angle(hit2.normal, direction) > 75f) {
-                    Debug.Log("GRIP FOUND!");
-                    //if (!grabingLedge)
-                    //    character.locomotion.wallrunController.t = 0.0f;
                     grabingLedge = true;
                     grabPoint = hit2.point + Vector3.up * 0.005f;
                     grabRotation = Quaternion.LookRotation(Vector3.Cross(hit1.normal, hit2.normal), -hit1.normal);
-
-                    //grabRotation = tPhysicalTarget.rotation;
-                    //tPhysicalTarget.position = hit2.point;
                     return true;
                 }
             }

@@ -7,6 +7,7 @@ public class WallrunController : MonoBehaviour {
     [SerializeField] private LayerMask layerMask;
     [SerializeField] private AnimationCurve verticalRunCurve;
     [SerializeField] private AnimationCurve mountCurve;
+    [SerializeField] private AnimationCurve yVelToVerticalRunScaleCurve;
     [SerializeField] private float verticalRunDuration;
     [SerializeField] private float maxVerticalVelocity;
 
@@ -48,14 +49,13 @@ public class WallrunController : MonoBehaviour {
 
         if (!wallDetected && isWallRunning) {
             StopWallRun();
-            //StartCoroutine(DelayedStop(0.1f));
         }
 
         if (!wallDetected)
             return;
 
         if (!isWallRunning) {
-            if (Input.GetKey(KeyCode.Space) && !wallRunUsed) {
+            if (Input.GetKey(KeyCode.Space) && !wallRunUsed && !character.locomotion.isGrounded) {
                 velocityWallAngle = Vector3.SignedAngle(-wallHit.normal, smoothCharacterHorizontalVelocity, Vector3.up);
 
                 if (Mathf.Abs(velocityWallAngle) < 15)
@@ -74,12 +74,6 @@ public class WallrunController : MonoBehaviour {
         lastYaw = character.fpCamera.yaw;
     }
 
-    private IEnumerator DelayedStop(float delay) {
-        yield return new WaitForSeconds(delay);
-        if (isWallRunning)
-            StopWallRun();
-    }
-
     private void FixedUpdate() {
         tClosestPointMarker.gameObject.SetActive(false);
         wallDetected = false;
@@ -93,15 +87,8 @@ public class WallrunController : MonoBehaviour {
         }
     }
 
-    //private void OnTriggerStay(Collider other) {
-    //    if (Physics.Raycast(transform.position, character.transform.forward, out wallHit, 2, layerMask)) {
-    //        if (Physics.Raycast(transform.position, -wallHit.normal, out wallHit, 1, layerMask)) {
-    //            wallDetected = true;
-    //        }
-    //    }
-    //}
-
     private void StartVerticalRun() {
+        Debug.Log("Vertical Vel: " + character.rb.velocity.y);
         angle = Vector3.SignedAngle(wallHit.normal, Quaternion.Euler(0, character.fpCamera.yaw, 0) * Vector3.forward, Vector3.up);
         isWallRunning = true;
         wallRunCorutine = StartCoroutine(VerticalRunCorutine(verticalRunDuration));
@@ -119,11 +106,15 @@ public class WallrunController : MonoBehaviour {
     }
 
     private IEnumerator VerticalRunCorutine(float duration) {
+
+        float scale = yVelToVerticalRunScaleCurve.Evaluate(character.rb.velocity.y);
+        duration *= scale;
+
         t = 0;
 
         while (t < 1) {
             t += Time.fixedDeltaTime / duration;
-            runVelocity = Vector3.up * verticalRunCurve.Evaluate(t) * maxVerticalVelocity;
+            runVelocity = Vector3.up * verticalRunCurve.Evaluate(t) * maxVerticalVelocity * scale;
             runVelocity += -wallHit.normal * 1f;
             wallCameraAngle = Vector3.SignedAngle(Vector3.ProjectOnPlane(character.fpCamera.tCameraTarget.forward, Vector3.up), Vector3.ProjectOnPlane(-wallHit.normal, Vector3.up), Vector3.up);
             yield return new WaitForFixedUpdate();

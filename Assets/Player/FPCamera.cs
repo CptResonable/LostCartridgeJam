@@ -49,6 +49,12 @@ public class FPCamera {
         else if (Input.GetKey(KeyCode.E))
             targetRoll -= 30;
 
+        if (character.locomotion.wallrunController.isWallRunning) {
+
+            // Y angle between look direction and -wall normal
+            targetRoll += Mathf.Sign(character.locomotion.wallrunController.wallCameraAngle) * wallAngleToRollCurve.Evaluate(Mathf.Abs(character.locomotion.wallrunController.wallCameraAngle)) * 40;
+        }
+
         roll = Mathf.Lerp(roll, targetRoll, Time.deltaTime * 12);
 
         if (camera != null) {
@@ -62,6 +68,7 @@ public class FPCamera {
         tCamera.Rotate(Vector3.up, yaw, Space.Self);
         tCamera.Rotate(Vector3.right, pitch, Space.Self);
         //tCamera.rotation = Quaternion.Euler(pitch, yaw, roll);
+
     }
 
     private void EquipedGun_gunFiredEvent(Vector3 rotationalRecoil, Vector3 translationalRecoil) {
