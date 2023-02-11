@@ -14,6 +14,7 @@ public class Locomotion {
     [SerializeField] private float jumpVelocity;
     [SerializeField] private AnimationCurve airTimeToGravityScale;
     [SerializeField] private AnimationCurve handDistanceForceCurve;
+    [SerializeField] private AnimationCurve bounceDownCurve;
 
     [SerializeField] private float targetHeight = 0.8f;
     [SerializeField] private float crouchTargetHeight = 0.45f;
@@ -37,6 +38,8 @@ public class Locomotion {
     public bool isGrounded = true;
     private float airTime = 0;
     private bool jumpOnCooldown = false;
+
+    private List<Bouncer.BounceInstance> bounceInstances = new List<Bouncer.BounceInstance>();
 
     private Character character;
 
@@ -78,6 +81,11 @@ public class Locomotion {
                 isCrouching = false;
                 crouchEndedEvent?.Invoke();
             }
+        }
+
+        character.tRig.localPosition = -0.5f * Vector3.up;
+        foreach (var instance in bounceInstances) {
+            character.tRig.position += instance.offset;
         }
 
         //BodyTilt();
@@ -122,23 +130,11 @@ public class Locomotion {
         //character.rb.rotation = targetRotation;
     }
 
-    private void Rotation() {
-
-        // Character rotation
-        float newYRotationError = -Vector3.SignedAngle(Vector3.ProjectOnPlane(character.fpCamera.tCameraTarget.forward, Vector3.up).normalized, Vector3.ProjectOnPlane(character.transform.forward, Vector3.up).normalized, Vector3.up);
-        //newYRotationError = -Vector3.SignedAngle(Vector3.ProjectOnPlane(character.head.tTarget.forward, Vector3.up).normalized, Vector3.ProjectOnPlane(character.transform.forward, Vector3.up).normalized, Vector3.up);
-
-        yDeltaError = (newYRotationError - yRotationError) / Time.fixedDeltaTime;
-        yRotationError = newYRotationError;
-        float damper = yDeltaError * rotateDamperCoef;
-        character.rb.AddTorque(Vector3.up * (yRotationError + damper) * rotateForce);
-    }
-
     private void Action_jump_keyDownEvent() {
 
 
         if (!jumpOnCooldown && isGrounded)
-            Jump();
+            bounceInstances.Add(new Bouncer.BounceInstance(OnBounceFinished, bounceDownCurve, Vector3.down, 0.3f, 0.15f));
         else if (wallrunController.isWallRunning) {
 
             wallrunController.StopWallRun();
@@ -152,6 +148,11 @@ public class Locomotion {
             //// Head bounce
             //character.head.HeadBounce();
         }
+    }
+
+    private void OnBounceFinished(Bouncer.BounceInstance bounceInstance) {
+        bounceInstances.Remove(bounceInstance);
+        Jump();
     }
 
     private void VerticalMovement() {

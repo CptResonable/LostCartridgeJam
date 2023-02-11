@@ -9,9 +9,16 @@ public class FPCamera {
 
     public float yaw, pitch, roll;
 
-    private Camera camera;
+    // Recoil
+    [SerializeField] private AnimationCurve recoilApplicationCurve;
 
+    // Wall running
+    [SerializeField] private AnimationCurve wallRunVerticalTiltBackCurve;
+    [SerializeField] private AnimationCurve wallAngleToRollCurve;
+
+    private Camera camera;
     private Character character;
+
     public void Initialize(Character character) {
         this.character = character;
         tCamera.TryGetComponent<Camera>(out camera);
@@ -24,6 +31,8 @@ public class FPCamera {
 
         if (character.weaponController.pistol != null)
             character.weaponController.pistol.gunFiredEvent += EquipedGun_gunFiredEvent;
+
+        character.locomotion.wallrunController.verticalRunStarted += WallrunController_verticalRunStarted;
     }
 
     private void character_fixedUpdateEvent() {
@@ -56,39 +65,31 @@ public class FPCamera {
     }
 
     private void EquipedGun_gunFiredEvent(Vector3 rotationalRecoil, Vector3 translationalRecoil) {
-        character.StartCoroutine(ApplyRecoilCorutine(-rotationalRecoil.x, rotationalRecoil.y, 0.12f));
+        character.StartCoroutine(ApplyRotationOverTime(-rotationalRecoil.x, rotationalRecoil.y, 0.12f, recoilApplicationCurve));
     }
 
     public void SetRotation() {
         tCameraTarget.parent.rotation = Quaternion.Euler(pitch, yaw, 0);
     }
 
-    //public IEnumerator ApplyRecoilCorutine(float pitch, float yaw, float time) {
-    //    float t = 0;
 
-    //    while (t < 1) {
-    //        float dTime =
-    //        t += Time.fixedDeltaTime / time;
+    private void WallrunController_verticalRunStarted() {
+        character.StartCoroutine(ApplyRotationOverTime(-25, 0, 0.35f, wallRunVerticalTiltBackCurve));
+    }
 
-    //        yield return new WaitForFixedUpdate();
-    //    }
-    //}
-
-    [SerializeField] private AnimationCurve recoilApplicationCurve;
-
-    public IEnumerator ApplyRecoilCorutine(float pitchRecoil, float yawRecoil, float time) {
+    public IEnumerator ApplyRotationOverTime(float totalPitch, float totalYaw, float time, AnimationCurve applicationCurve) {
         float t = 0;
         float lastValue = 0;
 
         while (t < 1) {
             t += Time.fixedDeltaTime / time;
 
-            float value = recoilApplicationCurve.Evaluate(t);
+            float value = applicationCurve.Evaluate(t);
             float dValue = value - lastValue;
             lastValue = value;
 
-            pitch += dValue * pitchRecoil;
-            yaw += dValue * yawRecoil;
+            pitch += dValue * totalPitch;
+            yaw += dValue * totalYaw;
 
             yield return new WaitForFixedUpdate();
         }
