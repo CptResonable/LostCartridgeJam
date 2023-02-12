@@ -18,6 +18,8 @@ public class FPCamera {
     [SerializeField] private AnimationCurve wallRunVerticalTiltBackCurve;
     [SerializeField] private AnimationCurve wallAngleToRollCurve;
 
+    private float headbobAmount = 0;
+
     private Character character;
 
     public void Initialize(Character character) {
@@ -69,6 +71,10 @@ public class FPCamera {
         tCamera.Rotate(Vector3.up, yaw, Space.Self);
         tCamera.Rotate(Vector3.right, pitch, Space.Self);
         //tCamera.rotation = Quaternion.Euler(pitch, yaw, roll);
+
+        headbobAmount = Mathf.Lerp(headbobAmount, character.rb.velocity.magnitude / 4, Time.deltaTime * 4);
+        Debug.Log("WHATE?! " + headbobAmount);
+        animator.SetFloat("Velocity", headbobAmount);
     }
 
     private void EquipedGun_gunFiredEvent(Vector3 rotationalRecoil, Vector3 translationalRecoil) {
