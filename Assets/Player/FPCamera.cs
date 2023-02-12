@@ -73,7 +73,6 @@ public class FPCamera {
         //tCamera.rotation = Quaternion.Euler(pitch, yaw, roll);
 
         headbobAmount = Mathf.Lerp(headbobAmount, character.rb.velocity.magnitude / 4, Time.deltaTime * 4);
-        Debug.Log("WHATE?! " + headbobAmount);
         animator.SetFloat("Velocity", headbobAmount);
     }
 

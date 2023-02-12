@@ -23,12 +23,14 @@ public class AnimatorController {
     }
 
     private void Character_updateEvent() {
+        Vector3 preAnimPelvisPos = character.body.tPelvis.position;
         localVelocity = Vector3.Lerp(localVelocity, character.transform.InverseTransformVector(character.rb.velocity), Time.deltaTime * 10);
         animator.SetFloat("VelocityZ", localVelocity.z / 6);
         animator.SetFloat("VelocityX", localVelocity.x / 6);
         animator.SetFloat("VelocityY", localVelocity.y / 6);
         //animator.SetBool("IsHanging", character.locomotion.hand_R.grabingLedge);
         animator.Update(Time.deltaTime);
+        character.body.tPelvis.position = Vector3.Lerp(character.body.tPelvis.position, new Vector3(preAnimPelvisPos.x, character.body.tPelvis.position.y, preAnimPelvisPos.z), 0.5f);
         animatorUpdatedEvent?.Invoke();
 
     }
