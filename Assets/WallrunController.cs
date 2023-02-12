@@ -8,6 +8,7 @@ public class WallrunController : MonoBehaviour {
     [SerializeField] private AnimationCurve verticalRunCurve;
     [SerializeField] private AnimationCurve mountCurve;
     [SerializeField] private AnimationCurve yVelToVerticalRunScaleCurve;
+    [SerializeField] private AnimationCurve verticalRunCameraRoll;
     [SerializeField] private float verticalRunDuration;
     [SerializeField] private float maxVerticalVelocity;
 

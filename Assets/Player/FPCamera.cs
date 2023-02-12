@@ -6,6 +6,8 @@ using UnityEngine;
 public class FPCamera {
     public Transform tCameraTarget;
     public Transform tCamera;
+    public Camera camera;
+    public Animator animator;
 
     public float yaw, pitch, roll;
 
@@ -16,12 +18,10 @@ public class FPCamera {
     [SerializeField] private AnimationCurve wallRunVerticalTiltBackCurve;
     [SerializeField] private AnimationCurve wallAngleToRollCurve;
 
-    private Camera camera;
     private Character character;
 
     public void Initialize(Character character) {
         this.character = character;
-        tCamera.TryGetComponent<Camera>(out camera);
 
         character.updateEvent += character_updateEvent;
         character.fixedUpdateEvent += character_fixedUpdateEvent;
@@ -33,6 +33,7 @@ public class FPCamera {
             character.weaponController.pistol.gunFiredEvent += EquipedGun_gunFiredEvent;
 
         character.locomotion.wallrunController.verticalRunStarted += WallrunController_verticalRunStarted;
+        character.locomotion.wallrunController.verticalRunStopped += WallrunController_verticalRunStopped;
     }
 
     private void character_fixedUpdateEvent() {
@@ -68,7 +69,6 @@ public class FPCamera {
         tCamera.Rotate(Vector3.up, yaw, Space.Self);
         tCamera.Rotate(Vector3.right, pitch, Space.Self);
         //tCamera.rotation = Quaternion.Euler(pitch, yaw, roll);
-
     }
 
     private void EquipedGun_gunFiredEvent(Vector3 rotationalRecoil, Vector3 translationalRecoil) {
@@ -82,6 +82,11 @@ public class FPCamera {
 
     private void WallrunController_verticalRunStarted() {
         character.StartCoroutine(ApplyRotationOverTime(-25, 0, 0.35f, wallRunVerticalTiltBackCurve));
+        animator.SetBool("IsWallClimbing", true);
+    }
+
+    private void WallrunController_verticalRunStopped() {
+        animator.SetBool("IsWallClimbing", false);
     }
 
     public IEnumerator ApplyRotationOverTime(float totalPitch, float totalYaw, float time, AnimationCurve applicationCurve) {

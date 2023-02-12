@@ -30,6 +30,8 @@ public class AnimatorController {
         //animator.SetBool("IsHanging", character.locomotion.hand_R.grabingLedge);
         animator.Update(Time.deltaTime);
         animatorUpdatedEvent?.Invoke();
+
+        Debug.Log(animator.GetCurrentAnimatorStateInfo(0).length);
     }
 
     private void WallrunController_verticalRunStarted() {
