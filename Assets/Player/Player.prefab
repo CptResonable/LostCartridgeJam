@@ -241,6 +241,8 @@ MonoBehaviour:
   tWeaponTarget: {fileID: 2925393505419985796}
   tPhysicalTarget: {fileID: 402087907}
   tIkTarget: {fileID: 899840614152652973}
+  tElbowPole: {fileID: 0}
+  tElbowNoAnimPoleTarget: {fileID: 0}
   tCOM: {fileID: 1905549669}
   errorAdjustmentCoef: 20
   velocityChangeCoef: 40
@@ -851,6 +853,8 @@ MonoBehaviour:
   tWeaponTarget: {fileID: 2925393505618189473}
   tPhysicalTarget: {fileID: 5108803204374245236}
   tIkTarget: {fileID: 6866139436226469841}
+  tElbowPole: {fileID: 0}
+  tElbowNoAnimPoleTarget: {fileID: 0}
   tCOM: {fileID: 2925393505589397855}
   errorAdjustmentCoef: 20
   velocityChangeCoef: 40
@@ -3899,6 +3903,16 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 7386630257519315610}
+    - target: {fileID: 6137723419212577545, guid: 527f4e4f17666ca469dfffeac44cfa13,
+        type: 3}
+      propertyPath: targetHandPosition.x
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6137723419212577545, guid: 527f4e4f17666ca469dfffeac44cfa13,
+        type: 3}
+      propertyPath: targetHandPosition.z
+      value: 0.25
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: 527f4e4f17666ca469dfffeac44cfa13, type: 3}

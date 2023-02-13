@@ -15,6 +15,7 @@ public class RightHand : Hand {
         base.Init(character);
 
         character.weaponController.reloadStartedEvent += WeaponController_reloadStartedEvent;
+        character.animatorController.animatorUpdatedEvent += AnimatorController_animatorUpdatedEvent;
     }
 
     public override void Update() {
@@ -45,6 +46,13 @@ public class RightHand : Hand {
             LookForGrip();
 
         PhysicalHandUpdate();
+    }
+
+    private void AnimatorController_animatorUpdatedEvent() {
+        float f = arms.animationWeightInterpolator.t;
+        if (character.locomotion.wallrunController.isWallRunning)
+            f *= 0.4f;
+        tElbowPole.transform.position = Vector3.Lerp(tElbowNoAnimPoleTarget.position, character.body.postAnimationState.GetBoneState(Body.BoneEnums.rArmR_2).position, f);
     }
 
     private void WeaponTargetUpdate() {

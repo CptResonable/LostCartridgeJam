@@ -8,6 +8,9 @@ public class Hand : MonoBehaviour {
     public Transform tPhysicalTarget; // Target position and rotation, it is the target after blending between diffrent states. Updates in fixedUpdate
     public Transform tIkTarget; // The ik target tarnsform
 
+    public Transform tElbowPole; // The ik pole target tarnsform
+    public Transform tElbowNoAnimPoleTarget; // The ik pole target when not following animation
+
     [SerializeField] private Transform tCOM;
 
     [SerializeField] protected float errorAdjustmentCoef;

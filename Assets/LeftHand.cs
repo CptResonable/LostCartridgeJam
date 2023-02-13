@@ -7,6 +7,12 @@ public class LeftHand : Hand {
     private RaycastHit hit;
     [SerializeField] private LayerMask layerMask;
 
+    public override void Init(Character character) {
+        base.Init(character);
+
+        character.animatorController.animatorUpdatedEvent += AnimatorController_animatorUpdatedEvent;
+    }
+
     public override void Update() {
 
         // Interpolate between physical hand and weapon grip, reason is i don't want grip hand to wobble
@@ -36,6 +42,11 @@ public class LeftHand : Hand {
             LookForGrip();
 
         PhysicalHandUpdate();
+    }
+
+
+    private void AnimatorController_animatorUpdatedEvent() {
+        tElbowPole.transform.position = Vector3.Lerp(tElbowNoAnimPoleTarget.position, character.body.postAnimationState.GetBoneState(Body.BoneEnums.rArmL_2).position, arms.animationWeightInterpolator.t);
     }
 
     private void PhysicalHandUpdate() {

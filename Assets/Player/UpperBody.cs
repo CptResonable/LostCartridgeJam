@@ -57,7 +57,8 @@ public class UpperBody {
 
         // Rotate torso when aimng guns
         if (character.weaponController.equipedGun != null) {
-            if (character.weaponController.equipedGun.isAuto)
+            //if (character.weaponController.equipedGun.isAuto)
+            if (!character.locomotion.isSprinting)
                 character.body.tTorso_2.Rotate(Vector3.up * 30, Space.Self);
         }
 
