@@ -15,6 +15,9 @@ MonoBehaviour:
   environment:
     serializedVersion: 2
     m_Bits: 4097
+  wall:
+    serializedVersion: 2
+    m_Bits: 4096
   characters:
     serializedVersion: 2
     m_Bits: 0

@@ -11,8 +11,8 @@ public class Body {
 
     public enum BoneEnums { rPelvis, rTorso_1, rTorso_2, rHead, rLegL_1, rLegL_2, rLegR_1, rLegR_2, rArmL_1, rArmL_2, rHandL, rArmR_1, rArmR_2, rHandR };
 
-    private Transform[] tBones;
-    private RagdollBone[] ragdollBones;
+    [HideInInspector] public Transform[] tBones;
+    [HideInInspector] public RagdollBone[] ragdollBones;
 
     public void Init(Character character) {
         tBones = new Transform[14] {

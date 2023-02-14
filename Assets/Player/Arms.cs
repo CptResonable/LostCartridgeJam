@@ -13,7 +13,8 @@ public class Arms {
     private Character character;
 
     // Inerpolation between straight animation and IK
-    public TWrapper animationWeightInterpolator = new TWrapper(0, 1, 0);
+    private TWrapper animationWeightInterpolator = new TWrapper(0, 1, 0);
+    public float animationWeight;
     private Coroutine animationWeightCorutine;
 
     // Inerpolation between hip and ads hand positions
@@ -28,6 +29,7 @@ public class Arms {
         hand_L.rb.inertiaTensor = hand_R.rb.inertiaTensor;
 
         character.fixedUpdateEvent += Player_fixedUpdateEvent;
+        character.lateUpdateEvent += Character_lateUpdateEvent;
 
         character.weaponController.adsEnteredEvent += WeaponController_adsEnteredEvent;
         character.weaponController.adsExitedEvent += WeaponController_adsExitedEvent;
@@ -44,6 +46,11 @@ public class Arms {
 
         hand_R.ManualFixedUpdate();
         hand_L.ManualFixedUpdate();
+    }
+
+    private void Character_lateUpdateEvent() {
+        animationWeight = Mathf.Lerp(animationWeightInterpolator.t, 1, character.weaponController.weaponSwapAnimationThing);
+    
     }
 
     private void EvanulateTargetAnimationWeight() {

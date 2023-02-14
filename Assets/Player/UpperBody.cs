@@ -5,6 +5,7 @@ using UnityEngine;
 [System.Serializable]
 public class UpperBody {
     private Character character;
+    private float equipmentInducedTorsoYaw;
 
     public void Init(Character character) {
         this.character = character;
@@ -56,11 +57,12 @@ public class UpperBody {
         character.body.tTorso_2.Rotate(Vector3.forward, deltaRoll * 0.5f, Space.Self);
 
         // Rotate torso when aimng guns
-        if (character.weaponController.equipedGun != null) {
-            //if (character.weaponController.equipedGun.isAuto)
-            if (!character.locomotion.isSprinting)
-                character.body.tTorso_2.Rotate(Vector3.up * 30, Space.Self);
-        }
+        if (character.weaponController.equipedGun != null && !character.locomotion.isSprinting)
+            equipmentInducedTorsoYaw = Mathf.Lerp(equipmentInducedTorsoYaw, 30, Time.deltaTime * 3f);
+        else
+            equipmentInducedTorsoYaw = Mathf.Lerp(equipmentInducedTorsoYaw, 0, Time.deltaTime * 3f);
+
+        character.body.tTorso_2.Rotate(Vector3.up * equipmentInducedTorsoYaw, Space.Self);
 
         character.body.tHead.rotation = character.fpCamera.tCamera.rotation; // Set head rotation to camera rotation
         character.fpCamera.tCamera.position = character.fpCamera.tCameraTarget.position; // Set camera position

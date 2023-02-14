@@ -12,6 +12,11 @@ public class WeaponController {
     [SerializeField] private Transform tOffHandPosition;
     [SerializeField] private ConfigurableJoint handJoint;
 
+    //public TWrapper Interpolator = new TWrapper(0, 1, 0);
+    public float weaponSwapProgress = 0;
+    public float weaponSwapAnimationThing = 0;
+    private Coroutine weaponSwapCorutine;
+
     private Character character;
 
     public bool isADS;
@@ -78,16 +83,43 @@ public class WeaponController {
 
     private void Character_updateEvent() {
 
+        //if (character.isPlayer) {
+        //    if (Input.GetKeyDown(KeyCode.Alpha2) && equipedGun != rifle) {
+        //        EquipGun(rifle);
+        //        JointDrive jd = handJoint.slerpDrive;
+        //        jd.positionSpring = 180;
+        //        jd.positionDamper = 3.5f;
+        //        handJoint.slerpDrive = jd;
+        //    }
+        //    else if (Input.GetKeyDown(KeyCode.Alpha1) && equipedGun != pistol) {
+        //        EquipGun(pistol);
+        //        JointDrive jd = handJoint.slerpDrive;
+        //        jd.positionSpring = 100;
+        //        jd.positionDamper = 2f;
+        //        handJoint.slerpDrive = jd;
+        //    }
+        //}
+
         if (character.isPlayer) {
             if (Input.GetKeyDown(KeyCode.Alpha2) && equipedGun != rifle) {
-                EquipGun(rifle);
+                if (weaponSwapCorutine != null)
+                    character.StopCoroutine(weaponSwapCorutine);
+
+                character.StartCoroutine(WeaponSwapCorutine(rifle));
+
+                //EquipGun(rifle);
                 JointDrive jd = handJoint.slerpDrive;
                 jd.positionSpring = 180;
                 jd.positionDamper = 3.5f;
                 handJoint.slerpDrive = jd;
             }
             else if (Input.GetKeyDown(KeyCode.Alpha1) && equipedGun != pistol) {
-                EquipGun(pistol);
+                if (weaponSwapCorutine != null)
+                    character.StopCoroutine(weaponSwapCorutine);
+
+                character.StartCoroutine(WeaponSwapCorutine(pistol));
+
+                //EquipGun(pistol);
                 JointDrive jd = handJoint.slerpDrive;
                 jd.positionSpring = 100;
                 jd.positionDamper = 2f;
@@ -103,6 +135,30 @@ public class WeaponController {
 
         if (character.characterInput.action_attack.isDown)
             equipedGun.TryFire();
+    }
+
+    private IEnumerator WeaponSwapCorutine(Gun newWeapon) {
+        if (weaponSwapProgress > 0.5f) {
+            weaponSwapProgress = 1 - weaponSwapProgress;
+        }
+
+        bool weaponSwaped = false;
+
+        while (weaponSwapProgress < 1) {
+
+            if (!weaponSwaped && weaponSwapProgress > 0.5f) {
+                weaponSwaped = true;
+                EquipGun(newWeapon);
+            }
+
+            weaponSwapAnimationThing = Mathf.Sin(weaponSwapProgress * Mathf.PI);
+
+            weaponSwapProgress += Time.deltaTime * 2;
+            yield return new WaitForEndOfFrame();
+        }
+
+        weaponSwapProgress = 1;
+        weaponSwapAnimationThing = Mathf.Sin(weaponSwapProgress * Mathf.PI);
     }
 
     private void Action_ads_keyUpEvent() {

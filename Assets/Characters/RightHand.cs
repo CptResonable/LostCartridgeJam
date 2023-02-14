@@ -21,7 +21,7 @@ public class RightHand : Hand {
         tIkTarget.position = transform.position;
         tIkTarget.rotation = transform.rotation;
 
-        if (arms.animationWeightInterpolator.t < 0.01f)
+        if (arms.animationWeight < 0.01f)
             grabingLedge = false;
     }
 
@@ -36,8 +36,8 @@ public class RightHand : Hand {
             wallRunRotation = grabRotation;
         }
 
-        tPhysicalTarget.position = Vector3.Lerp(tWeaponTarget.position, wallRunPosition, arms.animationWeightInterpolator.t);
-        tPhysicalTarget.rotation = Quaternion.Slerp(tWeaponTarget.rotation, wallRunRotation, arms.animationWeightInterpolator.t);
+        tPhysicalTarget.position = Vector3.Lerp(tWeaponTarget.position, wallRunPosition, arms.animationWeight);
+        tPhysicalTarget.rotation = Quaternion.Slerp(tWeaponTarget.rotation, wallRunRotation, arms.animationWeight);
 
         if (character.locomotion.wallrunController.isWallRunning)
             LookForGrip();
@@ -46,7 +46,7 @@ public class RightHand : Hand {
     }
 
     private void AnimatorController_animatorUpdatedEvent() {
-        float f = arms.animationWeightInterpolator.t;
+        float f = arms.animationWeight;
         if (character.locomotion.wallrunController.isWallRunning)
             f *= 0.4f;
         tElbowPole.transform.position = Vector3.Lerp(tElbowNoAnimPoleTarget.position, character.body.postAnimationState.GetBoneState(Body.BoneEnums.rArmR_2).position, f);
@@ -96,6 +96,57 @@ public class RightHand : Hand {
         reloadSpinPitch = 0;
     }
 
+    //private bool LookForGrip() {
+    //    Vector3 direction = -character.locomotion.wallrunController.wallHit.normal;
+
+    //    RaycastHit hit1;
+    //    if (Physics.Raycast(tPhysicalTarget.position - Vector3.up * 0.025f - direction * 0.5f, direction, out hit1, 0.4f, LayerMasks.i.environment)) {
+
+    //        RaycastHit hit2;
+    //        if (!Physics.Raycast(tPhysicalTarget.position + Vector3.up * 0.025f - direction * 0.5f, direction, out hit2, 0.4f, LayerMasks.i.environment)) {
+
+    //            RaycastHit hit3;
+    //            if (Physics.Raycast(hit1.point + direction * 0.05f + Vector3.up * 0.1f, Vector3.down, out hit3, 0.2f, LayerMasks.i.environment)) {
+    //                if (Vector3.Angle(hit3.normal, Vector3.up) < 15f && Vector3.Angle(hit3.normal, direction) > 75f) {
+    //                    grabingLedge = true;
+    //                    grabPoint = hit3.point + Vector3.up * 0.005f;
+    //                    grabRotation = Quaternion.LookRotation(-Vector3.Cross(hit1.normal, hit3.normal), -hit1.normal);
+    //                    return true;
+    //                }
+    //            }
+    //        }
+
+    //        return false;
+    //    }
+    //    else
+    //        return false;
+    //}
+
+    //private bool LookForGrip() {
+    //    Vector3 direction = -character.locomotion.wallrunController.wallHit.normal;
+
+    //    RaycastHit hit1;
+    //    if (Physics.Raycast(tPhysicalTarget.position - Vector3.up * 0.025f - direction * 0.5f, direction, out hit1, 1f, LayerMasks.i.environment)) {
+
+    //        RaycastHit hit2;
+    //        if (!Physics.Raycast(tPhysicalTarget.position + Vector3.up * 0.025f - direction * 0.5f, direction, out hit2, 1f, LayerMasks.i.environment)) {
+
+    //            RaycastHit hit3;
+    //            if (Physics.Raycast(hit1.point + direction * 0.05f + Vector3.up * 0.1f, Vector3.down, out hit3, 0.2f, LayerMasks.i.environment)) {
+    //                if (Vector3.Angle(hit3.normal, Vector3.up) < 15f && Vector3.Angle(hit3.normal, direction) > 75f) {
+    //                    grabingLedge = true;
+    //                    grabPoint = hit3.point + Vector3.up * 0.005f;
+    //                    grabRotation = Quaternion.LookRotation(-Vector3.Cross(hit1.normal, hit3.normal), -hit1.normal);
+    //                    return true;
+    //                }
+    //            }
+    //        }
+
+    //        return false;
+    //    }
+    //    else
+    //        return false;
+    //}
     private bool LookForGrip() {
         Vector3 direction = -character.locomotion.wallrunController.wallHit.normal;
 

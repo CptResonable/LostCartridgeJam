@@ -8,6 +8,7 @@ public class WallrunController : MonoBehaviour {
     public bool isWallRunning;
     public bool wallRunUsed = false;
     public bool isReaching;
+
     [HideInInspector] public Vector3 runVelocity;
     [HideInInspector] public float wallCameraAngle;
 
