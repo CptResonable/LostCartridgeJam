@@ -3,10 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class LeftHand : Hand {
-
-    private RaycastHit hit;
-    [SerializeField] private LayerMask layerMask;
-
     public override void Init(Character character) {
         base.Init(character);
 
@@ -62,16 +58,15 @@ public class LeftHand : Hand {
 
     private void WallAvoidance() {
         RaycastHit wallHit = character.locomotion.wallrunController.wallHit;
+        RaycastHit hit;
 
-        // Raycast down from foot
-        if (Physics.Raycast(tPhysicalTarget.position + wallHit.normal, -wallHit.normal, out hit, 4, layerMask)) {
+        if (Physics.Raycast(tPhysicalTarget.position + wallHit.normal, -wallHit.normal, out hit, 4, LayerMasks.i.environment)) {
             tPhysicalTarget.position = hit.point;
         }
     }
 
     private bool LookForGrip() {
         Vector3 direction = -character.locomotion.wallrunController.wallHit.normal;
-        Vector3 position = new Vector3(character.transform.position.x, tPhysicalTarget.position.y, character.transform.position.z);
 
         RaycastHit hit1;
         if (Physics.Raycast(tPhysicalTarget.position - Vector3.up * 0.025f - direction * 0.5f, direction, out hit1, 1f, LayerMasks.i.environment)) {

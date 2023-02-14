@@ -30,9 +30,6 @@ public class WallrunController : MonoBehaviour {
 
     public float t; // 0 - 1, wall run progress
 
-    private float lastYaw;
-    private float angle;
-
     public event Delegates.EmptyDelegate verticalRunStarted;
     public event Delegates.EmptyDelegate verticalRunStopped;
     public event Delegates.EmptyDelegate verticalRunReachStarted;
@@ -69,10 +66,6 @@ public class WallrunController : MonoBehaviour {
                 verticalRunReachStarted?.Invoke();
             }
         }
-
-        Vector3 lastYawVector = Quaternion.Euler(0, lastYaw, 0) * Vector3.forward;
-
-        lastYaw = character.fpCamera.yaw;
     }
 
     private void FixedUpdate() {
@@ -89,8 +82,6 @@ public class WallrunController : MonoBehaviour {
     }
 
     private void StartVerticalRun() {
-        Debug.Log("Vertical Vel: " + character.rb.velocity.y);
-        angle = Vector3.SignedAngle(wallHit.normal, Quaternion.Euler(0, character.fpCamera.yaw, 0) * Vector3.forward, Vector3.up);
         isWallRunning = true;
         wallRunCorutine = StartCoroutine(VerticalRunCorutine(verticalRunDuration));
         wallRunUsed = true;

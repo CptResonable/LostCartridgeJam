@@ -129,9 +129,9 @@ public class Locomotion {
 
     private void Action_jump_keyDownEvent() {
 
-
-        if (!jumpOnCooldown && isGrounded)
+        if (!jumpOnCooldown && isGrounded) {
             bounceInstances.Add(new Bouncer.BounceInstance(OnBounceFinished, bounceDownCurve, Vector3.down, 0.3f, 0.15f));
+        }
         else if (wallrunController.isWallRunning) {
 
             wallrunController.StopWallRun();

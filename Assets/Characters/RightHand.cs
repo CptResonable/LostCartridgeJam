@@ -8,9 +8,6 @@ public class RightHand : Hand {
     private Coroutine reloadCorutine;
     private float reloadSpinPitch;
 
-    private RaycastHit hit;
-    [SerializeField] private LayerMask layerMask;
-
     public override void Init(Character character) {
         base.Init(character);
 
