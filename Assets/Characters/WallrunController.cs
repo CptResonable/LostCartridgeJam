@@ -3,20 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class WallrunController : MonoBehaviour {
-    [SerializeField] private Transform tClosestPointMarker;
-    [SerializeField] private LayerMask layerMask;
-    [SerializeField] private AnimationCurve verticalRunCurve;
-    [SerializeField] private AnimationCurve mountCurve;
-    [SerializeField] private AnimationCurve yVelToVerticalRunScaleCurve;
-    [SerializeField] private AnimationCurve verticalRunCameraRoll;
-    [SerializeField] private float verticalRunDuration;
-    [SerializeField] private float maxVerticalVelocity;
+    [SerializeField] private WallrunSettings settings;
 
     public bool isWallRunning;
     public bool wallRunUsed = false;
     public bool isReaching;
-    public Vector3 runVelocity;
-    public float wallCameraAngle;
+    [HideInInspector] public Vector3 runVelocity;
+    [HideInInspector] public float wallCameraAngle;
 
     private Character character;
 
@@ -28,7 +21,7 @@ public class WallrunController : MonoBehaviour {
     private Vector3 smoothCharacterHorizontalVelocity;
     private float velocityWallAngle;
 
-    public float t; // 0 - 1, wall run progress
+    [HideInInspector] public float t; // 0 - 1, wall run progress
 
     public event Delegates.EmptyDelegate verticalRunStarted;
     public event Delegates.EmptyDelegate verticalRunStopped;
@@ -69,13 +62,12 @@ public class WallrunController : MonoBehaviour {
     }
 
     private void FixedUpdate() {
-        tClosestPointMarker.gameObject.SetActive(false);
         wallDetected = false;
     }
 
     private void OnTriggerStay(Collider other) {
-        if (Physics.Raycast(transform.position + Vector3.down * 0.4f, character.transform.forward, out wallHit, 2, layerMask)) {
-            if (Physics.Raycast(transform.position + Vector3.down * 0.4f, -wallHit.normal, out wallHit, 1, layerMask)) {
+        if (Physics.Raycast(transform.position + Vector3.down * 0.4f, character.transform.forward, out wallHit, 2, LayerMasks.i.wall)) {
+            if (Physics.Raycast(transform.position + Vector3.down * 0.4f, -wallHit.normal, out wallHit, 1, LayerMasks.i.wall)) {
                 wallDetected = true;
             }
         }
@@ -83,7 +75,7 @@ public class WallrunController : MonoBehaviour {
 
     private void StartVerticalRun() {
         isWallRunning = true;
-        wallRunCorutine = StartCoroutine(VerticalRunCorutine(verticalRunDuration));
+        wallRunCorutine = StartCoroutine(VerticalRunCorutine(settings.verticalRunDuration));
         wallRunUsed = true;
         verticalRunStarted?.Invoke();
     }
@@ -99,14 +91,14 @@ public class WallrunController : MonoBehaviour {
 
     private IEnumerator VerticalRunCorutine(float duration) {
 
-        float scale = yVelToVerticalRunScaleCurve.Evaluate(character.rb.velocity.y);
+        float scale = settings.yVelToVerticalRunScaleCurve.Evaluate(character.rb.velocity.y);
         duration *= scale;
 
         t = 0;
 
         while (t < 1) {
             t += Time.fixedDeltaTime / duration;
-            runVelocity = Vector3.up * verticalRunCurve.Evaluate(t) * maxVerticalVelocity * scale;
+            runVelocity = Vector3.up * settings.verticalRunCurve.Evaluate(t) * settings.maxVerticalVelocity * scale;
             runVelocity += -wallHit.normal * 1f;
             wallCameraAngle = Vector3.SignedAngle(Vector3.ProjectOnPlane(character.fpCamera.tCameraTarget.forward, Vector3.up), Vector3.ProjectOnPlane(-wallHit.normal, Vector3.up), Vector3.up);
             yield return new WaitForFixedUpdate();
@@ -116,7 +108,7 @@ public class WallrunController : MonoBehaviour {
             float t2 = 0;
             while (t2 < 1) {
                 t2 += Time.fixedDeltaTime / 0.75f;
-                runVelocity = Vector3.up * mountCurve.Evaluate(t2) * maxVerticalVelocity * 0.5f;
+                runVelocity = Vector3.up * settings.mountCurve.Evaluate(t2) * settings.maxVerticalVelocity * 0.5f;
                 runVelocity += -wallHit.normal * 1f;
                 wallCameraAngle = Vector3.SignedAngle(Vector3.ProjectOnPlane(character.fpCamera.tCameraTarget.forward, Vector3.up), Vector3.ProjectOnPlane(-wallHit.normal, Vector3.up), Vector3.up);
                 float f = Mathf.Clamp01(1 - (Mathf.Abs(wallCameraAngle) / 45));

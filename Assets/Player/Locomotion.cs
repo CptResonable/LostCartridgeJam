@@ -5,7 +5,6 @@ using UnityEngine;
 [System.Serializable]
 public class Locomotion {
     [SerializeField] private LocomotionSettings settings;
-
     [SerializeField] public WallrunController wallrunController;
 
     public bool isSprinting;
@@ -20,7 +19,6 @@ public class Locomotion {
 
     private Vector3 inputDir;
 
-    private Rigidbody rb;
     public bool isGrounded = true;
     private float airTime = 0;
     private bool jumpOnCooldown = false;
@@ -28,6 +26,7 @@ public class Locomotion {
     private List<Bouncer.BounceInstance> bounceInstances = new List<Bouncer.BounceInstance>();
 
     private Character character;
+    private Rigidbody rb;
 
     // Dash 
     private bool isDashing;
