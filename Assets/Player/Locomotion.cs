@@ -4,22 +4,8 @@ using UnityEngine;
 
 [System.Serializable]
 public class Locomotion {
-    [SerializeField] private float moveSpeed;
-    [SerializeField] private float sprintSpeed;
-    [SerializeField] private float moveAcceleration;
+    [SerializeField] private LocomotionSettings settings;
 
-    [SerializeField] private float bounceUpSpeed;
-    [SerializeField] private float yVelLerpSpeed;
-
-    [SerializeField] private float jumpVelocity;
-    [SerializeField] private AnimationCurve airTimeToGravityScale;
-    [SerializeField] private AnimationCurve handDistanceForceCurve;
-    [SerializeField] private AnimationCurve bounceDownCurve;
-
-    [SerializeField] private float targetHeight = 0.8f;
-    [SerializeField] private float crouchTargetHeight = 0.45f;
-
-    [SerializeField] private LayerMask layerMask;
     [SerializeField] public WallrunController wallrunController;
 
     public bool isSprinting;
@@ -103,7 +89,7 @@ public class Locomotion {
         if (!isGrounded) {
 
             rb.AddForce(Vector3.down * 9.81f, ForceMode.Acceleration);
-            rb.AddForce(Vector3.down * 9.81f * airTimeToGravityScale.Evaluate(airTime), ForceMode.Acceleration);
+            rb.AddForce(Vector3.down * 9.81f * settings.airTimeToGravityScale.Evaluate(airTime), ForceMode.Acceleration);
         }
         else {
             rb.AddForce(Vector3.down * 9.81f, ForceMode.Acceleration);
@@ -130,14 +116,14 @@ public class Locomotion {
     private void Action_jump_keyDownEvent() {
 
         if (!jumpOnCooldown && isGrounded) {
-            bounceInstances.Add(new Bouncer.BounceInstance(OnBounceFinished, bounceDownCurve, Vector3.down, 0.3f, 0.15f));
+            bounceInstances.Add(new Bouncer.BounceInstance(OnBounceFinished, settings.bounceDownCurve, Vector3.down, 0.3f, 0.15f));
         }
         else if (wallrunController.isWallRunning) {
 
             wallrunController.StopWallRun();
 
             Vector3 jumpVector = Vector3.Lerp(Vector3.Lerp(character.fpCamera.tCamera.forward, wallrunController.wallHit.normal, 0.5f), Vector3.up, 0.25f).normalized;
-            character.rb.velocity += (jumpVector * jumpVelocity * 0.7f) + Vector3.up * jumpVelocity * 0.4f;
+            character.rb.velocity += (jumpVector * settings.jumpVelocity * 0.7f) + Vector3.up * settings.jumpVelocity * 0.4f;
         }
     }
 
@@ -148,20 +134,20 @@ public class Locomotion {
 
     private void VerticalMovement() {
         RaycastHit downHit;
-        if (Physics.Raycast(character.transform.position, Vector3.down, out downHit, 100, layerMask)) {
+        if (Physics.Raycast(character.transform.position, Vector3.down, out downHit, 100, LayerMasks.i.environment)) {
             currentHeight = downHit.distance;
         }
 
-        float finalTargetHeight = targetHeight;
+        float finalTargetHeight = settings.targetHeight;
         if (isCrouching)
-            finalTargetHeight = crouchTargetHeight;
+            finalTargetHeight = settings.crouchTargetHeight;
 
         float deltaHeight = currentHeight - finalTargetHeight;
 
         if (deltaHeight < 0 && !jumpOnCooldown) {
             isGrounded = true;
-            float yVelTarget = (-deltaHeight) * bounceUpSpeed;
-            rb.velocity = Vector3.Lerp(rb.velocity, new Vector3(rb.velocity.x, yVelTarget, rb.velocity.z), yVelLerpSpeed * Time.deltaTime);
+            float yVelTarget = (-deltaHeight) * settings.bounceUpSpeed;
+            rb.velocity = Vector3.Lerp(rb.velocity, new Vector3(rb.velocity.x, yVelTarget, rb.velocity.z), settings.yVelLerpSpeed * Time.deltaTime);
         }
         else {
             isGrounded = false;
@@ -174,25 +160,25 @@ public class Locomotion {
             moveDir_forwardPart = Vector3.Project(inputDir, character.transform.forward);
 
         Vector3 moveDir_otherPart = inputDir - moveDir_forwardPart;
-        Vector3 moveVector = moveDir_otherPart * moveSpeed;
+        Vector3 moveVector = moveDir_otherPart * settings.moveSpeed;
 
         if (isSprinting)
-            moveVector += moveDir_forwardPart * sprintSpeed;
+            moveVector += moveDir_forwardPart * settings.sprintSpeed;
         else
-            moveVector += moveDir_forwardPart * moveSpeed;
+            moveVector += moveDir_forwardPart * settings.moveSpeed;
 
-        float acc = moveAcceleration;
+        float acc = settings.moveAcceleration;
         if (!isGrounded)
             acc *= 0.075f;
 
         if (isDashing)
-            rb.velocity = Vector3.Lerp(rb.velocity, dashVector * moveSpeed + Vector3.up * rb.velocity.y, acc * Time.deltaTime);
+            rb.velocity = Vector3.Lerp(rb.velocity, dashVector * settings.moveSpeed + Vector3.up * rb.velocity.y, acc * Time.deltaTime);
         else
             rb.velocity = Vector3.Lerp(rb.velocity, moveVector + Vector3.up * rb.velocity.y, acc * Time.deltaTime);
     }
 
     private void Jump() {
-        rb.velocity = new Vector3(rb.velocity.x, jumpVelocity, rb.velocity.z);
+        rb.velocity = new Vector3(rb.velocity.x, settings.jumpVelocity, rb.velocity.z);
         jumpOnCooldown = true;
         character.StartCoroutine(JumpCorutine());
     }
@@ -208,16 +194,16 @@ public class Locomotion {
     }
 
     private IEnumerator DashCorutine(float time) {
-        float defaultMoveSpeed = moveSpeed;
-        float defaultAcceleration = moveAcceleration;
+        float defaultMoveSpeed = settings.moveSpeed;
+        float defaultAcceleration = settings.moveAcceleration;
         isDashing = true;
 
-        moveSpeed *= 3;
-        moveAcceleration *= 2;
+        settings.moveSpeed *= 3;
+        settings.moveAcceleration *= 2;
         yield return new WaitForSeconds(time);
 
-        moveAcceleration = defaultAcceleration;
-        moveSpeed = defaultMoveSpeed;
+        settings.moveAcceleration = defaultAcceleration;
+        settings.moveSpeed = defaultMoveSpeed;
         isDashing = false;
     }
 }
