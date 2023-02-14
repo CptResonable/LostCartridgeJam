@@ -87,8 +87,6 @@ public class Locomotion {
         foreach (var instance in bounceInstances) {
             character.tRig.position += instance.offset;
         }
-
-        //BodyTilt();
     }
 
     private float yRotationError;
@@ -127,7 +125,6 @@ public class Locomotion {
             targetRotation = Quaternion.Euler(0, character.fpCamera.yaw, 0);
 
         tTargetRoation.rotation = targetRotation;
-        //character.rb.rotation = targetRotation;
     }
 
     private void Action_jump_keyDownEvent() {
@@ -140,13 +137,7 @@ public class Locomotion {
             wallrunController.StopWallRun();
 
             Vector3 jumpVector = Vector3.Lerp(Vector3.Lerp(character.fpCamera.tCamera.forward, wallrunController.wallHit.normal, 0.5f), Vector3.up, 0.25f).normalized;
-            //Vector3 jumpVector = Vector3.Lerp(Vector3.ProjectOnPlane(character.fpCamera.tCameraTarget.forward, Vector3.up).normalized, wallrunController.wallHit.normal, 0.5f).normalized;
-            //character.rb.velocity = character.fpCamera.tCamera.forward * jumpVelocity * 2f;
-            //Debug.Log("WALL JUMP!");
             character.rb.velocity += (jumpVector * jumpVelocity * 0.7f) + Vector3.up * jumpVelocity * 0.4f;
-
-            //// Head bounce
-            //character.head.HeadBounce();
         }
     }
 
@@ -205,23 +196,6 @@ public class Locomotion {
         jumpOnCooldown = true;
         character.StartCoroutine(JumpCorutine());
     }
-
-    // Tilt while climbing walls
-    private float tiltAmount = 0f;
-    private Vector3 tiltAxel;
-    private void BodyTilt() {
-        if (wallrunController.isWallRunning) {
-            tiltAmount = Mathf.Lerp(tiltAmount, 10, Time.deltaTime * 3);
-            tiltAxel = Vector3.Cross(-wallrunController.wallHit.normal, Vector3.up);
-        }
-        else {
-            tiltAmount = Mathf.Lerp(tiltAmount, 0, Time.deltaTime * 2);
-        }
-        character.tRig.localRotation = Quaternion.identity;
-        character.tRig.Rotate(tiltAxel, tiltAmount, Space.World);
-        //character.tRig.rotation = Quaternion.Slerp(character.tRig.rotation, targetBodyRotation, Time.deltaTime * 4);
-    }
-
 
     private IEnumerator JumpCorutine() {
         yield return new WaitForSeconds(0.3f);

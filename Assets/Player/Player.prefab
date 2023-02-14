@@ -63,6 +63,38 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   velocity: {x: 0, y: 0, z: 0}
   angularVelocity: {x: 0, y: 0, z: 0}
+--- !u!1 &471896908
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 471896909}
+  m_Layer: 6
+  m_Name: RightElbowPole (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &471896909
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 471896908}
+  m_LocalRotation: {x: -0.00000008940697, y: -0.00000003951267, z: 0.000000023707605,
+    w: 1}
+  m_LocalPosition: {x: 0.5, y: 1.309, z: 0.01099968}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8156727987830086456}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &516568717
 GameObject:
   m_ObjectHideFlags: 0
@@ -241,8 +273,8 @@ MonoBehaviour:
   tWeaponTarget: {fileID: 2925393505419985796}
   tPhysicalTarget: {fileID: 402087907}
   tIkTarget: {fileID: 899840614152652973}
-  tElbowPole: {fileID: 0}
-  tElbowNoAnimPoleTarget: {fileID: 0}
+  tElbowPole: {fileID: 1487189675}
+  tElbowNoAnimPoleTarget: {fileID: 2925393504685623568}
   tCOM: {fileID: 1905549669}
   errorAdjustmentCoef: 20
   velocityChangeCoef: 40
@@ -487,6 +519,57 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!1 &1487189674
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1487189675}
+  - component: {fileID: 1487189676}
+  m_Layer: 6
+  m_Name: LeftElbowPole (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1487189675
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1487189674}
+  m_LocalRotation: {x: -0.00000008940697, y: -0.00000003951267, z: 0.000000023707605,
+    w: 1}
+  m_LocalPosition: {x: -2, y: -0.19100022, z: -0.9890003}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8156727987830086456}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1487189676
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1487189674}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cc329982edfc412a8a508a8e175eef1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Character: {fileID: 0}
+  Transform: {fileID: 1487189675}
+  Parent: {fileID: 0}
+  Childs: []
+  Joint: {fileID: 0}
+  Objectives: []
 --- !u!1 &1860667697
 GameObject:
   m_ObjectHideFlags: 0
@@ -664,6 +747,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 471896909}
+  - {fileID: 1487189675}
   - {fileID: 402087907}
   - {fileID: 5108803204374245236}
   - {fileID: 2925393505612606320}
@@ -853,8 +938,8 @@ MonoBehaviour:
   tWeaponTarget: {fileID: 2925393505618189473}
   tPhysicalTarget: {fileID: 5108803204374245236}
   tIkTarget: {fileID: 6866139436226469841}
-  tElbowPole: {fileID: 0}
-  tElbowNoAnimPoleTarget: {fileID: 0}
+  tElbowPole: {fileID: 471896909}
+  tElbowNoAnimPoleTarget: {fileID: 2925393505915954208}
   tCOM: {fileID: 2925393505589397855}
   errorAdjustmentCoef: 20
   velocityChangeCoef: 40
@@ -877,7 +962,7 @@ GameObject:
   - component: {fileID: 2925393504685623568}
   - component: {fileID: 2925393504685623571}
   m_Layer: 6
-  m_Name: LeftElbowPole
+  m_Name: LeftElbowPoleTarget
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -890,14 +975,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2925393504685623569}
-  m_LocalRotation: {x: -0.39934307, y: 0.68076676, z: -0.6088692, w: 0.07975008}
-  m_LocalPosition: {x: -0.363, y: -0.481, z: 0.538}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1, y: -1.2, z: 0.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7458831216974441010}
   m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 86}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2925393504685623571
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1331,7 +1416,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2925393505915954208}
   m_Layer: 6
-  m_Name: RightElbowPole
+  m_Name: RightElbowPoleTarget
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1344,14 +1429,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2925393505915954209}
-  m_LocalRotation: {x: -0.85053194, y: 0.43565947, z: -0.082761474, w: -0.2827487}
-  m_LocalPosition: {x: 0.464, y: -0.57, z: -0.228}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1, y: -1.2, z: 0.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7458831216974441010}
   m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 86}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3478418115222141994
 GameObject:
   m_ObjectHideFlags: 0
@@ -1695,7 +1780,7 @@ Transform:
   - {fileID: 3878172958553687629}
   - {fileID: 8156727987830086456}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7386630257519315590
 GameObject:
@@ -2116,7 +2201,7 @@ ConfigurableJoint:
     spring: 0
     damper: 0
   m_LinearLimit:
-    limit: 2
+    limit: 0.5
     bounciness: 0
     contactDistance: 0
   m_AngularXLimitSpring:
@@ -3454,7 +3539,7 @@ MonoBehaviour:
   fixTransforms: 1
   solver:
     executedInEditor: 0
-    IKPosition: {x: 6.5615764, y: 1.1472962, z: 9.879297}
+    IKPosition: {x: 4.682576, y: 1.1472962, z: 15.799297}
     IKPositionWeight: 1
     root: {fileID: 3392244719839400506}
     target: {fileID: 6866139436226469841}
@@ -3495,7 +3580,7 @@ MonoBehaviour:
     bendModifier: 4
     maintainRotationWeight: 0
     bendModifierWeight: 1
-    bendGoal: {fileID: 2925393505915954208}
+    bendGoal: {fileID: 471896909}
 --- !u!114 &2925393506036200917
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3511,7 +3596,7 @@ MonoBehaviour:
   fixTransforms: 1
   solver:
     executedInEditor: 0
-    IKPosition: {x: 6.48339, y: 1.2901523, z: 9.885462}
+    IKPosition: {x: 4.6043897, y: 1.2901523, z: 15.805462}
     IKPositionWeight: 1
     root: {fileID: 3392244719839400506}
     target: {fileID: 899840614152652973}
@@ -3550,10 +3635,10 @@ MonoBehaviour:
       sqrMag: 0
       axis: {x: -1, y: -0, z: -0}
     goal: 2
-    bendModifier: 1
+    bendModifier: 4
     maintainRotationWeight: 0
     bendModifierWeight: 1
-    bendGoal: {fileID: 2925393504685623568}
+    bendGoal: {fileID: 1487189675}
 --- !u!4 &3392244719839400506 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: f869c8affc168f24cbeec4ce02c99087,

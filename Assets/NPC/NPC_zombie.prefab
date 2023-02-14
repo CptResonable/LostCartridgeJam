@@ -539,20 +539,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 3107843033243343418}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d3062eb6ed8df54d94ffc915d6e1c15, type: 3}
+  m_Script: {fileID: 11500000, guid: 3e591c54b56547849a1ed75c68e1c022, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  kmTarget: {fileID: 3107843033127412304}
-  kmThis: {fileID: 0}
-  errorAdjustmentCoef: 20
-  velocityChangeCoef: 40
-  tCOM: {fileID: 3107843033141056700}
-  velocity: {x: 0, y: 0, z: 0}
-  targetVelocity: {x: 0, y: 0, z: 0}
-  angularVelocity: {x: 0, y: 0, z: 0}
-  targetAngularVelocity: {x: 0, y: 0, z: 0}
-  rotationOffset: {x: 0, y: 0, z: 0}
+  tWeaponTarget: {fileID: 0}
+  tPhysicalTarget: {fileID: 0}
+  tIkTarget: {fileID: 0}
+  tElbowPole: {fileID: 0}
+  tElbowNoAnimPoleTarget: {fileID: 0}
+  tCOM: {fileID: 0}
+  errorAdjustmentCoef: 0
+  velocityChangeCoef: 0
+  rb: {fileID: 0}
   targetDeltaPos: {x: 0, y: 0, z: 0}
+  grabingLedge: 0
+  grabPoint: {x: 0, y: 0, z: 0}
+  grabRotation: {x: 0, y: 0, z: 0, w: 0}
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!153 &3107843033243343423
 ConfigurableJoint:
   m_ObjectHideFlags: 0
@@ -1011,102 +1016,82 @@ MonoBehaviour:
   isPlayer: 0
   characterInput: {fileID: 0}
   fpCamera:
-    tHead: {fileID: 3107843031994062702}
+    tCameraTarget: {fileID: 0}
+    tCamera: {fileID: 0}
+    camera: {fileID: 0}
+    animator: {fileID: 0}
     yaw: 0
     pitch: 0
+    roll: 0
     recoilApplicationCurve:
       serializedVersion: 2
       m_Curve: []
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-  playerController:
-    moveSpeed: 4
-    moveAcceleration: 10
-    bounceUpSpeed: 10
-    yVelLerpSpeed: 10
-    jumpVelocity: 7
+    wallRunVerticalTiltBackCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    wallAngleToRollCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+  locomotion:
+    moveSpeed: 0
+    sprintSpeed: 0
+    moveAcceleration: 0
+    bounceUpSpeed: 0
+    yVelLerpSpeed: 0
+    jumpVelocity: 0
     airTimeToGravityScale:
       serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0.94449466
-        outSlope: 0.94449466
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0.11666667
-      - serializedVersion: 3
-        time: 0.5
-        value: 1
-        inSlope: 0.009227102
-        outSlope: 0.009227102
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0.06315684
-        outWeight: 0
-      - serializedVersion: 3
-        time: 2
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
+      m_Curve: []
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
     handDistanceForceCurve:
       serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 0.3
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0.1111111
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 2
-        outSlope: 2
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    bounceDownCurve:
+      serializedVersion: 2
+      m_Curve: []
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
     targetHeight: 0.8
+    crouchTargetHeight: 0.45
     layerMask:
       serializedVersion: 2
-      m_Bits: 119
-    wallDetector: {fileID: 0}
-  handMovement: {fileID: 3107843033243343420}
+      m_Bits: 0
+    wallrunController: {fileID: 0}
+    isSprinting: 0
+    isCrouching: 0
+    isGrounded: 1
+    rotateForce: 0
+    rotateDamperCoef: 0
+    tTargetRoation: {fileID: 0}
   weaponController:
+    pistol: {fileID: 0}
+    rifle: {fileID: 0}
     equipedGun: {fileID: 0}
+    tHandTarget: {fileID: 0}
+    tOffHandPosition: {fileID: 0}
+    handJoint: {fileID: 0}
     isADS: 0
-  arm:
-    tBase: {fileID: 3107843031936582101}
-    tHandTarget: {fileID: 3107843033127412302}
-    hipHandPosition: {x: 0, y: 0, z: 0}
-    adsHandPosition: {x: 0, y: 0, z: 0}
-    handRotationOffset: {x: 0, y: 0, z: 0}
+  animatorController:
+    animator: {fileID: 0}
+  arms:
+    hand_R: {fileID: 0}
+    hand_L: {fileID: 0}
+    tArmControllerBase: {fileID: 0}
   health:
     maxHP: 100
     damageReceivers:
@@ -1151,10 +1136,13 @@ MonoBehaviour:
     rHandR: {fileID: 1920159301239828690}
   rb: {fileID: 0}
   animator: {fileID: 3107843033397838937}
+  tRig: {fileID: 0}
   goAliveModel: {fileID: 2873348326069434651}
   goDeadModel: {fileID: 2873348327240591295}
   capColider: {fileID: 0}
   dashTrigger: {fileID: 5084834863455260135}
+  dropAmmo: 0
+  ammoBoxPrefab: {fileID: 0}
 --- !u!153 &3107843034073992094
 ConfigurableJoint:
   m_ObjectHideFlags: 0
@@ -1285,6 +1273,12 @@ MonoBehaviour:
     keyCode: 0
     isDown: 0
   action_reload:
+    keyCode: 0
+    isDown: 0
+  action_sprint:
+    keyCode: 0
+    isDown: 0
+  action_crouch:
     keyCode: 0
     isDown: 0
   moveInput: {x: 0, y: 0, z: 0}

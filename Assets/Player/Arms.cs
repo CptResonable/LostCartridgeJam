@@ -87,19 +87,4 @@ public class Arms {
     private void WallrunController_verticalRunStopped() {
         EvanulateTargetAnimationWeight();
     }
-
-
-    //private void Locomotion_sprintStartedEvent() {
-    //    if (animationWeightCorutine != null)
-    //        character.StopCoroutine(animationWeightCorutine);
-
-    //    animationWeightCorutine = character.StartCoroutine(InterpolationUtils.i.SmoothStep(animationWeightInterpolator.t, 1, 4, animationWeightInterpolator));
-    //}
-
-    //private void Locomotion_sprintEndedEvent() {
-    //    if (animationWeightCorutine != null)
-    //        character.StopCoroutine(animationWeightCorutine);
-
-    //    animationWeightCorutine = character.StartCoroutine(InterpolationUtils.i.SmoothStep(animationWeightInterpolator.t, 0, 4, animationWeightInterpolator));
-    //}
 }

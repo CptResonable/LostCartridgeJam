@@ -25,9 +25,6 @@ public class Character : MonoBehaviour {
     public event Delegates.EmptyDelegate updateEvent;
     public event Delegates.EmptyDelegate fixedUpdateEvent;
     public event Delegates.EmptyDelegate lateUpdateEvent;
-    //public event Delegates.EmptyDelegate animatorUpdatedEvent;
-
-    private Vector3 localVelocity;
 
     protected void Awake() {
         rb = GetComponent<Rigidbody>();
@@ -48,8 +45,6 @@ public class Character : MonoBehaviour {
     protected void Update() {
         if (!health.isAlive)
             return;
-
-        UpdateAnimator();
 
         updateEvent?.Invoke();
     }
@@ -74,15 +69,5 @@ public class Character : MonoBehaviour {
         goAliveModel.SetActive(false);
         body.Ragdollify();
         goDeadModel.SetActive(true);
-    }
-
-    private void UpdateAnimator() {
-        //Vector3 preAnimPelvisPos = body.tPelvis.position;
-        //localVelocity = Vector3.Lerp(localVelocity, transform.InverseTransformVector(rb.velocity), Time.deltaTime * 4);
-        //animator.SetFloat("VelocityZ", localVelocity.z / 6);
-        //animator.SetFloat("VelocityX", localVelocity.x / 6);
-        //animator.Update(Time.deltaTime);
-        //animatorUpdatedEvent?.Invoke();
-        //body.tPelvis.position = Vector3.Lerp(body.tPelvis.position, new Vector3(preAnimPelvisPos.x, body.tPelvis.position.y, preAnimPelvisPos.z), 0.5f);
     }
 }
