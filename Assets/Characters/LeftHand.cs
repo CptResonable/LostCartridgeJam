@@ -24,6 +24,7 @@ public class LeftHand : Hand {
         tIkTarget.rotation = Quaternion.Slerp(tWeaponTarget.rotation, transform.rotation, arms.animationWeight);
 
         if (tHandActionTarget != null && handActionInterpolator > 0) {
+            Debug.Log("SDHJKSDHJKSDJKHSD");
             tIkTarget.position = Vector3.Lerp(tIkTarget.position, tHandActionTarget.position, handActionInterpolator);
             tIkTarget.rotation = Quaternion.Lerp(tIkTarget.rotation, tHandActionTarget.rotation, handActionInterpolator);
         }
@@ -100,17 +101,18 @@ public class LeftHand : Hand {
     }
 
     private void WeaponController_reloadStartedEvent(float reloadTime) {
+        Debug.Log("rel start");
         reloadCorutine = character.StartCoroutine(ReloadCorutine(reloadTime));
     }
 
     private IEnumerator ReloadCorutine(float reloadTime) {
         float t = 0;
         tHandActionTarget = tMagGrabAnimationPoint;
-
+        Debug.Log("rel cio s");
         while (t < 1) {
             t += Time.deltaTime / reloadTime;
-
             handActionInterpolator = Mathf.Sin(t * Mathf.PI);
+            Debug.Log("rel co " + handActionInterpolator);
             yield return new WaitForEndOfFrame();
         }
         handActionInterpolator = 0;
