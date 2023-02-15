@@ -28,6 +28,8 @@ public class Gun : MonoBehaviour {
     [SerializeField] private float headHorizontalRecoil;
     [SerializeField] private float horizontalChangeSpeed;
 
+    [SerializeField] private Animator animator;
+
     [SerializeField] private Player player;
     [SerializeField] public bool isAuto;
 
@@ -51,6 +53,12 @@ public class Gun : MonoBehaviour {
     public event GunFiredDelegate gunFiredEvent;
     public event Delegates.FloatDelegate reloadStartedEvent;
     public event Delegates.EmptyDelegate reloadFinishedEvent;
+
+    private void Update() {
+        if (Input.GetKeyDown(KeyCode.H))
+            animator.SetTrigger("rackBolt");
+
+    }
 
     private void LateUpdate() {
 

@@ -82,8 +82,10 @@ public class WeaponController {
 
     private void Character_updateEvent() {
 
-        if (equipedGun != null)
+        if (equipedGun != null) {
             tOffHandPosition.position = equipedGun.tOffHandTarget.position;
+            tOffHandPosition.rotation = equipedGun.tOffHandTarget.rotation;
+        }
         //if (character.isPlayer) {
         //    if (Input.GetKeyDown(KeyCode.Alpha2) && equipedGun != rifle) {
         //        EquipGun(rifle);
