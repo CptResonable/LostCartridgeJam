@@ -50439,6 +50439,16 @@ PrefabInstance:
       propertyPath: kmTarget
       value: 
       objectReference: {fileID: 1583364920}
+    - target: {fileID: 3454215125111351595, guid: b0a49345d2a43e644944d5f67068cf41,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.248
+      objectReference: {fileID: 0}
+    - target: {fileID: 3737601585298911470, guid: b0a49345d2a43e644944d5f67068cf41,
+        type: 3}
+      propertyPath: ammoReserve
+      value: 900
+      objectReference: {fileID: 0}
     - target: {fileID: 5108803204374245236, guid: b0a49345d2a43e644944d5f67068cf41,
         type: 3}
       propertyPath: m_LocalScale.z

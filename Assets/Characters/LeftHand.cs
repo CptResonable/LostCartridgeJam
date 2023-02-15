@@ -3,10 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class LeftHand : Hand {
+    public enum LeftHandState { weaponGrip, grabingMag}
+    [SerializeField] private Transform tMagGrabAnimationPoint;
+
+    private Coroutine reloadCorutine;
+    private float handActionInterpolator; // Used to lerp between default pos and action point (mag pocket etc)
+    private Transform tHandActionTarget;
+
     public override void Init(Character character) {
         base.Init(character);
 
         character.animatorController.animatorUpdatedEvent += AnimatorController_animatorUpdatedEvent;
+        character.weaponController.reloadStartedEvent += WeaponController_reloadStartedEvent;
     }
 
     public override void Update() {
@@ -14,6 +22,11 @@ public class LeftHand : Hand {
         // Interpolate between physical hand and weapon grip, reason is i don't want grip hand to wobble
         tIkTarget.position = Vector3.Lerp(tWeaponTarget.position, transform.position, arms.animationWeight);
         tIkTarget.rotation = Quaternion.Slerp(tWeaponTarget.rotation, transform.rotation, arms.animationWeight);
+
+        if (tHandActionTarget != null && handActionInterpolator > 0) {
+            tIkTarget.position = Vector3.Lerp(tIkTarget.position, tHandActionTarget.position, handActionInterpolator);
+            tIkTarget.rotation = Quaternion.Lerp(tIkTarget.rotation, tHandActionTarget.rotation, handActionInterpolator);
+        }
 
         if (arms.animationWeight < 0.01f)
             grabingLedge = false;
@@ -85,6 +98,24 @@ public class LeftHand : Hand {
         else
             return false;
     }
+
+    private void WeaponController_reloadStartedEvent(float reloadTime) {
+        reloadCorutine = character.StartCoroutine(ReloadCorutine(reloadTime));
+    }
+
+    private IEnumerator ReloadCorutine(float reloadTime) {
+        float t = 0;
+        tHandActionTarget = tMagGrabAnimationPoint;
+
+        while (t < 1) {
+            t += Time.deltaTime / reloadTime;
+
+            handActionInterpolator = Mathf.Sin(t * Mathf.PI);
+            yield return new WaitForEndOfFrame();
+        }
+        handActionInterpolator = 0;
+    }
+
 
     //private bool LookForGrip() {
     //    Vector3 direction = -character.locomotion.wallrunController.wallHit.normal;
