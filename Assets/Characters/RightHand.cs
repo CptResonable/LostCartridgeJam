@@ -4,12 +4,17 @@ using UnityEngine;
 
 public class RightHand : Hand {
 
+    [SerializeField] private Transform tRightHandAnimator;
+    private Animator rightHandAnimator;
+
     private Vector3 handRotationOffset;
     private Coroutine reloadCorutine;
     private float reloadSpinPitch;
 
     public override void Init(Character character) {
         base.Init(character);
+
+        rightHandAnimator = tRightHandAnimator.GetComponent<Animator>();
 
         character.weaponController.reloadStartedEvent += WeaponController_reloadStartedEvent;
         character.animatorController.animatorUpdatedEvent += AnimatorController_animatorUpdatedEvent;
@@ -62,10 +67,10 @@ public class RightHand : Hand {
         tWeaponTarget.Rotate(handRotationOffset);
         tWeaponTarget.Rotate(new Vector3(-90, 0, 180));
 
-        if (reloadSpinPitch != 0) {
-            tWeaponTarget.Rotate(new Vector3(0, 0, -50), Space.Self);
-            tWeaponTarget.Rotate(new Vector3(-reloadSpinPitch, 0, 0), Space.Self);
-        }
+        //if (reloadSpinPitch != 0) {
+        //    tWeaponTarget.Rotate(new Vector3(0, 0, -50), Space.Self);
+        //    tWeaponTarget.Rotate(new Vector3(-reloadSpinPitch, 0, 0), Space.Self);
+        //}
     }
 
     private void PhysicalHandUpdate() {
@@ -81,6 +86,7 @@ public class RightHand : Hand {
     }
 
     private void WeaponController_reloadStartedEvent(float reloadTime) {
+        rightHandAnimator.SetBool("isReloading", true);
         reloadCorutine = character.StartCoroutine(ReloadCorutine(reloadTime));
     }
 
@@ -93,8 +99,12 @@ public class RightHand : Hand {
             yield return new WaitForEndOfFrame();
         }
 
+        rightHandAnimator.SetBool("isReloading", false);
         reloadSpinPitch = 0;
     }
+
+    //private void UpdateRightHandAnimator() {
+    //}
 
     //private bool LookForGrip() {
     //    Vector3 direction = -character.locomotion.wallrunController.wallHit.normal;

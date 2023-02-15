@@ -8,6 +8,6 @@ public class IkAnimationPoint : MonoBehaviour {
     [SerializeField] private Character character;
 
     private void Awake() {
-        transform.parent = character.body.tBones[(int)parentBone];
+        transform.SetParent(character.body.tBones[(int)parentBone]);
     }
 }

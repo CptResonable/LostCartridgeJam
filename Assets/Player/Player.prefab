@@ -945,6 +945,7 @@ MonoBehaviour:
   grabingLedge: 0
   grabPoint: {x: 0, y: 0, z: 0}
   grabRotation: {x: 0, y: 0, z: 0, w: 0}
+  tRightHandAnimator: {fileID: 1061916866076582649}
 --- !u!1 &2925393504685623569
 GameObject:
   m_ObjectHideFlags: 0
@@ -1368,11 +1369,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3687472273389427665}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1061916866076582649}
   m_Father: {fileID: 8156727987830086456}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1564,7 +1566,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 3454215125111351595}
   m_Father: {fileID: 7386630257032044851}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1786,6 +1789,8 @@ MonoBehaviour:
     tHandTarget: {fileID: 2925393505618189473}
     tOffHandPosition: {fileID: 2925393505419985796}
     handJoint: {fileID: 1285744482911927165}
+    weaponSwapProgress: 0
+    weaponSwapAnimationThing: 0
     isADS: 0
   animatorController:
     animator: {fileID: 2925393506036200914}
@@ -1793,6 +1798,7 @@ MonoBehaviour:
     hand_R: {fileID: 606353170068321554}
     hand_L: {fileID: 3438967135199304485}
     tArmControllerBase: {fileID: 2925393505612606320}
+    animationWeight: 0
   health:
     maxHP: 100
     damageReceivers:
@@ -1835,6 +1841,7 @@ MonoBehaviour:
     rArmR_1: {fileID: 7557281469536339664}
     rArmR_2: {fileID: 8414543070186993934}
     rHandR: {fileID: 1809767101162193668}
+    tBones: []
   rb: {fileID: 0}
   animator: {fileID: 2925393506036200914}
   tRig: {fileID: 5076245695178447980}
@@ -2033,6 +2040,136 @@ Transform:
   m_Father: {fileID: 3878172958553687629}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8194055859316747942
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1061916866076582649}
+  - component: {fileID: 2815085458406721109}
+  - component: {fileID: 5988156068892655303}
+  - component: {fileID: 5230471346203281591}
+  m_Layer: 6
+  m_Name: AnimatedHandTarget_R
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1061916866076582649
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8194055859316747942}
+  m_LocalRotation: {x: 0.012915078, y: 0, z: 0, w: 0.9999167}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5108803204374245236}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 1.48, y: 0, z: 0}
+--- !u!54 &2815085458406721109
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8194055859316747942}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!114 &5988156068892655303
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8194055859316747942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 959a0d24069c36940b1e9ce0025e39fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  velocity: {x: 0, y: 0, z: 0}
+  angularVelocity: {x: 0, y: 0, z: 0}
+--- !u!95 &5230471346203281591
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8194055859316747942}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 46f1d78d42195f945ade58a629a83abf, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!1 &9066370034462293082
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3454215125111351595}
+  - component: {fileID: 5101266973838155776}
+  m_Layer: 0
+  m_Name: animPointMagGrab
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3454215125111351595
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9066370034462293082}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.216, y: 1, z: 0.008}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8911106073618798623}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5101266973838155776
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9066370034462293082}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cded9f3500a8dcb468418dff34e897b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parentBone: 0
+  character: {fileID: 7386630257519315610}
 --- !u!1001 &2925393504590342456
 PrefabInstance:
   m_ObjectHideFlags: 0

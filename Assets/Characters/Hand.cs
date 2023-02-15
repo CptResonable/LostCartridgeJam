@@ -18,7 +18,7 @@ public class Hand : MonoBehaviour {
 
     protected Character character;
     protected Arms arms;
-    protected KinematicMeasures kmTarget;
+    [SerializeField] protected KinematicMeasures kmTarget;
     public Rigidbody rb;
 
     protected Vector3 velocity;
@@ -33,7 +33,7 @@ public class Hand : MonoBehaviour {
         this.character = character;
         this.arms = character.arms;
 
-        kmTarget = tPhysicalTarget.GetComponent<KinematicMeasures>();
+        //kmTarget = tPhysicalTarget.GetComponent<KinematicMeasures>();
         rb = GetComponent<Rigidbody>();
     }
 
