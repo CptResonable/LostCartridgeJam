@@ -30,6 +30,10 @@ public class RightHand : Hand {
             grabingLedge = false;
     }
 
+
+    private void LateUpdate() {
+        
+    }
     public override void ManualFixedUpdate() {
         WeaponTargetUpdate();
 
@@ -40,6 +44,8 @@ public class RightHand : Hand {
             wallRunPosition = grabPoint;
             wallRunRotation = grabRotation;
         }
+
+
 
         tPhysicalTarget.position = Vector3.Lerp(tWeaponTarget.position, wallRunPosition, arms.animationWeight);
         tPhysicalTarget.rotation = Quaternion.Slerp(tWeaponTarget.rotation, wallRunRotation, arms.animationWeight);
@@ -58,6 +64,8 @@ public class RightHand : Hand {
     }
 
     private void WeaponTargetUpdate() {
+        tRightHandAnimator.Rotate(character.weaponController.equipedGun.tRightHandOffset.localRotation.eulerAngles);
+
         handRotationOffset = new Vector3(handRotationOffset.x, handRotationOffset.y, Mathf.Lerp(handRotationOffset.z, -character.characterInput.moveInput.x * 25 + character.rb.angularVelocity.y * -2, Time.fixedDeltaTime * 8));
 
         if (character.weaponController.equipedGun != null)

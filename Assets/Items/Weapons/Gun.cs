@@ -36,6 +36,7 @@ public class Gun : MonoBehaviour {
     public bool consumeAmmo;
     public int ammoReserve;
 
+    public Transform tRightHandOffset;
     public Transform tOffHandTarget;
     public Vector3 targetHandPosition;
     public Vector3 targetAdsHandPosition;
