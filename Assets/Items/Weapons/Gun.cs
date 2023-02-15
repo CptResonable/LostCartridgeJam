@@ -58,6 +58,8 @@ public class Gun : MonoBehaviour {
     private void Update() {
         if (Input.GetKeyDown(KeyCode.H))
             animator.SetTrigger("rackBolt");
+        if (Input.GetKeyDown(KeyCode.J))
+            animator.SetTrigger("reload");
 
     }
 
