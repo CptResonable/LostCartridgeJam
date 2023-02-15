@@ -59,7 +59,6 @@ public class WeaponController {
 
         tHandTarget.localPosition = gun.targetHandPosition;
         tHandTarget.localPosition = Vector3.zero;
-        tOffHandPosition.position = gun.tOffHandTarget.position;
 
         //character.arms.hand_L.SetCOM();
         //character.handMovement_L.SetCOM();
@@ -83,6 +82,8 @@ public class WeaponController {
 
     private void Character_updateEvent() {
 
+        if (equipedGun != null)
+            tOffHandPosition.position = equipedGun.tOffHandTarget.position;
         //if (character.isPlayer) {
         //    if (Input.GetKeyDown(KeyCode.Alpha2) && equipedGun != rifle) {
         //        EquipGun(rifle);
