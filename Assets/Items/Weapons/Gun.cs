@@ -56,6 +56,7 @@ public class Gun : MonoBehaviour {
     public event GunFiredDelegate gunFiredEvent;
     public event Delegates.FloatDelegate reloadStartedEvent;
     public event Delegates.EmptyDelegate reloadFinishedEvent;
+    public event Delegates.EmptyDelegate bulletChaimeredEvent;
 
     private void Awake() {
         gunAnimationController = GetComponentInChildren<GunAnimationController>();
@@ -105,11 +106,6 @@ public class Gun : MonoBehaviour {
 
         bulletInChaimber = false;
 
-        if (bulletsInMagCount > 0) {
-            bulletsInMagCount--;
-            bulletInChaimber = true;
-        }
-
         Recoil();
 
         GameObject goBullet = EZ_Pooling.EZ_PoolManager.Spawn(prefabBullet.transform, tMuzzle.position - tMuzzle.forward * 0.05f, tMuzzle.rotation).gameObject;
@@ -125,7 +121,18 @@ public class Gun : MonoBehaviour {
         GameObject goMuzzle = EZ_Pooling.EZ_PoolManager.Spawn(prefab_vfxMuzzleFlash.transform, tMuzzle.position, tMuzzle.rotation).gameObject;
         Vfx_muzzleFlash muzzleFlash = goMuzzle.GetComponent<Vfx_muzzleFlash>();
         muzzleFlash.Initiate(tMuzzle);
-     
+
+        // Chaimber new bullet
+        if (bulletsInMagCount > 0) {
+            ChaimerBullet();
+        }
+    }
+
+    private void ChaimerBullet() {
+        bulletsInMagCount--;
+        bulletInChaimber = true;
+
+        bulletChaimeredEvent?.Invoke();
     }
 
     #region Animation events

@@ -17,6 +17,9 @@ public class GunAnimationController : MonoBehaviour {
     private void Awake() {
         gun = GetComponentInParent<Gun>();
         animator = GetComponent<Animator>();
+
+        gun.gunFiredEvent += Gun_gunFiredEvent;
+        gun.bulletChaimeredEvent += Gun_bulletChaimeredEvent;
     }
 
     private void Update() {
@@ -29,8 +32,16 @@ public class GunAnimationController : MonoBehaviour {
     }
 
     public void InitReload() {
-        Debug.Log("RELOAD!");
         animator.SetTrigger("reload");
+    }
+
+    private void Gun_gunFiredEvent(Vector3 rotationalRecoil, Vector3 translationalRecoil) {
+        animator.SetTrigger("fire");
+        animator.SetBool("bulletInChaimber", false);
+    }
+
+    private void Gun_bulletChaimeredEvent() {
+        animator.SetBool("bulletInChaimber", true);
     }
 
     public void OnMagInsertedEvent() {
