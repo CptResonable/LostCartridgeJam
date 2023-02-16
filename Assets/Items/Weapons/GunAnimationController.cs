@@ -29,8 +29,7 @@ public class GunAnimationController : MonoBehaviour {
     }
 
     public void InitReload() {
-        if (Input.GetKeyDown(KeyCode.J))
-            animator.SetTrigger("reload");
+        animator.SetTrigger("reload");
     }
 
     public void OnMagInsertedEvent() {

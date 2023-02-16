@@ -8,15 +8,13 @@ public class RightHand : Hand {
     private Animator rightHandAnimator;
 
     private Vector3 handRotationOffset;
-    private Coroutine reloadCorutine;
-    private float reloadSpinPitch;
+
 
     public override void Init(Character character) {
         base.Init(character);
 
         rightHandAnimator = tRightHandAnimator.GetComponent<Animator>();
 
-        character.weaponController.reloadStartedEvent += WeaponController_reloadStartedEvent;
         character.animatorController.animatorUpdatedEvent += AnimatorController_animatorUpdatedEvent;
     }
 
@@ -89,24 +87,6 @@ public class RightHand : Hand {
         targetVelocity = kmTarget.velocity + targetDeltaPos * errorAdjustmentCoef;
         velocity = Vector3.Lerp(velocity, targetVelocity, Time.fixedDeltaTime * velocityChangeCoef);
         rb.velocity = velocity;
-    }
-
-    private void WeaponController_reloadStartedEvent(float reloadTime) {
-        rightHandAnimator.SetBool("isReloading", true);
-        reloadCorutine = character.StartCoroutine(ReloadCorutine(reloadTime));
-    }
-
-    private IEnumerator ReloadCorutine(float reloadTime) {
-        float t = 0;
-
-        while (t < 1) {
-            t += Time.deltaTime / reloadTime;
-            reloadSpinPitch = 1440 * t;
-            yield return new WaitForEndOfFrame();
-        }
-
-        rightHandAnimator.SetBool("isReloading", false);
-        reloadSpinPitch = 0;
     }
 
     //private void UpdateRightHandAnimator() {

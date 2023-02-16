@@ -48,7 +48,7 @@ public class Gun : MonoBehaviour {
     public bool bulletInChaimber = true;
     public int bulletsInMagCount = 30;
     private Coroutine reloadCorutine;
-    public bool isReloading = false;
+    //public bool isReloading = false;
 
     public bool hasSlideStop = true;
 
@@ -77,7 +77,7 @@ public class Gun : MonoBehaviour {
     }
 
     public void TryFire() {
-        if (cooldown <= 0 && bulletInChaimber && !isReloading) {
+        if (cooldown <= 0 && bulletInChaimber) {
             cooldown = timeBetweenShots;
             Fire();
         }
@@ -92,33 +92,12 @@ public class Gun : MonoBehaviour {
             }
         }
 
-        isReloading = true;
         reloadStartedEvent?.Invoke(reloadTime);
 
         gunAnimationController.InitReload();
-
-        if (!isReloading)
-            reloadCorutine = StartCoroutine(ReloadCorutine());
     }
 
-    //public void Reload() {
-    //    if (consumeAmmo) {
-    //        if (ammoReserve <= 0) {
-    //            return;
-    //        }
-    //        else {
-    //        }
-    //    }
-
-    //    if (!isReloading)
-    //        reloadCorutine = StartCoroutine(ReloadCorutine());
-    //}
-
     public void ReloadCanceled() {
-        if (isReloading) {
-            isReloading = false;
-            StopCoroutine(reloadCorutine);
-        }
     }
 
     private void Fire() {
@@ -207,28 +186,6 @@ public class Gun : MonoBehaviour {
             gunFiredEvent?.Invoke(new Vector3((force * 6) + 4, horizontalForceScale * 10.5f), Vector3.zero);
 
             recoilT += recoilIncreasPerBullet;
-        }
-    }
-
-    private IEnumerator ReloadCorutine() {
-        isReloading = true;
-        reloadStartedEvent?.Invoke(reloadTime);
-        float t = 0;
-
-        while (t < 1) {
-            t += Time.deltaTime / reloadTime;
-            yield return new WaitForEndOfFrame();
-        }
-
-        isReloading = false;
-
-        if (consumeAmmo && ammoReserve < magSize) {
-            bulletsInMagCount = ammoReserve;
-            ammoReserve = 0;
-        }
-        else {
-            ammoReserve -= (magSize - bulletsInMagCount);
-            bulletsInMagCount = magSize;
         }
     }
 }
