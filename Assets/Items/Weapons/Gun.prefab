@@ -807,7 +807,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   timeBetweenShots: 0.1
   tMuzzle: {fileID: 31990487392740302}
-  tMag: {fileID: 0}
+  tMag: {fileID: 807141359073220809}
   prefabSFX: {fileID: 1829890423154730761, guid: 56fe952883f6e0047b7caa35b84aa228,
     type: 3}
   prefabBullet: {fileID: 2038401751905426901, guid: 6f78fe6408305424aa4b2cb00b9d4abb,
@@ -937,7 +937,6 @@ MonoBehaviour:
   targetAdsHandPosition: {x: 0, y: -0.162, z: 0.2}
   bulletInChaimber: 1
   bulletsInMagCount: 30
-  isReloading: 0
   hasSlideStop: 1
 --- !u!1 &4199560739605136275
 GameObject:

@@ -25640,6 +25640,12 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 610083468}
   m_CullTransparentMesh: 1
+--- !u!4 &619557104 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3454215125111351595, guid: b0a49345d2a43e644944d5f67068cf41,
+    type: 3}
+  m_PrefabInstance: {fileID: 2925393505217285473}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &643297951
 GameObject:
   m_ObjectHideFlags: 0
@@ -43411,7 +43417,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh28872
+  m_Name: pb_Mesh170926
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -50439,6 +50445,11 @@ PrefabInstance:
       propertyPath: kmTarget
       value: 
       objectReference: {fileID: 1583364920}
+    - target: {fileID: 3438967135199304485, guid: b0a49345d2a43e644944d5f67068cf41,
+        type: 3}
+      propertyPath: tMagGrabAnimationPoint
+      value: 
+      objectReference: {fileID: 619557104}
     - target: {fileID: 3454215125111351595, guid: b0a49345d2a43e644944d5f67068cf41,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -50452,7 +50463,7 @@ PrefabInstance:
     - target: {fileID: 5108803204374245236, guid: b0a49345d2a43e644944d5f67068cf41,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5108803204374245236, guid: b0a49345d2a43e644944d5f67068cf41,
         type: 3}

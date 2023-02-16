@@ -29,6 +29,7 @@ public class GunAnimationController : MonoBehaviour {
     }
 
     public void InitReload() {
+        Debug.Log("RELOAD!");
         animator.SetTrigger("reload");
     }
 
