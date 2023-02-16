@@ -5,6 +5,7 @@ using UnityEngine;
 public class Gun : MonoBehaviour {
     [SerializeField] private float timeBetweenShots;
     [SerializeField] private Transform tMuzzle;
+    [SerializeField] private Transform tMag;
 
     [SerializeField] private GameObject prefabSFX;
     [SerializeField] private GameObject prefabBullet;
@@ -28,10 +29,10 @@ public class Gun : MonoBehaviour {
     [SerializeField] private float headHorizontalRecoil;
     [SerializeField] private float horizontalChangeSpeed;
 
-    [SerializeField] private Animator animator;
-
     [SerializeField] private Player player;
     [SerializeField] public bool isAuto;
+
+    private GunAnimationController gunAnimationController;
 
     public bool consumeAmmo;
     public int ammoReserve;
@@ -44,6 +45,7 @@ public class Gun : MonoBehaviour {
     private float cooldown = 0;
     private float timeSinceLastShot = 0;
 
+    public bool bulletInChaimber = true;
     public int bulletsInMagCount = 30;
     private Coroutine reloadCorutine;
     public bool isReloading = false;
@@ -55,12 +57,12 @@ public class Gun : MonoBehaviour {
     public event Delegates.FloatDelegate reloadStartedEvent;
     public event Delegates.EmptyDelegate reloadFinishedEvent;
 
-    private void Update() {
-        if (Input.GetKeyDown(KeyCode.H))
-            animator.SetTrigger("rackBolt");
-        if (Input.GetKeyDown(KeyCode.J))
-            animator.SetTrigger("reload");
+    private void Awake() {
+        gunAnimationController = GetComponentInChildren<GunAnimationController>();
 
+        gunAnimationController.magInsertedEvent += GunAnimationController_magInsertedEvent;
+        gunAnimationController.magDroppedEvent += GunAnimationController_magDroppedEvent;
+        gunAnimationController.boltRackedEvent += GunAnimationController_boltRackedEvent;
     }
 
     private void LateUpdate() {
@@ -75,7 +77,7 @@ public class Gun : MonoBehaviour {
     }
 
     public void TryFire() {
-        if (cooldown <= 0 && bulletsInMagCount > 0 && !isReloading) {
+        if (cooldown <= 0 && bulletInChaimber && !isReloading) {
             cooldown = timeBetweenShots;
             Fire();
         }
@@ -103,7 +105,13 @@ public class Gun : MonoBehaviour {
 
     private void Fire() {
         timeSinceLastShot = 0;
-        bulletsInMagCount--;
+
+        bulletInChaimber = false;
+
+        if (bulletsInMagCount > 0) {
+            bulletsInMagCount--;
+            bulletInChaimber = true;
+        }
 
         Recoil();
 
@@ -122,6 +130,28 @@ public class Gun : MonoBehaviour {
         muzzleFlash.Initiate(tMuzzle);
      
     }
+
+    #region Animation events
+    private void GunAnimationController_boltRackedEvent() {
+        bulletsInMagCount--;
+        bulletInChaimber = true;
+    }
+
+    private void GunAnimationController_magDroppedEvent() {
+        bulletsInMagCount = 0;
+    }
+
+    private void GunAnimationController_magInsertedEvent() {
+        if (consumeAmmo && ammoReserve < magSize) {
+            bulletsInMagCount = ammoReserve;
+            ammoReserve = 0;
+        }
+        else {
+            ammoReserve -= (magSize - bulletsInMagCount);
+            bulletsInMagCount = magSize;
+        }
+    }
+    #endregion
 
     private void Recoil() {
         if (isAuto) {
