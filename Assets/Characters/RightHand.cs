@@ -45,8 +45,6 @@ public class RightHand : Hand {
             wallRunRotation = grabRotation;
         }
 
-
-
         tPhysicalTarget.position = Vector3.Lerp(tWeaponTarget.position, wallRunPosition, arms.animationWeight);
         tPhysicalTarget.rotation = Quaternion.Slerp(tWeaponTarget.rotation, wallRunRotation, arms.animationWeight);
 

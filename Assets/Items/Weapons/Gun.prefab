@@ -807,6 +807,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   timeBetweenShots: 0.1
   tMuzzle: {fileID: 31990487392740302}
+  tMag: {fileID: 0}
   prefabSFX: {fileID: 1829890423154730761, guid: 56fe952883f6e0047b7caa35b84aa228,
     type: 3}
   prefabBullet: {fileID: 2038401751905426901, guid: 6f78fe6408305424aa4b2cb00b9d4abb,
@@ -927,12 +928,14 @@ MonoBehaviour:
   horizontalChangeSpeed: 4
   player: {fileID: 0}
   isAuto: 1
+  gunAnimationController: {fileID: 0}
   consumeAmmo: 0
   ammoReserve: 0
   tRightHandOffset: {fileID: 7709939523417422269}
   tOffHandTarget: {fileID: 1055402783947464875}
   targetHandPosition: {x: 0.135, y: -0.225, z: 0.2}
   targetAdsHandPosition: {x: 0, y: -0.162, z: 0.2}
+  bulletInChaimber: 1
   bulletsInMagCount: 30
   isReloading: 0
   hasSlideStop: 1
@@ -1422,6 +1425,7 @@ Transform:
   - {fileID: 31990487392740302}
   - {fileID: 5650372509367580076}
   - {fileID: 1055402783947464875}
+  - {fileID: 895762310288855466}
   m_Father: {fileID: 1756045621161936768}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1457,6 +1461,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9afef3bc7129a0c40ad082b29fd5ddda, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tLeftHandMagGrabT: {fileID: 895762310288855466}
+  leftHandMagGrabT: 0
 --- !u!1 &5650372509232152855
 GameObject:
   m_ObjectHideFlags: 0
@@ -1776,6 +1782,38 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &7047543867500181100
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 895762310288855466}
+  m_Layer: 0
+  m_Name: LeftHandMagGrabT(uses x pos to lerp between mag belt and animation hand
+    position)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &895762310288855466
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7047543867500181100}
+  m_LocalRotation: {x: -0, y: -0, z: 0.000000043711392, w: -1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5650372509202759402}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7084227314714819000
 GameObject:
   m_ObjectHideFlags: 0

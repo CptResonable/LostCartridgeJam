@@ -32,7 +32,7 @@ public class Gun : MonoBehaviour {
     [SerializeField] private Player player;
     [SerializeField] public bool isAuto;
 
-    private GunAnimationController gunAnimationController;
+    public GunAnimationController gunAnimationController;
 
     public bool consumeAmmo;
     public int ammoReserve;
@@ -92,9 +92,27 @@ public class Gun : MonoBehaviour {
             }
         }
 
+        isReloading = true;
+        reloadStartedEvent?.Invoke(reloadTime);
+
+        gunAnimationController.InitReload();
+
         if (!isReloading)
             reloadCorutine = StartCoroutine(ReloadCorutine());
     }
+
+    //public void Reload() {
+    //    if (consumeAmmo) {
+    //        if (ammoReserve <= 0) {
+    //            return;
+    //        }
+    //        else {
+    //        }
+    //    }
+
+    //    if (!isReloading)
+    //        reloadCorutine = StartCoroutine(ReloadCorutine());
+    //}
 
     public void ReloadCanceled() {
         if (isReloading) {
@@ -139,9 +157,12 @@ public class Gun : MonoBehaviour {
 
     private void GunAnimationController_magDroppedEvent() {
         bulletsInMagCount = 0;
+        tMag.gameObject.SetActive(false);
     }
 
     private void GunAnimationController_magInsertedEvent() {
+        tMag.gameObject.SetActive(true);
+
         if (consumeAmmo && ammoReserve < magSize) {
             bulletsInMagCount = ammoReserve;
             ammoReserve = 0;

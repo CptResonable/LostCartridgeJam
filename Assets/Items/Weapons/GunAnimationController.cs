@@ -3,8 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GunAnimationController : MonoBehaviour {
+    [SerializeField] private Transform tLeftHandMagGrabT;
+
     private Animator animator;
     private Gun gun;
+
+    public float leftHandMagGrabT;
 
     public event Delegates.EmptyDelegate magInsertedEvent;
     public event Delegates.EmptyDelegate magDroppedEvent;
@@ -18,6 +22,13 @@ public class GunAnimationController : MonoBehaviour {
     private void Update() {
         if (Input.GetKeyDown(KeyCode.H))
             animator.SetTrigger("rackBolt");
+        if (Input.GetKeyDown(KeyCode.J))
+            animator.SetTrigger("reload");
+
+        leftHandMagGrabT = tLeftHandMagGrabT.localPosition.x;
+    }
+
+    public void InitReload() {
         if (Input.GetKeyDown(KeyCode.J))
             animator.SetTrigger("reload");
     }

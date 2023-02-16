@@ -6,15 +6,14 @@ public class LeftHand : Hand {
     public enum LeftHandState { weaponGrip, grabingMag}
     [SerializeField] private Transform tMagGrabAnimationPoint;
 
-    private Coroutine reloadCorutine;
-    private float handActionInterpolator; // Used to lerp between default pos and action point (mag pocket etc)
-    private Transform tHandActionTarget;
+    //private Coroutine reloadCorutine;
+    //private float handActionInterpolator; // Used to lerp between default pos and action point (mag pocket etc)
+    //private Transform tHandActionTarget;
 
     public override void Init(Character character) {
         base.Init(character);
 
         character.animatorController.animatorUpdatedEvent += AnimatorController_animatorUpdatedEvent;
-        character.weaponController.reloadStartedEvent += WeaponController_reloadStartedEvent;
     }
 
     public override void Update() {
@@ -23,10 +22,10 @@ public class LeftHand : Hand {
         tIkTarget.position = Vector3.Lerp(tWeaponTarget.position, transform.position, arms.animationWeight);
         tIkTarget.rotation = Quaternion.Slerp(tWeaponTarget.rotation, transform.rotation, arms.animationWeight);
 
-        if (tHandActionTarget != null && handActionInterpolator > 0) {
-            Debug.Log("SDHJKSDHJKSDJKHSD");
-            tIkTarget.position = Vector3.Lerp(tIkTarget.position, tHandActionTarget.position, handActionInterpolator);
-            tIkTarget.rotation = Quaternion.Lerp(tIkTarget.rotation, tHandActionTarget.rotation, handActionInterpolator);
+        // Interpolate between hand target and mag belt while reloading
+        if (character.weaponController.equipedGun != null) {
+            tIkTarget.position = Vector3.Lerp(tIkTarget.position, tMagGrabAnimationPoint.position, character.weaponController.equipedGun.gunAnimationController.leftHandMagGrabT);
+            tIkTarget.rotation = Quaternion.Lerp(tIkTarget.rotation, tMagGrabAnimationPoint.rotation, character.weaponController.equipedGun.gunAnimationController.leftHandMagGrabT);
         }
 
         if (arms.animationWeight < 0.01f)
@@ -99,25 +98,6 @@ public class LeftHand : Hand {
         else
             return false;
     }
-
-    private void WeaponController_reloadStartedEvent(float reloadTime) {
-        Debug.Log("rel start");
-        reloadCorutine = character.StartCoroutine(ReloadCorutine(reloadTime));
-    }
-
-    private IEnumerator ReloadCorutine(float reloadTime) {
-        float t = 0;
-        tHandActionTarget = tMagGrabAnimationPoint;
-        Debug.Log("rel cio s");
-        while (t < 1) {
-            t += Time.deltaTime / reloadTime;
-            handActionInterpolator = Mathf.Sin(t * Mathf.PI);
-            Debug.Log("rel co " + handActionInterpolator);
-            yield return new WaitForEndOfFrame();
-        }
-        handActionInterpolator = 0;
-    }
-
 
     //private bool LookForGrip() {
     //    Vector3 direction = -character.locomotion.wallrunController.wallHit.normal;

@@ -78,6 +78,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   timeBetweenShots: 0.1
   tMuzzle: {fileID: 31990487392740302}
+  tMag: {fileID: 588090894312346866}
   prefabSFX: {fileID: 1829890423154730761, guid: 56fe952883f6e0047b7caa35b84aa228,
     type: 3}
   prefabBullet: {fileID: 2038401751905426901, guid: 6f78fe6408305424aa4b2cb00b9d4abb,
@@ -196,7 +197,6 @@ MonoBehaviour:
   headUpRecoil: -5
   headHorizontalRecoil: 5
   horizontalChangeSpeed: 4
-  animator: {fileID: 0}
   player: {fileID: 0}
   isAuto: 0
   consumeAmmo: 0
@@ -205,6 +205,7 @@ MonoBehaviour:
   tOffHandTarget: {fileID: 1055402783947464875}
   targetHandPosition: {x: 0.135, y: -0.225, z: 0.2}
   targetAdsHandPosition: {x: 0, y: -0.154, z: 0.3}
+  bulletInChaimber: 1
   bulletsInMagCount: 11
   isReloading: 0
   hasSlideStop: 1
@@ -708,6 +709,12 @@ PrefabInstance:
     m_RemovedComponents: []
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: e45c1e33941f62240b39359dd465eb31, type: 3}
+--- !u!4 &588090894312346866 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -4226156463210825400, guid: e45c1e33941f62240b39359dd465eb31,
+    type: 3}
+  m_PrefabInstance: {fileID: 5580237681200852410}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5402707559016860241 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: e45c1e33941f62240b39359dd465eb31,
