@@ -7,6 +7,7 @@ public class SfxLibrary : ScriptableObject {
 
     [Header("Weapon sounds")]
     public GameObject rileShot_01;
+    public GameObject pistolShot_01;
     public GameObject magOut_01;
     public GameObject magIn_01;
     public GameObject rackBolt_01;

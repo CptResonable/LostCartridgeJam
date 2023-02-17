@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rileShot_01: {fileID: 1829890423154730761, guid: 56fe952883f6e0047b7caa35b84aa228,
     type: 3}
+  pistolShot_01: {fileID: 1829890423154730761, guid: 803c0e77c03be9445a56ab6eee60252a,
+    type: 3}
   magOut_01: {fileID: 1829890423154730761, guid: 01d89f200b7206247b8369627c0150f3,
     type: 3}
   magIn_01: {fileID: 1829890423154730761, guid: 618bf356f2707074d93908338289ab6c,
