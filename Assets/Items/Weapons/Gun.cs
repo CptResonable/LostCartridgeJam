@@ -137,8 +137,7 @@ public class Gun : MonoBehaviour {
 
     #region Animation events
     private void GunAnimationController_boltRackedEvent() {
-        bulletsInMagCount--;
-        bulletInChaimber = true;
+        ChaimerBullet();
     }
 
     private void GunAnimationController_magDroppedEvent() {
