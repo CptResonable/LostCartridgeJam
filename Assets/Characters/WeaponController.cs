@@ -66,10 +66,7 @@ public class WeaponController {
     }
 
     private void Action_attack_keyDownEvent() {
-        if (equipedGun.isAuto)
-            return;
-
-        equipedGun.TryFire();
+        equipedGun.TryFire(true);
     }
 
     private void EquipedGun_reloadStartedEvent(float reloadTime) {
@@ -136,8 +133,8 @@ public class WeaponController {
                 return;
         }
 
-        if (character.characterInput.action_attack.isDown)
-            equipedGun.TryFire();
+        if (character.characterInput.action_attack.isDown )
+            equipedGun.TryFire(false);
     }
 
     private IEnumerator WeaponSwapCorutine(Gun newWeapon) {

@@ -791,7 +791,7 @@ Transform:
   m_Children:
   - {fileID: 5650372509202759402}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6137723419212577545
 MonoBehaviour:
@@ -808,8 +808,6 @@ MonoBehaviour:
   timeBetweenShots: 0.1
   tMuzzle: {fileID: 31990487392740302}
   tMag: {fileID: 807141359073220809}
-  prefabSFX: {fileID: 1829890423154730761, guid: 56fe952883f6e0047b7caa35b84aa228,
-    type: 3}
   prefabBullet: {fileID: 2038401751905426901, guid: 6f78fe6408305424aa4b2cb00b9d4abb,
     type: 3}
   prefab_vfxMuzzleFlash: {fileID: 638455987314716288, guid: 78b680f0f37a6d0479d39650b0200b83,
@@ -1399,6 +1397,7 @@ GameObject:
   - component: {fileID: 5650372509202759402}
   - component: {fileID: 3124241975910560795}
   - component: {fileID: 7584969867103209127}
+  - component: {fileID: 2436585309712759678}
   m_Layer: 6
   m_Name: Base
   m_TagString: Untagged
@@ -1462,6 +1461,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tLeftHandMagGrabT: {fileID: 895762310288855466}
   leftHandMagGrabT: 0
+--- !u!114 &2436585309712759678
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5650372509202759405}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1079a7167a4ecda4aa43fc2e1aa6d634, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gunShotSfxPrefab: {fileID: 1829890423154730761, guid: 56fe952883f6e0047b7caa35b84aa228,
+    type: 3}
 --- !u!1 &5650372509232152855
 GameObject:
   m_ObjectHideFlags: 0

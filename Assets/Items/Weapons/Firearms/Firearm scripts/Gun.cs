@@ -7,7 +7,6 @@ public class Gun : MonoBehaviour {
     [SerializeField] private Transform tMuzzle;
     [SerializeField] private Transform tMag;
 
-    [SerializeField] private GameObject prefabSFX;
     [SerializeField] private GameObject prefabBullet;
     [SerializeField] private GameObject prefab_vfxMuzzleFlash;
 
@@ -77,10 +76,15 @@ public class Gun : MonoBehaviour {
             recoilT = 0;
     }
 
-    public void TryFire() {
-        if (cooldown <= 0 && bulletInChaimber) {
-            cooldown = timeBetweenShots;
-            Fire();
+    public void TryFire(bool triggerPressedThisFrame) {
+        if (cooldown <= 0) {
+            if (bulletInChaimber) {
+                cooldown = timeBetweenShots;
+                Fire();
+            }
+            else if (triggerPressedThisFrame) {           
+                AudioManager.i.PlaySoundStatic(AudioManager.i.sfxLibrary.dryFire_01, transform.position);
+            }
         }
     }
 
@@ -112,9 +116,6 @@ public class Gun : MonoBehaviour {
         Bullet bullet = goBullet.GetComponent<Bullet>();
         bullet.Fire(tMuzzle.forward * muzzleVelocity, damage);
 
-        // SFX
-        AudioManager.i.PlaySoundStatic(prefabSFX, tMuzzle.position);
-
         // VFX
         GameObject goMuzzle = EZ_Pooling.EZ_PoolManager.Spawn(prefab_vfxMuzzleFlash.transform, tMuzzle.position, tMuzzle.rotation).gameObject;
         Vfx_muzzleFlash muzzleFlash = goMuzzle.GetComponent<Vfx_muzzleFlash>();
@@ -141,7 +142,6 @@ public class Gun : MonoBehaviour {
     private void GunAnimationController_magDroppedEvent() {
         bulletsInMagCount = 0;
         tMag.gameObject.SetActive(false);
-        AudioManager.i.PlaySoundStatic(AudioManager.i.sfxLibrary.magOut_01, transform.position);
     }
 
     private void GunAnimationController_magInsertedEvent() {
@@ -155,8 +155,6 @@ public class Gun : MonoBehaviour {
             ammoReserve -= (magSize - bulletsInMagCount);
             bulletsInMagCount = magSize;
         }
-
-        AudioManager.i.PlaySoundStatic(AudioManager.i.sfxLibrary.magIn_01, transform.position);
     }
     #endregion
 

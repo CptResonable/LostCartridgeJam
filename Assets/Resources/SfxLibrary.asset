@@ -18,3 +18,7 @@ MonoBehaviour:
     type: 3}
   magIn_01: {fileID: 1829890423154730761, guid: 618bf356f2707074d93908338289ab6c,
     type: 3}
+  rackBolt_01: {fileID: 1829890423154730761, guid: a1c6296d39a56d347aac92b066ff96d8,
+    type: 3}
+  dryFire_01: {fileID: 1829890423154730761, guid: 6c6a4f2bb2ed230488e82b11fa770434,
+    type: 3}
