@@ -113,9 +113,7 @@ public class Gun : MonoBehaviour {
         bullet.Fire(tMuzzle.forward * muzzleVelocity, damage);
 
         // SFX
-        GameObject goSFX = EZ_Pooling.EZ_PoolManager.Spawn(prefabSFX.transform, tMuzzle.position, tMuzzle.rotation).gameObject;
-        SFX sfx = goSFX.GetComponent<SFX>();
-        sfx.Play();
+        AudioManager.i.PlaySoundStatic(prefabSFX, tMuzzle.position);
 
         // VFX
         GameObject goMuzzle = EZ_Pooling.EZ_PoolManager.Spawn(prefab_vfxMuzzleFlash.transform, tMuzzle.position, tMuzzle.rotation).gameObject;
@@ -143,6 +141,7 @@ public class Gun : MonoBehaviour {
     private void GunAnimationController_magDroppedEvent() {
         bulletsInMagCount = 0;
         tMag.gameObject.SetActive(false);
+        AudioManager.i.PlaySoundStatic(AudioManager.i.sfxLibrary.magOut_01, transform.position);
     }
 
     private void GunAnimationController_magInsertedEvent() {
@@ -156,6 +155,8 @@ public class Gun : MonoBehaviour {
             ammoReserve -= (magSize - bulletsInMagCount);
             bulletsInMagCount = magSize;
         }
+
+        AudioManager.i.PlaySoundStatic(AudioManager.i.sfxLibrary.magIn_01, transform.position);
     }
     #endregion
 
