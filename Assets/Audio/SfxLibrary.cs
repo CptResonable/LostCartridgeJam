@@ -12,4 +12,8 @@ public class SfxLibrary : ScriptableObject {
     public GameObject magIn_01;
     public GameObject rackBolt_01;
     public GameObject dryFire_01;
+
+    [Header("Footstep sounds")]
+    public GameObject footstepWalkDirt;
+    public GameObject footstepRunDirt;
 }

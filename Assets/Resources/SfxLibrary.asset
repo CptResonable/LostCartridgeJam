@@ -24,3 +24,6 @@ MonoBehaviour:
     type: 3}
   dryFire_01: {fileID: 1829890423154730761, guid: 6c6a4f2bb2ed230488e82b11fa770434,
     type: 3}
+  footstepWalkDirt: {fileID: 1829890423154730761, guid: 3dc79b0464d642847980579fd9eb08f0,
+    type: 3}
+  footstepRunDirt: {fileID: 0}
