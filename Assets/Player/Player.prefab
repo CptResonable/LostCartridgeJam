@@ -278,11 +278,13 @@ MonoBehaviour:
   tCOM: {fileID: 1905549669}
   errorAdjustmentCoef: 20
   velocityChangeCoef: 40
+  kmTarget: {fileID: 0}
   rb: {fileID: 0}
   targetDeltaPos: {x: 0, y: 0, z: 0}
   grabingLedge: 0
   grabPoint: {x: 0, y: 0, z: 0}
   grabRotation: {x: 0, y: 0, z: 0, w: 0}
+  tMagGrabAnimationPoint: {fileID: 0}
 --- !u!1 &662654163
 GameObject:
   m_ObjectHideFlags: 0
@@ -296,6 +298,7 @@ GameObject:
   - component: {fileID: 662654166}
   - component: {fileID: 662654165}
   - component: {fileID: 662654168}
+  - component: {fileID: 2296875462288324868}
   m_Layer: 6
   m_Name: Camera
   m_TagString: Untagged
@@ -422,6 +425,19 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &2296875462288324868
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 662654163}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a235abe721286646a4483a09f49f179, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  character: {fileID: 7386630257519315610}
 --- !u!1 &1104308677
 GameObject:
   m_ObjectHideFlags: 0
@@ -940,6 +956,7 @@ MonoBehaviour:
   tCOM: {fileID: 2925393505589397855}
   errorAdjustmentCoef: 20
   velocityChangeCoef: 40
+  kmTarget: {fileID: 0}
   rb: {fileID: 0}
   targetDeltaPos: {x: 0, y: 0, z: 0}
   grabingLedge: 0
