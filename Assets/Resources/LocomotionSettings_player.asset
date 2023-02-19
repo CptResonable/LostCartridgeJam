@@ -16,7 +16,7 @@ MonoBehaviour:
   sprintSpeed: 5
   moveAcceleration: 10
   bounceUpSpeed: 10
-  yVelLerpSpeed: 10
+  yVelLerpSpeed: 20
   jumpVelocity: 7
   airTimeToGravityScale:
     serializedVersion: 2

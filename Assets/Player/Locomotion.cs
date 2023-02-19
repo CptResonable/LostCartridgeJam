@@ -68,7 +68,7 @@ public class Locomotion {
             }
         }
 
-        character.tRig.localPosition = -0.5f * Vector3.up;
+        character.tRig.localPosition = -0.75f * Vector3.up;
         foreach (var instance in bounceInstances) {
             character.tRig.position += instance.offset;
         }
