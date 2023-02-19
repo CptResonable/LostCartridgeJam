@@ -16,4 +16,5 @@ public class SfxLibrary : ScriptableObject {
     [Header("Footstep sounds")]
     public GameObject footstepWalkDirt;
     public GameObject footstepRunDirt;
+    public GameObject wallClimb_01;
 }

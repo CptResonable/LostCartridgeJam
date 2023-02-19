@@ -27,3 +27,5 @@ MonoBehaviour:
   footstepWalkDirt: {fileID: 1829890423154730761, guid: 3dc79b0464d642847980579fd9eb08f0,
     type: 3}
   footstepRunDirt: {fileID: 0}
+  wallClimb_01: {fileID: 1829890423154730761, guid: acfa6e7bdc275f144a7a564147430eed,
+    type: 3}

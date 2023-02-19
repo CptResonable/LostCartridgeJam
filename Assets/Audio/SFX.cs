@@ -17,6 +17,7 @@ public class SFX : MonoBehaviour {
     public void Play() {
         audioSource.clip = audioClips[Random.Range(0, audioClips.Length)];
         audioSource.pitch = pitch + (pitchVariance * Random.Range(-1f, 1f));
+        audioSource.volume = volume;
         audioSource.Play();
 
         StartCoroutine(DespawnCorutine(audioSource.clip.length * 2));
