@@ -17,4 +17,6 @@ public class SfxLibrary : ScriptableObject {
     public GameObject footstepWalkDirt;
     public GameObject footstepRunDirt;
     public GameObject wallClimb_01;
+    public GameObject jumpStart_01;
+    public GameObject land_01;
 }

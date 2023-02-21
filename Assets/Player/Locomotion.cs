@@ -15,13 +15,16 @@ public class Locomotion {
     public event Delegates.EmptyDelegate crouchStartedEvent;
     public event Delegates.EmptyDelegate crouchEndedEvent;
 
-    private float currentHeight = 1;
-
-    private Vector3 inputDir;
+    public event Delegates.EmptyDelegate jumpStartedEvent;
 
     public bool isGrounded = true;
     private float airTime = 0;
+    public delegate void LandedDelegate(float airTime);
+    public event LandedDelegate landedEvent;
     private bool jumpOnCooldown = false;
+
+    private float currentHeight = 1;
+    private Vector3 inputDir;
 
     private List<Bouncer.BounceInstance> bounceInstances = new List<Bouncer.BounceInstance>();
 
@@ -80,10 +83,17 @@ public class Locomotion {
     [SerializeField] private float rotateDamperCoef;
     [SerializeField] private Transform tTargetRoation;
     private void Character_fixedUpdateEvent() {
-        if (isGrounded)
+        if (isGrounded) {
+            if (airTime > 0.2f)
+                landedEvent?.Invoke(airTime);
             airTime = 0;
-        else 
+        }
+        else {
             airTime += Time.deltaTime;
+        }
+
+        if (wallrunController.isWallRunning)
+            airTime = 0;
             
         if (!isGrounded) {
 
@@ -116,6 +126,7 @@ public class Locomotion {
 
         if (!jumpOnCooldown && isGrounded) {
             bounceInstances.Add(new Bouncer.BounceInstance(OnBounceFinished, settings.bounceDownCurve, Vector3.down, 0.3f, 0.15f));
+            jumpStartedEvent?.Invoke();
         }
         else if (wallrunController.isWallRunning) {
 

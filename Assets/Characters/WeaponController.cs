@@ -50,12 +50,14 @@ public class WeaponController {
         if (equipedGun != null) {
             equipedGun.ReloadCanceled();
             equipedGun.reloadStartedEvent -= EquipedGun_reloadStartedEvent;
+            equipedGun.Unequip();
             equipedGun.gameObject.SetActive(false);
         }
 
         equipedGun = gun;
         equipedGun.gameObject.SetActive(true);
         equipedGun.reloadStartedEvent += EquipedGun_reloadStartedEvent;
+        equipedGun.Equip(character);
 
         tHandTarget.localPosition = gun.targetHandPosition;
         tHandTarget.localPosition = Vector3.zero;

@@ -20,6 +20,9 @@ public class GunAnimationController : MonoBehaviour {
 
         gun.gunFiredEvent += Gun_gunFiredEvent;
         gun.bulletChaimeredEvent += Gun_bulletChaimeredEvent;
+        gun.equipedEvent += Gun_equipedEvent;
+        gun.unequipedEvent += Gun_unequipedEvent;
+        animator.keepAnimatorControllerStateOnDisable = true;
     }
 
     private void Update() {
@@ -42,6 +45,14 @@ public class GunAnimationController : MonoBehaviour {
 
     private void Gun_bulletChaimeredEvent() {
         animator.SetBool("bulletInChaimber", true);
+    }
+
+    private void Gun_equipedEvent() {
+        animator.SetTrigger("equip");
+    }
+
+    private void Gun_unequipedEvent() {
+        animator.SetTrigger("unequip");
     }
 
     public void OnMagInsertedEvent() {

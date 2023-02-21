@@ -27,9 +27,9 @@ public class Gun : MonoBehaviour {
     [SerializeField] private float headUpRecoil;
     [SerializeField] private float headHorizontalRecoil;
     [SerializeField] private float horizontalChangeSpeed;
-
-    [SerializeField] private Player player;
     [SerializeField] public bool isAuto;
+
+    private Character character;
 
     public GunAnimationController gunAnimationController;
 
@@ -56,6 +56,8 @@ public class Gun : MonoBehaviour {
     public event Delegates.FloatDelegate reloadStartedEvent;
     public event Delegates.EmptyDelegate reloadFinishedEvent;
     public event Delegates.EmptyDelegate bulletChaimeredEvent;
+    public event Delegates.EmptyDelegate equipedEvent;
+    public event Delegates.EmptyDelegate unequipedEvent;
 
     private void Awake() {
         gunAnimationController = GetComponentInChildren<GunAnimationController>();
@@ -63,6 +65,16 @@ public class Gun : MonoBehaviour {
         gunAnimationController.magInsertedEvent += GunAnimationController_magInsertedEvent;
         gunAnimationController.magDroppedEvent += GunAnimationController_magDroppedEvent;
         gunAnimationController.boltRackedEvent += GunAnimationController_boltRackedEvent;
+    }
+
+    public void Equip(Character character) {
+        this.character = character;
+        equipedEvent?.Invoke();
+    }
+
+    public void Unequip() {
+        character = null;
+        unequipedEvent?.Invoke(); 
     }
 
     private void LateUpdate() {
