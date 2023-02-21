@@ -102,18 +102,17 @@ BlendTree:
     m_DirectBlendParameter: VelocityZ
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 660882829d4c4764a8a82949d1be1ea2, type: 2}
+    m_Motion: {fileID: 7400000, guid: 3625a6877c0687a46976339b5caea09f, type: 2}
     m_Threshold: 0.75
-    m_Position: {x: -1, y: 0}
+    m_Position: {x: -0.7, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: Blend
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: -4730923601388674693, guid: 5d308d641d8899042b774a7b0607bde8,
-      type: 3}
+    m_Motion: {fileID: 7400000, guid: 13d134459d0b19441bdc8cf92363f0e6, type: 2}
     m_Threshold: 0.85
-    m_Position: {x: 1, y: 0}
+    m_Position: {x: 0.7, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: Blend
