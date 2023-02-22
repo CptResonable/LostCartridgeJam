@@ -16,6 +16,7 @@ public class WallrunController : MonoBehaviour {
 
     private bool wallDetected;
     public RaycastHit wallHit;
+    public Vector3 wallUpVector; // Just (0, 1, 0) for now. TODO make it actually up vector;
     private Coroutine wallRunCorutine;
 
     private Vector3 smoothCharacterVelocity;
@@ -78,6 +79,7 @@ public class WallrunController : MonoBehaviour {
         isWallRunning = true;
         wallRunCorutine = StartCoroutine(VerticalRunCorutine(settings.verticalRunDuration));
         wallRunUsed = true;
+        wallUpVector = Vector3.up;
         verticalRunStarted?.Invoke();
     }
 

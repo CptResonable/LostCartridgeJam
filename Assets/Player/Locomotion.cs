@@ -132,10 +132,88 @@ public class Locomotion {
 
             wallrunController.StopWallRun();
 
-            Vector3 jumpVector = Vector3.Lerp(Vector3.Lerp(character.fpCamera.tCamera.forward, wallrunController.wallHit.normal, 0.5f), Vector3.up, 0.25f).normalized;
-            character.rb.velocity += (jumpVector * settings.jumpVelocity * 0.7f) + Vector3.up * settings.jumpVelocity * 0.4f;
+            Vector3 lookDir = Vector3.ProjectOnPlane(character.fpCamera.tCamera.forward, wallrunController.wallUpVector).normalized;
+
+            float wasdAngle = 0;
+            //if (character.characterInput.moveInput.magnitude > 0.5f) {
+            //    wasdAngle = Vector3.SignedAngle(new Vector3(0, 0, 1), character.characterInput.moveInput, Vector3.up);
+            //    lookDir = Quaternion.AngleAxis(wasdAngle, Vector3.up) * lookDir;
+            //    // worldMoveInput = character.transform.TransformVector
+            //}
+
+            float lookDirToCameraAngle = Vector3.SignedAngle(lookDir, wallrunController.wallHit.normal, wallrunController.wallUpVector);
+            Debug.Log(lookDirToCameraAngle);
+            //if (Mathf.Abs(lookDirToCameraAngle) > 90)
+            //    lookDirToCameraAngle = Mathf.Sign(lookDirToCameraAngle) * (180 - Mathf.Abs(lookDirToCameraAngle));
+            //lookDirToCameraAngle = Mathf.Clamp(lookDirToCameraAngle, -45, 45);
+
+            Vector3 jumpVector = Quaternion.AngleAxis(-lookDirToCameraAngle, Vector3.up) * wallrunController.wallHit.normal;
+            if (character.characterInput.moveInput.magnitude > 0.5f) {
+                wasdAngle = Vector3.SignedAngle(new Vector3(0, 0, 1), character.characterInput.moveInput, Vector3.up);
+                jumpVector = Quaternion.AngleAxis(wasdAngle, Vector3.up) * jumpVector;
+                // worldMoveInput = character.transform.TransformVector
+            }
+
+            if (Vector3.Dot(jumpVector, wallrunController.wallHit.normal) < 0)
+                jumpVector = Vector3.ProjectOnPlane(jumpVector, wallrunController.wallHit.normal) + wallrunController.wallHit.normal * 0.2f;
+
+            character.rb.velocity = jumpVector * settings.jumpVelocity * 0.6f + Vector3.up * character.rb.velocity.y;
+            //Vector3 jumpVector = Vector3.Lerp(Vector3.Lerp(character.fpCamera.tCamera.forward, wallrunController.wallHit.normal, 0.5f), Vector3.up, 0).normalized;
+            //character.rb.velocity += (jumpVector * settings.jumpVelocity * 0.6f);// + Vector3.up * settings.jumpVelocity * 0.4f;
+            //Vector3 jumpVector = Vector3.Lerp(Vector3.Lerp(character.fpCamera.tCamera.forward, wallrunController.wallHit.normal, 0.5f), Vector3.up, 0.25f).normalized;
+            //character.rb.velocity += (jumpVector * settings.jumpVelocity * 0.7f) + Vector3.up * settings.jumpVelocity * 0.4f;
         }
     }
+
+    //private void Action_jump_keyDownEvent() {
+
+    //    if (!jumpOnCooldown && isGrounded) {
+    //        bounceInstances.Add(new Bouncer.BounceInstance(OnBounceFinished, settings.bounceDownCurve, Vector3.down, 0.3f, 0.15f));
+    //        jumpStartedEvent?.Invoke();
+    //    }
+    //    else if (wallrunController.isWallRunning) {
+
+    //        wallrunController.StopWallRun();
+
+    //        Vector3 lookDir = Vector3.ProjectOnPlane(character.fpCamera.tCamera.forward, wallrunController.wallUpVector).normalized;
+
+    //        float wasdAngle = 0;
+    //        if (character.characterInput.moveInput.magnitude > 0.5f) {
+    //            wasdAngle = Vector3.SignedAngle(new Vector3(0, 0, 1), character.characterInput.moveInput, Vector3.up);
+    //            lookDir = Quaternion.AngleAxis(wasdAngle, Vector3.up) * lookDir;
+    //            // worldMoveInput = character.transform.TransformVector
+    //        }
+
+    //        float lookDirToCameraAngle = Vector3.SignedAngle(lookDir, wallrunController.wallHit.normal, wallrunController.wallUpVector);
+    //        Debug.Log(lookDirToCameraAngle);
+    //        if (Mathf.Abs(lookDirToCameraAngle) > 90)
+    //            lookDirToCameraAngle = Mathf.Sign(lookDirToCameraAngle) * (180 - Mathf.Abs(lookDirToCameraAngle));
+    //        lookDirToCameraAngle = Mathf.Clamp(lookDirToCameraAngle, -45, 45);
+
+    //        Vector3 jumpVector = Quaternion.AngleAxis(-lookDirToCameraAngle, Vector3.up) * wallrunController.wallHit.normal;
+
+    //        character.rb.velocity = jumpVector * settings.jumpVelocity * 0.6f + Vector3.up * character.rb.velocity.y;
+    //        //Vector3 jumpVector = Vector3.Lerp(Vector3.Lerp(character.fpCamera.tCamera.forward, wallrunController.wallHit.normal, 0.5f), Vector3.up, 0).normalized;
+    //        //character.rb.velocity += (jumpVector * settings.jumpVelocity * 0.6f);// + Vector3.up * settings.jumpVelocity * 0.4f;
+    //        //Vector3 jumpVector = Vector3.Lerp(Vector3.Lerp(character.fpCamera.tCamera.forward, wallrunController.wallHit.normal, 0.5f), Vector3.up, 0.25f).normalized;
+    //        //character.rb.velocity += (jumpVector * settings.jumpVelocity * 0.7f) + Vector3.up * settings.jumpVelocity * 0.4f;
+    //    }
+    //}
+    //private void Action_jump_keyDownEvent() {
+
+    //    if (!jumpOnCooldown && isGrounded) {
+    //        bounceInstances.Add(new Bouncer.BounceInstance(OnBounceFinished, settings.bounceDownCurve, Vector3.down, 0.3f, 0.15f));
+    //        jumpStartedEvent?.Invoke();
+    //    }
+    //    else if (wallrunController.isWallRunning) {
+
+    //        wallrunController.StopWallRun();
+
+    //        Vector3 jumpVector = Vector3.Lerp(Vector3.Lerp(character.fpCamera.tCamera.forward, wallrunController.wallHit.normal, 0.5f), Vector3.up, 0.25f).normalized;
+    //        character.rb.velocity += (jumpVector * settings.jumpVelocity * 0.7f) + Vector3.up * settings.jumpVelocity * 0.4f;
+    //    }
+    //}
+
 
     private void OnBounceFinished(Bouncer.BounceInstance bounceInstance) {
         bounceInstances.Remove(bounceInstance);
@@ -178,14 +256,32 @@ public class Locomotion {
             moveVector += moveDir_forwardPart * settings.moveSpeed;
 
         float acc = settings.moveAcceleration;
-        if (!isGrounded)
-            acc *= 0.075f;
-
-        if (isDashing)
-            rb.velocity = Vector3.Lerp(rb.velocity, dashVector * settings.moveSpeed + Vector3.up * rb.velocity.y, acc * Time.deltaTime);
-        else
+        if (isGrounded) {
             rb.velocity = Vector3.Lerp(rb.velocity, moveVector + Vector3.up * rb.velocity.y, acc * Time.deltaTime);
+        }
     }
+    //private void HorizontalMovement() {
+    //    Vector3 moveDir_forwardPart = Vector3.zero;
+    //    if (character.characterInput.moveInput.z > 0)
+    //        moveDir_forwardPart = Vector3.Project(inputDir, character.transform.forward);
+
+    //    Vector3 moveDir_otherPart = inputDir - moveDir_forwardPart;
+    //    Vector3 moveVector = moveDir_otherPart * settings.moveSpeed;
+
+    //    if (isSprinting)
+    //        moveVector += moveDir_forwardPart * settings.sprintSpeed;
+    //    else
+    //        moveVector += moveDir_forwardPart * settings.moveSpeed;
+
+    //    float acc = settings.moveAcceleration;
+    //    if (!isGrounded)
+    //        acc *= 0.075f;
+
+    //    if (isDashing)
+    //        rb.velocity = Vector3.Lerp(rb.velocity, dashVector * settings.moveSpeed + Vector3.up * rb.velocity.y, acc * Time.deltaTime);
+    //    else
+    //        rb.velocity = Vector3.Lerp(rb.velocity, moveVector + Vector3.up * rb.velocity.y, acc * Time.deltaTime);
+    //}
 
     private void Jump() {
         rb.velocity = new Vector3(rb.velocity.x, settings.jumpVelocity, rb.velocity.z);

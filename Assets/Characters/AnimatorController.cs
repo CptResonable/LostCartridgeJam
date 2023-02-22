@@ -25,7 +25,7 @@ public class AnimatorController {
     private void Character_updateEvent() {
         Vector3 preAnimPelvisPos = character.body.tPelvis.localPosition;
         localVelocity = Vector3.Lerp(localVelocity, character.transform.InverseTransformVector(character.rb.velocity), Time.deltaTime * 5);
-        Debug.Log(localVelocity.z);
+
         animator.SetFloat("VelocityZ", localVelocity.z / 5);
         animator.SetFloat("VelocityX", localVelocity.x / 5);
         animator.SetFloat("VelocityY", localVelocity.y / 5);
