@@ -73,7 +73,7 @@ public class LeftHand : Hand {
         RaycastHit wallHit = character.locomotion.wallrunController.wallHit;
         RaycastHit hit;
 
-        if (Physics.Raycast(tPhysicalTarget.position + wallHit.normal, -wallHit.normal, out hit, 0.4f, LayerMasks.i.environment)) {
+        if (Physics.Raycast(tPhysicalTarget.position + wallHit.normal, -wallHit.normal, out hit, 1.2f, LayerMasks.i.environment)) {
             tPhysicalTarget.position = hit.point;
         }
     }
