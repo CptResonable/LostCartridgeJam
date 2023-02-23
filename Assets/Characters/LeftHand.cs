@@ -17,6 +17,7 @@ public class LeftHand : Hand {
     }
 
     public override void Update() {
+        base.Update();
 
         // Interpolate between physical hand and weapon grip, reason is i don't want grip hand to wobble
         tIkTarget.position = Vector3.Lerp(tWeaponTarget.position, transform.position, arms.animationWeight);
@@ -28,22 +29,19 @@ public class LeftHand : Hand {
             tIkTarget.rotation = Quaternion.Lerp(tIkTarget.rotation, tMagGrabAnimationPoint.rotation, character.weaponController.equipedGun.gunAnimationController.leftHandMagGrabT);
         }
 
-        if (arms.animationWeight < 0.01f)
-            grabingLedge = false;
+        //if (arms.animationWeight < 0.01f)
+        //    grabingLedge = false;
     }
 
     public override void ManualFixedUpdate() {
 
-        Vector3 wallRunPosition = character.body.postAnimationState.GetBoneState(Body.BoneEnums.rHandL).position;
-        Quaternion wallRunRotation = character.body.postAnimationState.GetBoneState(Body.BoneEnums.rHandL).rotation;
+        // Interpolate between weapon hand target and animation position/rotation
+        tPhysicalTarget.position = Vector3.Lerp(tWeaponTarget.position, character.body.postAnimationState.GetBoneState(Body.BoneEnums.rHandL).position, arms.animationWeight);
+        tPhysicalTarget.rotation = Quaternion.Slerp(tWeaponTarget.rotation, character.body.postAnimationState.GetBoneState(Body.BoneEnums.rHandL).rotation, arms.animationWeight);
 
-        if (grabingLedge) {
-            wallRunPosition = grabPoint;
-            wallRunRotation = grabRotation;
-        }
-
-        tPhysicalTarget.position = Vector3.Lerp(tWeaponTarget.position, wallRunPosition, arms.animationWeight);
-        tPhysicalTarget.rotation = Quaternion.Slerp(tWeaponTarget.rotation, wallRunRotation, arms.animationWeight);
+        // Set postion/rotation to ledge grab point if grabing ledge
+        tPhysicalTarget.position = Vector3.Lerp(tPhysicalTarget.position, grabPoint, ledgeGrabInterpolator);
+        tPhysicalTarget.rotation = Quaternion.Slerp(tPhysicalTarget.rotation, grabRotation, ledgeGrabInterpolator);
 
         WallAvoidance();
 

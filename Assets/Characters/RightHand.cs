@@ -19,13 +19,18 @@ public class RightHand : Hand {
     }
 
     public override void Update() {
+        base.Update();
 
         // Set ik target to physical hand
         tIkTarget.position = transform.position;
         tIkTarget.rotation = transform.rotation;
 
-        if (arms.animationWeight < 0.01f)
-            grabingLedge = false;
+        //Debug.Log(arms.animationWeight);
+
+        //if (arms.animationWeight * animationWeightOverride < 0.01f)
+        //    grabingLedge = false;
+        //if (!character.locomotion.wallrunController.isWallRunning)
+        //    grabingLedge = false;
     }
 
 
@@ -35,16 +40,13 @@ public class RightHand : Hand {
     public override void ManualFixedUpdate() {
         WeaponTargetUpdate();
 
-        Vector3 wallRunPosition = character.body.postAnimationState.GetBoneState(Body.BoneEnums.rHandR).position;
-        Quaternion wallRunRotation = character.body.postAnimationState.GetBoneState(Body.BoneEnums.rHandR).rotation;
+        // Interpolate between weapon hand target and animation position/rotation
+        tPhysicalTarget.position = Vector3.Lerp(tWeaponTarget.position, character.body.postAnimationState.GetBoneState(Body.BoneEnums.rHandR).position, arms.animationWeight);
+        tPhysicalTarget.rotation = Quaternion.Slerp(tWeaponTarget.rotation, character.body.postAnimationState.GetBoneState(Body.BoneEnums.rHandR).rotation, arms.animationWeight);
 
-        if (grabingLedge) {
-            wallRunPosition = grabPoint;
-            wallRunRotation = grabRotation;
-        }
-
-        tPhysicalTarget.position = Vector3.Lerp(tWeaponTarget.position, wallRunPosition, arms.animationWeight);
-        tPhysicalTarget.rotation = Quaternion.Slerp(tWeaponTarget.rotation, wallRunRotation, arms.animationWeight);
+        // Set postion/rotation to ledge grab point if grabing ledge
+        tPhysicalTarget.position = Vector3.Lerp(tPhysicalTarget.position, grabPoint, ledgeGrabInterpolator);
+        tPhysicalTarget.rotation = Quaternion.Slerp(tPhysicalTarget.rotation, grabRotation, ledgeGrabInterpolator);
 
         if (character.locomotion.wallrunController.isWallRunning)
             LookForGrip();
