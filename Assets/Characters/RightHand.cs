@@ -34,10 +34,9 @@ public class RightHand : Hand {
     }
 
 
-    private void LateUpdate() {
-        
-    }
-    public override void ManualFixedUpdate() {
+    protected override void Character_fixedUpdateEvent() {
+        base.Character_fixedUpdateEvent();
+
         WeaponTargetUpdate();
 
         // Interpolate between weapon hand target and animation position/rotation
@@ -74,10 +73,6 @@ public class RightHand : Hand {
         tWeaponTarget.Rotate(handRotationOffset);
         tWeaponTarget.Rotate(new Vector3(-90, 0, 180));
 
-        //if (reloadSpinPitch != 0) {
-        //    tWeaponTarget.Rotate(new Vector3(0, 0, -50), Space.Self);
-        //    tWeaponTarget.Rotate(new Vector3(-reloadSpinPitch, 0, 0), Space.Self);
-        //}
     }
 
     private void PhysicalHandUpdate() {
@@ -92,60 +87,6 @@ public class RightHand : Hand {
         rb.velocity = velocity;
     }
 
-    //private void UpdateRightHandAnimator() {
-    //}
-
-    //private bool LookForGrip() {
-    //    Vector3 direction = -character.locomotion.wallrunController.wallHit.normal;
-
-    //    RaycastHit hit1;
-    //    if (Physics.Raycast(tPhysicalTarget.position - Vector3.up * 0.025f - direction * 0.5f, direction, out hit1, 0.4f, LayerMasks.i.environment)) {
-
-    //        RaycastHit hit2;
-    //        if (!Physics.Raycast(tPhysicalTarget.position + Vector3.up * 0.025f - direction * 0.5f, direction, out hit2, 0.4f, LayerMasks.i.environment)) {
-
-    //            RaycastHit hit3;
-    //            if (Physics.Raycast(hit1.point + direction * 0.05f + Vector3.up * 0.1f, Vector3.down, out hit3, 0.2f, LayerMasks.i.environment)) {
-    //                if (Vector3.Angle(hit3.normal, Vector3.up) < 15f && Vector3.Angle(hit3.normal, direction) > 75f) {
-    //                    grabingLedge = true;
-    //                    grabPoint = hit3.point + Vector3.up * 0.005f;
-    //                    grabRotation = Quaternion.LookRotation(-Vector3.Cross(hit1.normal, hit3.normal), -hit1.normal);
-    //                    return true;
-    //                }
-    //            }
-    //        }
-
-    //        return false;
-    //    }
-    //    else
-    //        return false;
-    //}
-
-    //private bool LookForGrip() {
-    //    Vector3 direction = -character.locomotion.wallrunController.wallHit.normal;
-
-    //    RaycastHit hit1;
-    //    if (Physics.Raycast(tPhysicalTarget.position - Vector3.up * 0.025f - direction * 0.5f, direction, out hit1, 1f, LayerMasks.i.environment)) {
-
-    //        RaycastHit hit2;
-    //        if (!Physics.Raycast(tPhysicalTarget.position + Vector3.up * 0.025f - direction * 0.5f, direction, out hit2, 1f, LayerMasks.i.environment)) {
-
-    //            RaycastHit hit3;
-    //            if (Physics.Raycast(hit1.point + direction * 0.05f + Vector3.up * 0.1f, Vector3.down, out hit3, 0.2f, LayerMasks.i.environment)) {
-    //                if (Vector3.Angle(hit3.normal, Vector3.up) < 15f && Vector3.Angle(hit3.normal, direction) > 75f) {
-    //                    grabingLedge = true;
-    //                    grabPoint = hit3.point + Vector3.up * 0.005f;
-    //                    grabRotation = Quaternion.LookRotation(-Vector3.Cross(hit1.normal, hit3.normal), -hit1.normal);
-    //                    return true;
-    //                }
-    //            }
-    //        }
-
-    //        return false;
-    //    }
-    //    else
-    //        return false;
-    //}
     private bool LookForGrip() {
         Vector3 direction = -character.locomotion.wallrunController.wallHit.normal;
 

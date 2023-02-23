@@ -6,10 +6,6 @@ public class LeftHand : Hand {
     public enum LeftHandState { weaponGrip, grabingMag}
     [SerializeField] private Transform tMagGrabAnimationPoint;
 
-    //private Coroutine reloadCorutine;
-    //private float handActionInterpolator; // Used to lerp between default pos and action point (mag pocket etc)
-    //private Transform tHandActionTarget;
-
     public override void Init(Character character) {
         base.Init(character);
 
@@ -28,12 +24,10 @@ public class LeftHand : Hand {
             tIkTarget.position = Vector3.Lerp(tIkTarget.position, tMagGrabAnimationPoint.position, character.weaponController.equipedGun.gunAnimationController.leftHandMagGrabT);
             tIkTarget.rotation = Quaternion.Lerp(tIkTarget.rotation, tMagGrabAnimationPoint.rotation, character.weaponController.equipedGun.gunAnimationController.leftHandMagGrabT);
         }
-
-        //if (arms.animationWeight < 0.01f)
-        //    grabingLedge = false;
     }
 
-    public override void ManualFixedUpdate() {
+    protected override void Character_fixedUpdateEvent() {
+        base.Character_fixedUpdateEvent();
 
         // Interpolate between weapon hand target and animation position/rotation
         tPhysicalTarget.position = Vector3.Lerp(tWeaponTarget.position, character.body.postAnimationState.GetBoneState(Body.BoneEnums.rHandL).position, arms.animationWeight);
@@ -96,30 +90,4 @@ public class LeftHand : Hand {
         else
             return false;
     }
-
-    //private bool LookForGrip() {
-    //    Vector3 direction = -character.locomotion.wallrunController.wallHit.normal;
-
-    //    RaycastHit hit1;
-    //    if (Physics.Raycast(tPhysicalTarget.position - Vector3.up * 0.025f - direction * 0.5f, direction, out hit1, 0.4f, LayerMasks.i.environment)) {
-
-    //        RaycastHit hit2;
-    //        if (!Physics.Raycast(tPhysicalTarget.position + Vector3.up * 0.025f - direction * 0.5f, direction, out hit2, 0.4f, LayerMasks.i.environment)) {
-
-    //            RaycastHit hit3;
-    //            if (Physics.Raycast(hit1.point + direction * 0.05f + Vector3.up * 0.1f, Vector3.down, out hit3, 0.2f, LayerMasks.i.environment)) {
-    //                if (Vector3.Angle(hit3.normal, Vector3.up) < 15f && Vector3.Angle(hit3.normal, direction) > 75f) {
-    //                    grabingLedge = true;
-    //                    grabPoint = hit3.point + Vector3.up * 0.005f;
-    //                    grabRotation = Quaternion.LookRotation(-Vector3.Cross(hit1.normal, hit3.normal), -hit1.normal);
-    //                    return true;
-    //                }
-    //            }
-    //        }
-
-    //        return false;
-    //    }
-    //    else
-    //        return false;
-    //}
 }

@@ -30,11 +30,6 @@ public class Hand : MonoBehaviour {
     public Quaternion grabRotation;
     protected float ledgeGrabInterpolator = 0;
 
-    //// Inerpolation between straight animation and IK
-    //private TWrapper animationWeightInterpolator = new TWrapper(0, 1, 0);
-    //public float animationWeightOverride = 1;
-    //private Coroutine animationWeightCorutine;
-
     public virtual void Init(Character character) {
         this.character = character;
         this.arms = character.arms;
@@ -43,22 +38,20 @@ public class Hand : MonoBehaviour {
         rb = GetComponent<Rigidbody>();
 
         character.locomotion.wallrunController.verticalRunStopped += WallrunController_verticalRunStopped;
+        character.fixedUpdateEvent += Character_fixedUpdateEvent;
+    }
+
+    protected virtual void Character_fixedUpdateEvent() {
     }
 
     public virtual void Update() {
         if (grabingLedge)
             ledgeGrabInterpolator = 1;
         else
-            ledgeGrabInterpolator = Mathf.Lerp(ledgeGrabInterpolator, 0, Time.deltaTime * 8);
-
-        //if (grabingLedge)
-        //    animationWeightOverride = Mathf.Lerp(animationWeightOverride, 0, Time.deltaTime * 4);
-        //else
-        //    animationWeightOverride = Mathf.Lerp(animationWeightOverride, 1, Time.deltaTime * 4);
-
+            ledgeGrabInterpolator = Mathf.Lerp(ledgeGrabInterpolator, 0, Time.deltaTime * 8);     
     }
 
-    public virtual void ManualFixedUpdate() { }
+    //public virtual void ManualFixedUpdate() { }
 
 
     private void WallrunController_verticalRunStopped() {
