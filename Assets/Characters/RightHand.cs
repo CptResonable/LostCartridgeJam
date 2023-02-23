@@ -24,13 +24,6 @@ public class RightHand : Hand {
         // Set ik target to physical hand
         tIkTarget.position = transform.position;
         tIkTarget.rotation = transform.rotation;
-
-        //Debug.Log(arms.animationWeight);
-
-        //if (arms.animationWeight * animationWeightOverride < 0.01f)
-        //    grabingLedge = false;
-        //if (!character.locomotion.wallrunController.isWallRunning)
-        //    grabingLedge = false;
     }
 
 

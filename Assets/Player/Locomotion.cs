@@ -7,6 +7,8 @@ public class Locomotion {
     [SerializeField] private LocomotionSettings settings;
     [SerializeField] public WallrunController wallrunController;
 
+    [SerializeField] private Transform tTargetRoation;
+
     public bool isSprinting;
     public event Delegates.EmptyDelegate sprintStartedEvent;
     public event Delegates.EmptyDelegate sprintEndedEvent;
@@ -31,7 +33,8 @@ public class Locomotion {
     private Character character;
     private Rigidbody rb;
 
-    public enum LocomotionState { sprinting, wallClimbing, wallGrabing, jumping }
+    public enum LocomotionState { grounded, wallClimbing, wallGrabing, jumping }
+    public LocomotionState state;
 
     // Dash 
     private bool isDashing;
@@ -79,11 +82,6 @@ public class Locomotion {
         }
     }
 
-    private float yRotationError;
-    private float yDeltaError;
-    [SerializeField] private float rotateForce;
-    [SerializeField] private float rotateDamperCoef;
-    [SerializeField] private Transform tTargetRoation;
     private void Character_fixedUpdateEvent() {
         if (isGrounded) {
             if (airTime > 0.2f)
@@ -98,7 +96,6 @@ public class Locomotion {
             airTime = 0;
             
         if (!isGrounded) {
-
             rb.AddForce(Vector3.down * 9.81f, ForceMode.Acceleration);
             rb.AddForce(Vector3.down * 9.81f * settings.airTimeToGravityScale.Evaluate(airTime), ForceMode.Acceleration);
         }
@@ -131,39 +128,7 @@ public class Locomotion {
             jumpStartedEvent?.Invoke();
         }
         else if (wallrunController.isWallRunning) {
-
-            wallrunController.StopWallRun();
-
-            Vector3 lookDir = Vector3.ProjectOnPlane(character.fpCamera.tCamera.forward, wallrunController.wallUpVector).normalized;
-
-            float wasdAngle = 0;
-            //if (character.characterInput.moveInput.magnitude > 0.5f) {
-            //    wasdAngle = Vector3.SignedAngle(new Vector3(0, 0, 1), character.characterInput.moveInput, Vector3.up);
-            //    lookDir = Quaternion.AngleAxis(wasdAngle, Vector3.up) * lookDir;
-            //    // worldMoveInput = character.transform.TransformVector
-            //}
-
-            float lookDirToCameraAngle = Vector3.SignedAngle(lookDir, wallrunController.wallHit.normal, wallrunController.wallUpVector);
-            Debug.Log(lookDirToCameraAngle);
-            //if (Mathf.Abs(lookDirToCameraAngle) > 90)
-            //    lookDirToCameraAngle = Mathf.Sign(lookDirToCameraAngle) * (180 - Mathf.Abs(lookDirToCameraAngle));
-            //lookDirToCameraAngle = Mathf.Clamp(lookDirToCameraAngle, -45, 45);
-
-            Vector3 jumpVector = Quaternion.AngleAxis(-lookDirToCameraAngle, Vector3.up) * wallrunController.wallHit.normal;
-            if (character.characterInput.moveInput.magnitude > 0.5f) {
-                wasdAngle = Vector3.SignedAngle(new Vector3(0, 0, 1), character.characterInput.moveInput, Vector3.up);
-                jumpVector = Quaternion.AngleAxis(wasdAngle, Vector3.up) * jumpVector;
-                // worldMoveInput = character.transform.TransformVector
-            }
-
-            if (Vector3.Dot(jumpVector, wallrunController.wallHit.normal) < 0)
-                jumpVector = Vector3.ProjectOnPlane(jumpVector, wallrunController.wallHit.normal) + wallrunController.wallHit.normal * 0.2f;
-
-            character.rb.velocity = jumpVector * settings.jumpVelocity * 0.6f + Vector3.up * character.rb.velocity.y;
-            //Vector3 jumpVector = Vector3.Lerp(Vector3.Lerp(character.fpCamera.tCamera.forward, wallrunController.wallHit.normal, 0.5f), Vector3.up, 0).normalized;
-            //character.rb.velocity += (jumpVector * settings.jumpVelocity * 0.6f);// + Vector3.up * settings.jumpVelocity * 0.4f;
-            //Vector3 jumpVector = Vector3.Lerp(Vector3.Lerp(character.fpCamera.tCamera.forward, wallrunController.wallHit.normal, 0.5f), Vector3.up, 0.25f).normalized;
-            //character.rb.velocity += (jumpVector * settings.jumpVelocity * 0.7f) + Vector3.up * settings.jumpVelocity * 0.4f;
+            JumpFromWallClimb();
         }
     }
 
@@ -222,6 +187,29 @@ public class Locomotion {
     private IEnumerator JumpCorutine() {
         yield return new WaitForSeconds(0.3f);
         jumpOnCooldown = false;
+    }
+
+    private void JumpFromWallClimb() {
+
+        wallrunController.StopWallRun();
+
+        Vector3 lookDir = Vector3.ProjectOnPlane(character.fpCamera.tCamera.forward, wallrunController.wallUpVector).normalized;
+        float lookDirToCameraAngle = Vector3.SignedAngle(lookDir, wallrunController.wallHit.normal, wallrunController.wallUpVector);
+
+        // Get jump vector by rotating wall normal with camera to wall angle
+        Vector3 jumpVector = Quaternion.AngleAxis(-lookDirToCameraAngle, Vector3.up) * wallrunController.wallHit.normal;
+
+        // If character has move input
+        if (character.characterInput.moveInput.magnitude > 0.5f) {
+            float wasdAngle = Vector3.SignedAngle(new Vector3(0, 0, 1), character.characterInput.moveInput, Vector3.up);
+            jumpVector = Quaternion.AngleAxis(wasdAngle, Vector3.up) * jumpVector;
+        }
+
+        // Stops jump vector from goin into wall, also add some velocity away from wall
+        if (Vector3.Dot(jumpVector, wallrunController.wallHit.normal) < 0)
+            jumpVector = Vector3.ProjectOnPlane(jumpVector, wallrunController.wallHit.normal) + wallrunController.wallHit.normal * 0.2f;
+
+        character.rb.velocity = jumpVector * settings.wallJumpVelocity + Vector3.up * character.rb.velocity.y;
     }
 
     public void Dash(float time, Vector3 dashVector) {

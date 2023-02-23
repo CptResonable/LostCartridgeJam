@@ -12,6 +12,8 @@ public class LocomotionSettings : ScriptableObject {
     public float yVelLerpSpeed;
 
     public float jumpVelocity;
+    public float wallJumpVelocity;
+
     public AnimationCurve airTimeToGravityScale;
     public AnimationCurve handDistanceForceCurve;
     public AnimationCurve bounceDownCurve;
