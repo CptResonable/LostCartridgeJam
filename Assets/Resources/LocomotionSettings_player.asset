@@ -18,6 +18,7 @@ MonoBehaviour:
   bounceUpSpeed: 10
   yVelLerpSpeed: 20
   jumpVelocity: 7
+  wallJumpVelocity: 4
   airTimeToGravityScale:
     serializedVersion: 2
     m_Curve:

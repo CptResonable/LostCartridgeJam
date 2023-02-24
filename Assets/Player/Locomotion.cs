@@ -190,7 +190,6 @@ public class Locomotion {
     }
 
     private void JumpFromWallClimb() {
-
         wallrunController.StopWallRun();
 
         Vector3 lookDir = Vector3.ProjectOnPlane(character.fpCamera.tCamera.forward, wallrunController.wallUpVector).normalized;

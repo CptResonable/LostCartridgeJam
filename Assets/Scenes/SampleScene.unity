@@ -43769,6 +43769,52 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1262627942}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1266556599 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 662654163, guid: b0a49345d2a43e644944d5f67068cf41,
+    type: 3}
+  m_PrefabInstance: {fileID: 2925393505217285473}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1266556606
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1266556599}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 500e1a99b426d9b48a1abff4fbf6b31b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  noiseScrollSpeed: 12
+  translationScale: {x: 0.1, y: 0.1, z: 0.1}
+  rotationalScale: {x: 1, y: 1, z: 0}
+  shakeScaleCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 6.7127266
+      outSlope: 6.7127266
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.06327021
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  scale: 0
 --- !u!1001 &1276929557
 PrefabInstance:
   m_ObjectHideFlags: 0

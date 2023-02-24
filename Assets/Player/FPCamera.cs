@@ -18,12 +18,16 @@ public class FPCamera {
     [SerializeField] private AnimationCurve wallRunVerticalTiltBackCurve;
     [SerializeField] private AnimationCurve wallAngleToRollCurve;
 
+    private Shaker shaker;
+
     private float headbobAmount = 0;
 
     private Character character;
 
     public void Initialize(Character character) {
         this.character = character;
+
+        shaker = camera.GetComponent<Shaker>();
 
         character.updateEvent += character_updateEvent;
         character.fixedUpdateEvent += character_fixedUpdateEvent;
@@ -78,12 +82,12 @@ public class FPCamera {
 
     private void EquipedGun_gunFiredEvent(Vector3 rotationalRecoil, Vector3 translationalRecoil) {
         character.StartCoroutine(ApplyRotationOverTime(-rotationalRecoil.x, rotationalRecoil.y, 0.12f, recoilApplicationCurve));
+        shaker.Shake(2, 0.12f);
     }
 
     public void SetRotation() {
         tCameraTarget.parent.rotation = Quaternion.Euler(pitch, yaw, 0);
     }
-
 
     private void WallrunController_verticalRunStarted() {
         character.StartCoroutine(ApplyRotationOverTime(-25, 0, 0.35f, wallRunVerticalTiltBackCurve));
