@@ -241,39 +241,34 @@ public class Locomotion {
         private bool isPreparingJump = false;
         private float timeSinceGroundTouched; // Grace period, stops character from exiting ground state for something like going over a bump
 
-        public override void Init(Locomotion locomotion) {
-            base.Init(locomotion);
+        public override void EnterState() {
+            base.EnterState();
 
+            if (locomotion.character.characterInput.action_sprint.isDown)
+                SprintStarted();
+
+            locomotion.character.fixedUpdateEvent += Character_fixedUpdateEvent;
+            locomotion.character.characterInput.action_jump.keyDownEvent += Action_jump_keyDownEvent;
             locomotion.character.characterInput.action_sprint.keyDownEvent += Action_sprint_keyDownEvent;
             locomotion.character.characterInput.action_sprint.keyUpEvent += Action_sprint_keyUpEvent;
         }
 
-        public override void EnterState() {
-            base.EnterState();
-            locomotion.character.fixedUpdateEvent += Character_fixedUpdateEvent;
-            locomotion.character.characterInput.action_jump.keyDownEvent += Action_jump_keyDownEvent;
-        }
-
         public override void ExitState() {
             base.ExitState();
+
+            if (isSprinting)
+                SprintEnded();
+
             locomotion.character.fixedUpdateEvent -= Character_fixedUpdateEvent;
             locomotion.character.characterInput.action_jump.keyDownEvent -= Action_jump_keyDownEvent;
+            locomotion.character.characterInput.action_sprint.keyDownEvent -= Action_sprint_keyDownEvent;
+            locomotion.character.characterInput.action_sprint.keyUpEvent -= Action_sprint_keyUpEvent;
         }
 
         private void Character_fixedUpdateEvent() {
-            Debug.Log("GROUNDED!");
             StillOnGroundCheck();
             VerticalMovement();
             HorizontalMovement();
-        }
-
-        private void Action_sprint_keyDownEvent() {
-            isSprinting = true;
-            locomotion.sprintStartedEvent?.Invoke();
-        }
-        private void Action_sprint_keyUpEvent() {
-            isSprinting = false;
-            locomotion.sprintEndedEvent?.Invoke();
         }
 
         private void StillOnGroundCheck() {
@@ -339,6 +334,25 @@ public class Locomotion {
             // Lerp character velocity towards new target velocity
             locomotion.rb.velocity = Vector3.Lerp(locomotion.rb.velocity, moveVector + Vector3.up * locomotion.rb.velocity.y, locomotion.settings.moveAcceleration * Time.deltaTime);
         }
+
+        #region Sprint
+        private void Action_sprint_keyDownEvent() {
+            SprintStarted();
+        }
+        private void Action_sprint_keyUpEvent() {
+            SprintEnded();
+        }
+
+        private void SprintStarted() {
+            isSprinting = true;
+            locomotion.sprintStartedEvent?.Invoke();
+        }
+
+        private void SprintEnded() {
+            isSprinting = false;
+            locomotion.sprintEndedEvent?.Invoke();
+        }
+        #endregion
 
         #region Jump
         private void Action_jump_keyDownEvent() {
