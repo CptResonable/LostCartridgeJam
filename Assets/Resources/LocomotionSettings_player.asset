@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: LocomotionSettings_player
   m_EditorClassIdentifier: 
   moveSpeed: 3
+  strafeSpeed: 3
   sprintSpeed: 5
+  sprintStrafeSpeed: 3
   moveAcceleration: 10
   bounceUpSpeed: 10
   yVelLerpSpeed: 20

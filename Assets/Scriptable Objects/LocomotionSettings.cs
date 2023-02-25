@@ -5,7 +5,9 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "LocomotionSettings", menuName = "ScriptableObjects/LocomotionSettings", order = 2)]
 public class LocomotionSettings : ScriptableObject {
     public float moveSpeed;
+    public float strafeSpeed;
     public float sprintSpeed;
+    public float sprintStrafeSpeed;
     public float moveAcceleration;
 
     public float bounceUpSpeed;

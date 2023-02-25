@@ -57,7 +57,7 @@ public class UpperBody {
         character.body.tTorso_2.Rotate(Vector3.forward, deltaRoll * 0.5f, Space.Self);
 
         // Rotate torso when aimng guns
-        if (character.weaponController.equipedGun != null && !character.locomotion.isSprinting)
+        if (character.weaponController.equipedGun != null && !character.locomotion.state_grounded.isSprinting)
             equipmentInducedTorsoYaw = Mathf.Lerp(equipmentInducedTorsoYaw, 30, Time.deltaTime * 3f);
         else
             equipmentInducedTorsoYaw = Mathf.Lerp(equipmentInducedTorsoYaw, 0, Time.deltaTime * 3f);

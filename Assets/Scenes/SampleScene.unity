@@ -46319,7 +46319,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26ada1053ea8ac443b1510fc581166f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetFramerate: 60
+  targetFramerate: 144
 --- !u!1 &1482722338
 GameObject:
   m_ObjectHideFlags: 0
