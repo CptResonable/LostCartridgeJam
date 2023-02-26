@@ -19,7 +19,6 @@ public class AnimatorController {
 
         character.locomotion.wallrunController.verticalRunStarted += WallrunController_verticalRunStarted;
         character.locomotion.wallrunController.verticalRunStopped += WallrunController_verticalRunStopped;
-        character.locomotion.wallrunController.verticalRunReachStarted += WallrunController_verticalRunReachStarted;
     }
 
     private void Character_updateEvent() {
@@ -54,9 +53,5 @@ public class AnimatorController {
     private void WallrunController_verticalRunStopped() {
         animator.SetBool("IsWallClimbing", false);
         animator.SetBool("IsReaching", false);
-    }
-
-    private void WallrunController_verticalRunReachStarted() {
-        //animator.SetBool("IsReaching", true);
     }
 }

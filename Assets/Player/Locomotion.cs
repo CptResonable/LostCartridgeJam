@@ -11,6 +11,7 @@ public class Locomotion {
 
     public LocomotionState_grounded state_grounded;
     public LocomotionState_inAir state_inAir;
+    public LocomotionState_wallClimbing state_wallClimbing;
     [HideInInspector] public LocomotionState activeState;
 
     //public bool isSprinting;
@@ -52,6 +53,7 @@ public class Locomotion {
 
         state_grounded.Init(this);
         state_inAir.Init(this);
+        state_wallClimbing.Init(this);
         activeState = state_grounded;
         activeState.EnterState();
     }
@@ -135,13 +137,25 @@ public class Locomotion {
     private void EnterState_inAir() {
         activeState.ExitState();
         state_inAir.EnterState();
-        activeState = state_inAir;        
+        activeState = state_inAir;
+
+        Debug.Log("New state: AIR");
     }
 
     private void EnterState_grounded() {
         activeState.ExitState();
         state_grounded.EnterState();
         activeState = state_grounded;
+
+        Debug.Log("New state: GROUND");
+    }
+
+    private void EnterState_wallClimbing() {
+        activeState.ExitState();
+        state_wallClimbing.EnterState();
+        activeState = state_wallClimbing;
+
+        Debug.Log("New state: Wall climb");
     }
 
     private void Action_jump_keyDownEvent() {
@@ -217,10 +231,12 @@ public class Locomotion {
         isDashing = false;
     }
 
-    //public enum LocomotionState { grounded, wallClimbing, wallGrabing, jumping }
     //public LocomotionState state;
     [System.Serializable]
     public class LocomotionState {
+        public enum StateIDEnum { Grounded, InAir, WallClimbing }
+        [HideInInspector] public StateIDEnum stateID;
+
         protected Locomotion locomotion;
 
         public virtual void Init(Locomotion locomotion) {
@@ -240,6 +256,11 @@ public class Locomotion {
         public bool isSprinting;
         private bool isPreparingJump = false;
         private float timeSinceGroundTouched; // Grace period, stops character from exiting ground state for something like going over a bump
+
+        public override void Init(Locomotion locomotion) {
+            base.Init(locomotion);
+            stateID = StateIDEnum.Grounded;
+        }
 
         public override void EnterState() {
             base.EnterState();
@@ -361,7 +382,6 @@ public class Locomotion {
             if (isPreparingJump)
                 return;
 
-            Debug.Log("Jump pressed");
             locomotion.bounceInstances.Add(new Bouncer.BounceInstance(OnBounceFinished, locomotion.settings.bounceDownCurve, Vector3.down, 0.3f, 0.15f));
             locomotion.jumpStartedEvent?.Invoke();
             isPreparingJump = true;
@@ -370,7 +390,6 @@ public class Locomotion {
         private void OnBounceFinished(Bouncer.BounceInstance bounceInstance) {
             locomotion.bounceInstances.Remove(bounceInstance);
             isPreparingJump = false;
-            Debug.Log("Bounced");
             Jump();
         }
 
@@ -378,13 +397,12 @@ public class Locomotion {
             locomotion.rb.velocity = new Vector3(locomotion.rb.velocity.x, locomotion.settings.jumpVelocity, locomotion.rb.velocity.z);
             locomotion.jumpOnCooldown = true;
 
-            Debug.Log("Jump!");
-
             Utils.DelayedFunctionCall(JumpCooldownDone, 0.3f); // Jump cooldown
+
+            locomotion.EnterState_inAir();
         }
 
         private void JumpCooldownDone() {
-            Debug.Log("Jump off cooldown");
             locomotion.jumpOnCooldown = false;
         }
 
@@ -395,38 +413,82 @@ public class Locomotion {
     public class LocomotionState_inAir : LocomotionState {
         public float airTime;
 
+        public override void Init(Locomotion locomotion) {
+            base.Init(locomotion);
+            stateID = StateIDEnum.InAir;
+        }
+
         public override void EnterState() {
             base.EnterState();
+
+            locomotion.character.updateEvent += Character_updateEvent;
             locomotion.character.fixedUpdateEvent += Character_fixedUpdateEvent;
+            locomotion.wallrunController.verticalRunStarted += WallrunController_verticalRunStarted;
         }
 
         public override void ExitState() {
             base.ExitState();
+
+            locomotion.character.updateEvent -= Character_updateEvent;
             locomotion.character.fixedUpdateEvent -= Character_fixedUpdateEvent;
+            locomotion.wallrunController.verticalRunStarted -= WallrunController_verticalRunStarted;
+
             airTime = 0f;
         }
 
+        private void Character_updateEvent() {
+
+            // Check for wall to run if pressing jump key
+            if (locomotion.character.characterInput.action_jump.isDown)
+                locomotion.wallrunController.AttemptWallRun();
+        }
+
         private void Character_fixedUpdateEvent() {
-            Debug.Log("In AIR!");
             StillInAirCheck();
+            VerticalMovement();
 
             airTime += Time.deltaTime;
         }
 
         private void StillInAirCheck() {
-            if (locomotion.currentHeight < locomotion.settings.targetHeight)
+            if (locomotion.currentHeight < locomotion.settings.targetHeight && airTime > 0.1f)
                 locomotion.EnterState_grounded();
         }
 
-        //private void v() {
-        //    if (isGrounded) {
-        //        if (airTime > 0.2f)
-        //            landedEvent?.Invoke(airTime);
-        //        airTime = 0;
-        //    }
-        //    else {
-        //        airTime += Time.deltaTime;
-        //    }
-        //}
+        private void VerticalMovement() {
+            locomotion.rb.AddForce(Vector3.down * 9.81f * locomotion.settings.airTimeToGravityScale.Evaluate(airTime), ForceMode.Acceleration);
+        }
+
+        private void WallrunController_verticalRunStarted() {
+            locomotion.EnterState_wallClimbing();
+        }
+    }
+
+    [System.Serializable]
+    public class LocomotionState_wallClimbing : LocomotionState {
+        public override void Init(Locomotion locomotion) {
+            base.Init(locomotion);
+            stateID = StateIDEnum.WallClimbing;
+        }
+
+        public override void EnterState() {
+            base.EnterState();
+            locomotion.character.fixedUpdateEvent += Character_fixedUpdateEvent;
+            locomotion.wallrunController.verticalRunStopped += WallrunController_verticalRunStopped;
+        }
+
+        public override void ExitState() {
+            base.ExitState();
+            locomotion.character.fixedUpdateEvent -= Character_fixedUpdateEvent;
+            locomotion.wallrunController.verticalRunStopped -= WallrunController_verticalRunStopped;
+        }
+
+        private void Character_fixedUpdateEvent() {
+            locomotion.rb.velocity = locomotion.wallrunController.runVelocity;
+        }
+
+        private void WallrunController_verticalRunStopped() {
+            locomotion.EnterState_inAir();
+        }
     }
 }
