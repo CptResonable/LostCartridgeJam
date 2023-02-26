@@ -6,7 +6,7 @@ public class WallrunController : MonoBehaviour {
     [SerializeField] private WallrunSettings settings;
 
     public bool isWallRunning;
-    public bool wallRunUsed = false;
+    private bool wallClimbOnCooldown;
 
     [HideInInspector] public Vector3 runVelocity;
     [HideInInspector] public float wallCameraAngle;
@@ -35,24 +35,6 @@ public class WallrunController : MonoBehaviour {
         smoothCharacterVelocity = Vector3.Lerp(smoothCharacterVelocity, character.rb.velocity, Time.deltaTime * 8);
         smoothCharacterHorizontalVelocity = Vector3.ProjectOnPlane(smoothCharacterVelocity, Vector3.up);
 
-        if (character.locomotion.activeState.stateID == Locomotion.LocomotionState.StateIDEnum.Grounded && !isWallRunning)
-            wallRunUsed = false;
-
-        //if (!wallDetected && isWallRunning) {
-        //    StopWallRun();
-        //}
-
-        //if (!wallDetected)
-        //    return;
-
-        //if (!isWallRunning) {
-        //    if (Input.GetKey(KeyCode.Space) && !wallRunUsed && !character.locomotion.isGrounded) {
-        //        velocityWallAngle = Vector3.SignedAngle(-wallHit.normal, smoothCharacterHorizontalVelocity, Vector3.up);
-
-        //        if (Mathf.Abs(velocityWallAngle) < 15)
-        //            StartVerticalRun();
-        //    }
-        //}
     }
 
     private void FixedUpdate() {
@@ -72,27 +54,34 @@ public class WallrunController : MonoBehaviour {
         if (!wallDetected) // No wall to run/climb
             return;
 
-        if (!isWallRunning) {
-            if (!wallRunUsed) {
-                velocityWallAngle = Vector3.SignedAngle(-wallHit.normal, smoothCharacterHorizontalVelocity, Vector3.up);
-                if (Mathf.Abs(velocityWallAngle) < 15)
+        if (!isWallRunning && !wallClimbOnCooldown) {
+            velocityWallAngle = Vector3.SignedAngle(-wallHit.normal, smoothCharacterHorizontalVelocity, Vector3.up);
+            if (Mathf.Abs(velocityWallAngle) < settings.maxAngleForWallClimb) {
+                Vector3 proj = Vector3.Project(smoothCharacterVelocity, -wallHit.normal);
+                if (proj.magnitude > settings.velocityNeededForWallClimb)
                     StartVerticalRun();
             }
         }
     }
 
+    private void WallClimbCooldownDone() {
+        wallClimbOnCooldown = false;
+    }
+
     private void StartVerticalRun() {
         isWallRunning = true;
         wallRunCorutine = StartCoroutine(VerticalRunCorutine(settings.verticalRunDuration));
-        wallRunUsed = true;
         wallUpVector = Vector3.up;
         verticalRunStarted?.Invoke();
     }
 
     public void StopWallRun() {
+
         if (isWallRunning) {
             StopCoroutine(wallRunCorutine);
             isWallRunning = false;
+            wallClimbOnCooldown = true;
+            Utils.DelayedFunctionCall(WallClimbCooldownDone, 0.05f); // Wall climb cooldown
             verticalRunStopped?.Invoke();
         }
     }

@@ -371,6 +371,7 @@ public class Locomotion {
         }
 
         private void WallrunController_verticalRunStopped() {
+            Debug.Log("Wall run stopped");
             locomotion.EnterState_inAir();
         }
 

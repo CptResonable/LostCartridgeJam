@@ -9,4 +9,6 @@ public class WallrunSettings : ScriptableObject {
     public AnimationCurve yVelToVerticalRunScaleCurve;
     public float verticalRunDuration;
     public float maxVerticalVelocity;
+    public float velocityNeededForWallClimb;
+    public float maxAngleForWallClimb;
 }

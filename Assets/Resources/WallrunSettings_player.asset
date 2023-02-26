@@ -122,3 +122,5 @@ MonoBehaviour:
     m_RotationOrder: 4
   verticalRunDuration: 1
   maxVerticalVelocity: 7
+  velocityNeededForWallClimb: 1
+  maxAngleForWallClimb: 30
