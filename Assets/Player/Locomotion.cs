@@ -14,28 +14,24 @@ public class Locomotion {
     public LocomotionState_wallClimbing state_wallClimbing;
     [HideInInspector] public LocomotionState activeState;
 
-    //public bool isSprinting;
+    private List<Bouncer.BounceInstance> bounceInstances = new List<Bouncer.BounceInstance>();
+
+    private Character character;
+    private Rigidbody rb;
+
+    private float currentHeight = 1;
+    private Vector3 inputDir;
+
     public event Delegates.EmptyDelegate sprintStartedEvent;
     public event Delegates.EmptyDelegate sprintEndedEvent;
 
-    public bool isCrouching;
     public event Delegates.EmptyDelegate crouchStartedEvent;
     public event Delegates.EmptyDelegate crouchEndedEvent;
 
     public event Delegates.EmptyDelegate jumpStartedEvent;
 
-    public bool isGrounded = true;
     public delegate void LandedDelegate(float airTime);
     public event LandedDelegate landedEvent;
-    private bool jumpOnCooldown = false;
-
-    private float currentHeight = 1;
-    private Vector3 inputDir;
-
-    private List<Bouncer.BounceInstance> bounceInstances = new List<Bouncer.BounceInstance>();
-
-    private Character character;
-    private Rigidbody rb;
 
 
     public void Initialize(Character character) {
@@ -56,7 +52,7 @@ public class Locomotion {
         // Convert movement input into world space vector
         inputDir = character.transform.TransformDirection(character.characterInput.moveInput);
 
-        // Set rig base hight (Default model is not at the correct height)
+        // Set rig base height (Default model is not at the correct height)
         character.tRig.localPosition = -0.75f * Vector3.up;
 
         // Bounces the model, now only used just before character jumps
@@ -67,14 +63,6 @@ public class Locomotion {
 
     private void Character_fixedUpdateEvent() {
         HeightCheck();
-
-        Quaternion targetRotation;
-        if (wallrunController.isWallRunning)
-            targetRotation = Quaternion.LookRotation(Vector3.ProjectOnPlane(-wallrunController.wallHit.normal, Vector3.up).normalized, Vector3.up);
-        else
-            targetRotation = Quaternion.Euler(0, character.fpCamera.yaw, 0);
-
-        tTargetRoation.rotation = targetRotation;
     }
 
     private void HeightCheck() {
@@ -96,6 +84,11 @@ public class Locomotion {
     }
 
     private void EnterState_grounded() {
+
+        // Invoke landed event
+        if (activeState.stateID == LocomotionState.StateIDEnum.InAir)
+            landedEvent?.Invoke(state_inAir.airTime);
+
         activeState.ExitState();
         state_grounded.EnterState();
         activeState = state_grounded;
@@ -133,7 +126,9 @@ public class Locomotion {
     public class LocomotionState_grounded : LocomotionState {
 
         public bool isSprinting;
-        private bool isPreparingJump = false;
+
+        private bool isPreparingJump;
+        private bool jumpOnCooldown;
         private float timeSinceGroundTouched; // Grace period, stops character from exiting ground state for something like going over a bump
 
         public override void Init(Locomotion locomotion) {
@@ -169,6 +164,7 @@ public class Locomotion {
             StillOnGroundCheck();
             VerticalMovement();
             HorizontalMovement();
+            SetTargetRotation();
         }
 
         private void StillOnGroundCheck() {
@@ -183,10 +179,14 @@ public class Locomotion {
 
         }
 
+        private void SetTargetRotation() {
+            locomotion.tTargetRoation.rotation = Quaternion.Euler(0, locomotion.character.fpCamera.yaw, 0);
+        }
+
         private void VerticalMovement() {
 
             // Return if jumping, don't want to intefere with jump stuff
-            if (locomotion.jumpOnCooldown)
+            if (jumpOnCooldown)
                 return;
 
             float finalTargetHeight = locomotion.settings.targetHeight;
@@ -265,7 +265,7 @@ public class Locomotion {
 
         private void Jump() {
             locomotion.rb.velocity = new Vector3(locomotion.rb.velocity.x, locomotion.settings.jumpVelocity, locomotion.rb.velocity.z);
-            locomotion.jumpOnCooldown = true;
+            jumpOnCooldown = true;
 
             Utils.DelayedFunctionCall(JumpCooldownDone, 0.3f); // Jump cooldown
 
@@ -273,7 +273,7 @@ public class Locomotion {
         }
 
         private void JumpCooldownDone() {
-            locomotion.jumpOnCooldown = false;
+            jumpOnCooldown = false;
         }
 
         #endregion
@@ -316,6 +316,7 @@ public class Locomotion {
         private void Character_fixedUpdateEvent() {
             StillInAirCheck();
             VerticalMovement();
+            SetTargetRotation();
 
             airTime += Time.deltaTime;
         }
@@ -323,6 +324,10 @@ public class Locomotion {
         private void StillInAirCheck() {
             if (locomotion.currentHeight < locomotion.settings.targetHeight && airTime > 0.1f)
                 locomotion.EnterState_grounded();
+        }
+
+        private void SetTargetRotation() {
+            locomotion.tTargetRoation.rotation = Quaternion.Euler(0, locomotion.character.fpCamera.yaw, 0);
         }
 
         private void VerticalMovement() {
@@ -357,6 +362,12 @@ public class Locomotion {
 
         private void Character_fixedUpdateEvent() {
             locomotion.rb.velocity = locomotion.wallrunController.runVelocity;
+
+            SetTargetRotation();
+        }
+
+        private void SetTargetRotation() {
+            locomotion.tTargetRoation.rotation = Quaternion.LookRotation(Vector3.ProjectOnPlane(-locomotion.wallrunController.wallHit.normal, Vector3.up).normalized, Vector3.up);
         }
 
         private void WallrunController_verticalRunStopped() {
