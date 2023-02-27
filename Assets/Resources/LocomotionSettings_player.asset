@@ -121,4 +121,4 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   targetHeight: 0.8
-  crouchTargetHeight: 0.45
+  crouchTargetHeight: 0.55

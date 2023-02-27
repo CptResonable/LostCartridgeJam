@@ -13,6 +13,8 @@ public class Foot {
     private Transform tLeg_1;
     private Transform tLeg_2;
 
+    private float deltaHeight;
+
     public void Init(Character character) {
         this.character = character;
 
@@ -35,15 +37,20 @@ public class Foot {
 
         tIkPole.position = tLeg_2.position + character.transform.forward;
 
-        RaycastHit downHit;
-        if (Physics.Raycast(tIkTarget.position + Vector3.up, Vector3.down, out downHit, 5, LayerMasks.i.environment)) {
-            float deltaHeight = downHit.point.y - character.locomotion.downHit.point.y;
-            tIkTarget.position += Vector3.up * deltaHeight;
-
-            RaycastHit hipToFootHit;
-            if (Physics.Linecast(tLeg_1.position, tIkTarget.position, out hipToFootHit,LayerMasks.i.environment)) {
-                tIkTarget.position = hipToFootHit.point;
+        float rawDeltaHeight = 0;
+        if (character.locomotion.activeState.stateID == Locomotion.LocomotionState.StateIDEnum.Grounded) {
+            RaycastHit downHit;
+            if (Physics.Raycast(tIkTarget.position + Vector3.up, Vector3.down, out downHit, 5, LayerMasks.i.environment)) {
+                rawDeltaHeight = downHit.point.y - character.locomotion.downHit.point.y;           
             }
+        }
+        deltaHeight = Mathf.Lerp(deltaHeight, rawDeltaHeight, Time.deltaTime * 8);
+
+        tIkTarget.position += Vector3.up * deltaHeight;
+
+        RaycastHit hipToFootHit;
+        if (Physics.Linecast(tLeg_1.position, tIkTarget.position, out hipToFootHit, LayerMasks.i.environment)) {
+            tIkTarget.position = hipToFootHit.point;
         }
     }
 }
