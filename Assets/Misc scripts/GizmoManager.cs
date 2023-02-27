@@ -3,13 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GizmoManager : MonoBehaviour {
-    public static GizmoManager i;
+    private static GizmoManager _i;
+    public static GizmoManager i {
+        get {
+            if (_i == null) {
+                GameObject goGizmoManager = new GameObject("GizmoManager");
+                _i = goGizmoManager.AddComponent<GizmoManager>();
+            }
+            return _i;
+        }
+    }
 
     private List<Gizmo> gizmos = new List<Gizmo>();
-
-    private void Awake() {
-        i = this;
-    }
 
     private void OnDrawGizmos() {
         for (int i = 0; i < gizmos.Count; i++) {

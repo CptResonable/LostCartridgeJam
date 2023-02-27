@@ -60,6 +60,8 @@ public class Locomotion {
         foreach (var instance in bounceInstances) {
             character.tRig.position += instance.offset;
         }
+
+        GizmoManager.i.DrawSphere(Time.deltaTime, Color.red, character.transform.TransformPoint(rb.centerOfMass), 0.2f);
     }
 
     private void Character_fixedUpdateEvent() {
@@ -130,6 +132,9 @@ public class Locomotion {
         public bool isCrouching;
         public bool isSliding;
 
+        private TWrapper crouchBodyRotationInterpolator = new TWrapper(0, 1, 0);
+        private Coroutine crouchInterpolationCorutine;
+
         private bool isPreparingJump;
         private bool jumpOnCooldown;
         private float timeSinceGroundTouched; // Grace period, stops character from exiting ground state for something like going over a bump
@@ -163,10 +168,15 @@ public class Locomotion {
             if (isSprinting)
                 SprintEnded();
 
+            if (isCrouching)
+                StopCrouch();
+
             locomotion.character.fixedUpdateEvent -= Character_fixedUpdateEvent;
             locomotion.character.characterInput.action_jump.keyDownEvent -= Action_jump_keyDownEvent;
             locomotion.character.characterInput.action_sprint.keyDownEvent -= Action_sprint_keyDownEvent;
             locomotion.character.characterInput.action_sprint.keyUpEvent -= Action_sprint_keyUpEvent;
+            locomotion.character.characterInput.action_crouch.keyDownEvent -= Action_crouch_keyDownEvent;
+            locomotion.character.characterInput.action_crouch.keyUpEvent -= Action_crouch_keyUpEvent;
         }
 
         private void Character_fixedUpdateEvent() {
@@ -289,20 +299,41 @@ public class Locomotion {
 
         #region Crouch/Slide
         private void Action_crouch_keyDownEvent() {
-            if (!isCrouching) {
-                isCrouching = true;
-                upperBodyRotationModifier.UpdateBonusEulers(new Vector3(60, 0, 0), new Vector3(0, 0, 0));
-                locomotion.character.tRig.localRotation = Quaternion.Euler(-30, 0, 0);
-            }
+            if (!isCrouching)
+                StartCrouch();
         }
 
         private void Action_crouch_keyUpEvent() {
-            if (isCrouching) {
-                isCrouching = false;
-                upperBodyRotationModifier.UpdateBonusEulers(new Vector3(0, 0, 0), new Vector3(0, 0, 0));
-                locomotion.character.tRig.localRotation = Quaternion.Euler(0, 0, 0);
-            }
+            if (isCrouching)
+                StopCrouch();
         }
+
+        private void StartCrouch() {
+            isCrouching = true;
+
+            if (crouchInterpolationCorutine != null)
+                locomotion.character.StopCoroutine(crouchInterpolationCorutine);
+
+            crouchInterpolationCorutine = locomotion.character.StartCoroutine(InterpolationUtils.i.SmoothStepUpdateCallback(crouchBodyRotationInterpolator.t, 1, 4, crouchBodyRotationInterpolator, CrouchInterpolationUpdateCallback));
+        }
+
+        private void StopCrouch() {
+            isCrouching = false;
+
+            if (crouchInterpolationCorutine != null)
+                locomotion.character.StopCoroutine(crouchInterpolationCorutine);
+
+            crouchInterpolationCorutine = locomotion.character.StartCoroutine(InterpolationUtils.i.SmoothStepUpdateCallback(crouchBodyRotationInterpolator.t, 0, 4, crouchBodyRotationInterpolator, CrouchInterpolationUpdateCallback));
+        }
+
+        // Will be called from the crouch interpolation corutine
+        private void CrouchInterpolationUpdateCallback() {
+
+            // Set crouch body rotation adjustments
+            upperBodyRotationModifier.UpdateBonusEulers(Vector3.Lerp(Vector3.zero, new Vector3(60, 0, 0), crouchBodyRotationInterpolator.t), new Vector3(0, 0, 0));
+            locomotion.character.tRig.localRotation = Quaternion.Lerp(Quaternion.identity, Quaternion.Euler(-30, 0, 0), crouchBodyRotationInterpolator.t);
+        }
+
         #endregion
     }
 

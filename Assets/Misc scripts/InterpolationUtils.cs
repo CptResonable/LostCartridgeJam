@@ -78,4 +78,23 @@ public class InterpolationUtilsInstance {
 
         yield return null;
     }
+
+    public IEnumerator SmoothStepUpdateCallback(float from, float to, float transitionSpeed, TWrapper tWrap, Delegates.EmptyDelegate OnUpdate) {
+        float linearTransition = 0;
+
+        while (linearTransition < 1) {
+            linearTransition += Time.deltaTime * transitionSpeed;
+            if (linearTransition > 1)
+                linearTransition = 1;
+
+            float t = InterpolationUtils.LinearToSmoothStep(linearTransition);
+            tWrap.t = Mathf.Lerp(from, to, t);
+
+            OnUpdate();
+            yield return null;
+        }
+        tWrap.t = to;
+
+        yield return null;
+    }
 }

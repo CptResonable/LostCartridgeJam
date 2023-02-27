@@ -37,6 +37,7 @@ public class Foot {
 
         tIkPole.position = tLeg_2.position + character.transform.forward;
 
+        // Measure diffrence in ground height at foot position and body position
         float rawDeltaHeight = 0;
         if (character.locomotion.activeState.stateID == Locomotion.LocomotionState.StateIDEnum.Grounded) {
             RaycastHit downHit;
@@ -44,10 +45,14 @@ public class Foot {
                 rawDeltaHeight = downHit.point.y - character.locomotion.downHit.point.y;           
             }
         }
+
+        // Smooth the diffrence to minimize leg rotations "jumping"
         deltaHeight = Mathf.Lerp(deltaHeight, rawDeltaHeight, Time.deltaTime * 8);
 
+        // Adjust ik target unsing delta height
         tIkTarget.position += Vector3.up * deltaHeight;
 
+        // Raycast between hip and ik target, move target if hit
         RaycastHit hipToFootHit;
         if (Physics.Linecast(tLeg_1.position, tIkTarget.position, out hipToFootHit, LayerMasks.i.environment)) {
             tIkTarget.position = hipToFootHit.point;
