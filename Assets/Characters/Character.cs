@@ -13,9 +13,9 @@ public class Character : MonoBehaviour {
     public Arms arms;
     public Health health;
     public Body body;
+    public Legs legs;
 
     public Rigidbody rb;
-    public Animator animator;
 
     public Transform tRig;
     public GameObject goAliveModel;
@@ -38,6 +38,7 @@ public class Character : MonoBehaviour {
         arms.Init(this);
         health.Init(this);
         body.Init(this);
+        legs.Init(this);
 
         health.diedEvent += Health_diedEvent;
     }

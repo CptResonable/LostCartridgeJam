@@ -19,6 +19,7 @@ public class Locomotion {
     private Character character;
     private Rigidbody rb;
 
+    public RaycastHit downHit;
     private float currentHeight = 1;
     private Vector3 inputDir;
 
@@ -66,7 +67,6 @@ public class Locomotion {
     }
 
     private void HeightCheck() {
-        RaycastHit downHit;
         if (Physics.Raycast(character.transform.position, Vector3.down, out downHit, 100, LayerMasks.i.environment)) {
             currentHeight = downHit.distance;
         }

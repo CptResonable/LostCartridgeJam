@@ -2,17 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Legs : MonoBehaviour
-{
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+[System.Serializable]
+public class Legs {
+    public Foot foot_L;
+    public Foot foot_R;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    private Character character;
+
+    public void Init(Character character) {
+        this.character = character;
+
+        foot_L.Init(character);
+        foot_R.Init(character);
     }
 }
