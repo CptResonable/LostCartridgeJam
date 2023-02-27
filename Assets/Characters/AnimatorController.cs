@@ -19,6 +19,8 @@ public class AnimatorController {
 
         character.locomotion.wallrunController.verticalRunStarted += WallrunController_verticalRunStarted;
         character.locomotion.wallrunController.verticalRunStopped += WallrunController_verticalRunStopped;
+        character.locomotion.slideStartedEvent += Locomotion_slideStartedEvent;
+        character.locomotion.slideEndedEvent += Locomotion_slideEndedEvent;
     }
 
     private void Character_updateEvent() {
@@ -53,5 +55,13 @@ public class AnimatorController {
     private void WallrunController_verticalRunStopped() {
         animator.SetBool("IsWallClimbing", false);
         animator.SetBool("IsReaching", false);
+    }
+
+    private void Locomotion_slideStartedEvent() {
+        animator.SetBool("IsSliding", true);
+    }
+
+    private void Locomotion_slideEndedEvent() {
+        animator.SetBool("IsSliding", false);
     }
 }

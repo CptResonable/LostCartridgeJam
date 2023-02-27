@@ -29,6 +29,9 @@ public class Locomotion {
     public event Delegates.EmptyDelegate crouchStartedEvent;
     public event Delegates.EmptyDelegate crouchEndedEvent;
 
+    public event Delegates.EmptyDelegate slideStartedEvent;
+    public event Delegates.EmptyDelegate slideEndedEvent;
+
     public event Delegates.EmptyDelegate jumpStartedEvent;
 
     public delegate void LandedDelegate(float airTime);
@@ -221,6 +224,8 @@ public class Locomotion {
         }
 
         private void HorizontalMovement() {
+            if (isSliding)
+                return;
 
             // Get forward part of inputDir
             Vector3 inputDir_forward = Vector3.zero;
@@ -299,11 +304,16 @@ public class Locomotion {
 
         #region Crouch/Slide
         private void Action_crouch_keyDownEvent() {
-            if (!isCrouching)
+            if (isSprinting)
+                StartSlide();
+            else if (!isCrouching)
                 StartCrouch();
         }
 
         private void Action_crouch_keyUpEvent() {
+            if (isSliding)
+                StopSlide();
+
             if (isCrouching)
                 StopCrouch();
         }
@@ -326,11 +336,21 @@ public class Locomotion {
             crouchInterpolationCorutine = locomotion.character.StartCoroutine(InterpolationUtils.i.SmoothStepUpdateCallback(crouchBodyRotationInterpolator.t, 0, 4, crouchBodyRotationInterpolator, CrouchInterpolationUpdateCallback));
         }
 
+        private void StartSlide() {
+            isSliding = true;
+            locomotion.slideStartedEvent?.Invoke();
+        }
+
+        private void StopSlide() {
+            isSliding = false;
+            locomotion.slideEndedEvent?.Invoke();
+        }
+
         // Will be called from the crouch interpolation corutine
         private void CrouchInterpolationUpdateCallback() {
 
             // Set crouch body rotation adjustments
-            upperBodyRotationModifier.UpdateBonusEulers(Vector3.Lerp(Vector3.zero, new Vector3(60, 0, 0), crouchBodyRotationInterpolator.t), Vector3.Lerp(Vector3.zero, new Vector3(-20, 0, 0), crouchBodyRotationInterpolator.t));
+            upperBodyRotationModifier.UpdateBonusEulers(Vector3.Lerp(Vector3.zero, new Vector3(60, 0, 0), crouchBodyRotationInterpolator.t), Vector3.Lerp(Vector3.zero, new Vector3(-10, 0, 0), crouchBodyRotationInterpolator.t));
             //upperBodyRotationModifier.UpdateBonusEulers(Vector3.Lerp(Vector3.zero, new Vector3(0, 0, 0), crouchBodyRotationInterpolator.t), new Vector3(0, 0, 0));
             locomotion.character.tRig.localRotation = Quaternion.Lerp(Quaternion.identity, Quaternion.Euler(-20, 0, 0), crouchBodyRotationInterpolator.t);
         }
