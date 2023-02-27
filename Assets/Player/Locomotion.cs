@@ -330,8 +330,9 @@ public class Locomotion {
         private void CrouchInterpolationUpdateCallback() {
 
             // Set crouch body rotation adjustments
-            upperBodyRotationModifier.UpdateBonusEulers(Vector3.Lerp(Vector3.zero, new Vector3(60, 0, 0), crouchBodyRotationInterpolator.t), new Vector3(0, 0, 0));
-            locomotion.character.tRig.localRotation = Quaternion.Lerp(Quaternion.identity, Quaternion.Euler(-30, 0, 0), crouchBodyRotationInterpolator.t);
+            upperBodyRotationModifier.UpdateBonusEulers(Vector3.Lerp(Vector3.zero, new Vector3(60, 0, 0), crouchBodyRotationInterpolator.t), Vector3.Lerp(Vector3.zero, new Vector3(-20, 0, 0), crouchBodyRotationInterpolator.t));
+            //upperBodyRotationModifier.UpdateBonusEulers(Vector3.Lerp(Vector3.zero, new Vector3(0, 0, 0), crouchBodyRotationInterpolator.t), new Vector3(0, 0, 0));
+            locomotion.character.tRig.localRotation = Quaternion.Lerp(Quaternion.identity, Quaternion.Euler(-20, 0, 0), crouchBodyRotationInterpolator.t);
         }
 
         #endregion

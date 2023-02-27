@@ -56,13 +56,13 @@ public class UpperBody {
         }
 
         character.body.tTorso_1.Rotate(Vector3.up, deltaYaw * 0.35f + bonusEulers_torso1.y, Space.Self);
-        character.body.tTorso_2.Rotate(Vector3.up, deltaYaw * 0.35f, Space.Self);
+        character.body.tTorso_2.Rotate(Vector3.up, deltaYaw * 0.35f + bonusEulers_torso2.y, Space.Self);
 
         character.body.tTorso_1.Rotate(Vector3.right, deltaPitch * 0.35f + bonusEulers_torso1.x, Space.Self);
-        character.body.tTorso_2.Rotate(Vector3.right, deltaPitch * 0.35f, Space.Self);
+        character.body.tTorso_2.Rotate(Vector3.right, deltaPitch * 0.35f + bonusEulers_torso2.x, Space.Self);
 
         character.body.tTorso_1.Rotate(Vector3.forward, deltaRoll * 0.5f + bonusEulers_torso1.z, Space.Self);
-        character.body.tTorso_2.Rotate(Vector3.forward, deltaRoll * 0.5f, Space.Self);
+        character.body.tTorso_2.Rotate(Vector3.forward, deltaRoll * 0.5f + bonusEulers_torso2.z, Space.Self);
 
         // Rotate torso when aimng guns
         if (character.weaponController.equipedGun != null && !character.locomotion.state_grounded.isSprinting)
@@ -140,6 +140,8 @@ public class UpperBody {
     public class UpperBodyRotationModifier {
         public Vector3 bonusEuler_torso1;
         public Vector3 bonusEuler_torso2;
+
+        private TWrapper t;
 
         public UpperBodyRotationModifier(Vector3 bonusEuler_torso1, Vector3 bonusEuler_torso2) {
             this.bonusEuler_torso1 = bonusEuler_torso1;
