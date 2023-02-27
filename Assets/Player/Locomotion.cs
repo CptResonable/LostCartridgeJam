@@ -124,8 +124,11 @@ public class Locomotion {
 
     [System.Serializable]
     public class LocomotionState_grounded : LocomotionState {
+        private UpperBody.UpperBodyRotationModifier upperBodyRotationModifier;
 
         public bool isSprinting;
+        public bool isCrouching;
+        public bool isSliding;
 
         private bool isPreparingJump;
         private bool jumpOnCooldown;
@@ -134,6 +137,10 @@ public class Locomotion {
         public override void Init(Locomotion locomotion) {
             base.Init(locomotion);
             stateID = StateIDEnum.Grounded;
+
+            upperBodyRotationModifier = new UpperBody.UpperBodyRotationModifier(Vector3.zero, Vector3.zero);
+            Debug.Log(locomotion.character.upperBody);
+            locomotion.character.upperBody.AddModifier(upperBodyRotationModifier);
         }
 
         public override void EnterState() {
@@ -146,6 +153,8 @@ public class Locomotion {
             locomotion.character.characterInput.action_jump.keyDownEvent += Action_jump_keyDownEvent;
             locomotion.character.characterInput.action_sprint.keyDownEvent += Action_sprint_keyDownEvent;
             locomotion.character.characterInput.action_sprint.keyUpEvent += Action_sprint_keyUpEvent;
+            locomotion.character.characterInput.action_crouch.keyDownEvent += Action_crouch_keyDownEvent;
+            locomotion.character.characterInput.action_crouch.keyUpEvent += Action_crouch_keyUpEvent;
         }
 
         public override void ExitState() {
@@ -190,8 +199,8 @@ public class Locomotion {
                 return;
 
             float finalTargetHeight = locomotion.settings.targetHeight;
-            //if (isCrouching)
-            //    finalTargetHeight = settings.crouchTargetHeight;
+            if (isCrouching)
+                finalTargetHeight = locomotion.settings.crouchTargetHeight;
 
             float deltaHeight = locomotion.currentHeight - finalTargetHeight;
 
@@ -276,6 +285,24 @@ public class Locomotion {
             jumpOnCooldown = false;
         }
 
+        #endregion
+
+        #region Crouch/Slide
+        private void Action_crouch_keyDownEvent() {
+            if (!isCrouching) {
+                isCrouching = true;
+                upperBodyRotationModifier.UpdateBonusEulers(new Vector3(60, 0, 0), new Vector3(0, 0, 0));
+                locomotion.character.tRig.localRotation = Quaternion.Euler(-30, 0, 0);
+            }
+        }
+
+        private void Action_crouch_keyUpEvent() {
+            if (isCrouching) {
+                isCrouching = false;
+                upperBodyRotationModifier.UpdateBonusEulers(new Vector3(0, 0, 0), new Vector3(0, 0, 0));
+                locomotion.character.tRig.localRotation = Quaternion.Euler(0, 0, 0);
+            }
+        }
         #endregion
     }
 
