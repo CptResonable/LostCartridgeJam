@@ -19,6 +19,8 @@ public class LocomotionSettings : ScriptableObject {
     public AnimationCurve airTimeToGravityScale;
     public AnimationCurve handDistanceForceCurve;
     public AnimationCurve bounceDownCurve;
+    public AnimationCurve slideAngleToAccelerationCurve;
+    public float slideMaxSlopeAcceleration;
 
     public float targetHeight = 0.8f;
     public float crouchTargetHeight = 0.45f;

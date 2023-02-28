@@ -22,6 +22,7 @@ public class Locomotion {
     public RaycastHit downHit;
     private float currentHeight = 1;
     private Vector3 inputDir;
+    private Vector3 localVelocity;
 
     public event Delegates.EmptyDelegate sprintStartedEvent;
     public event Delegates.EmptyDelegate sprintEndedEvent;
@@ -53,6 +54,9 @@ public class Locomotion {
 
     private void Character_updateEvent() {
 
+        // Get local velocity
+        localVelocity = character.transform.InverseTransformVector(rb.velocity);
+
         // Convert movement input into world space vector
         inputDir = character.transform.TransformDirection(character.characterInput.moveInput);
 
@@ -64,7 +68,7 @@ public class Locomotion {
             character.tRig.position += instance.offset;
         }
 
-        GizmoManager.i.DrawSphere(Time.deltaTime, Color.red, character.transform.TransformPoint(rb.centerOfMass), 0.2f);
+        //GizmoManager.i.DrawSphere(Time.deltaTime, Color.red, character.transform.TransformPoint(rb.centerOfMass), 0.2f);
     }
 
     private void Character_fixedUpdateEvent() {
@@ -185,7 +189,12 @@ public class Locomotion {
         private void Character_fixedUpdateEvent() {
             StillOnGroundCheck();
             VerticalMovement();
-            HorizontalMovement();
+
+            if (isSliding)
+                SlideUpdate();
+            else
+                HorizontalMovement();
+
             SetTargetRotation();
         }
 
@@ -202,7 +211,8 @@ public class Locomotion {
         }
 
         private void SetTargetRotation() {
-            locomotion.tTargetRoation.rotation = Quaternion.Euler(0, locomotion.character.fpCamera.yaw, 0);
+            if (!isSliding)
+                locomotion.tTargetRoation.rotation = Quaternion.Euler(0, locomotion.character.fpCamera.yaw, 0);
         }
 
         private void VerticalMovement() {
@@ -224,8 +234,6 @@ public class Locomotion {
         }
 
         private void HorizontalMovement() {
-            if (isSliding)
-                return;
 
             // Get forward part of inputDir
             Vector3 inputDir_forward = Vector3.zero;
@@ -272,6 +280,10 @@ public class Locomotion {
         #region Jump
         private void Action_jump_keyDownEvent() {
 
+            // End slide
+            if (isSliding)
+                StopSlide();
+
             // Don't jump again before you have jumped
             if (isPreparingJump)
                 return;
@@ -304,7 +316,7 @@ public class Locomotion {
 
         #region Crouch/Slide
         private void Action_crouch_keyDownEvent() {
-            if (isSprinting)
+            if (locomotion.localVelocity.z > 4f)
                 StartSlide();
             else if (!isCrouching)
                 StartCrouch();
@@ -319,6 +331,9 @@ public class Locomotion {
         }
 
         private void StartCrouch() {
+            if (isSprinting)
+                SprintEnded();
+
             isCrouching = true;
 
             if (crouchInterpolationCorutine != null)
@@ -337,7 +352,14 @@ public class Locomotion {
         }
 
         private void StartSlide() {
+            if (isSprinting)
+                SprintEnded();
+
             isSliding = true;
+
+            Vector3 velocityProjectedOnGround = Vector3.ProjectOnPlane(locomotion.rb.velocity, locomotion.downHit.normal);
+            locomotion.rb.velocity += velocityProjectedOnGround * 1;
+
             locomotion.slideStartedEvent?.Invoke();
         }
 
@@ -345,6 +367,54 @@ public class Locomotion {
             isSliding = false;
             locomotion.slideEndedEvent?.Invoke();
         }
+
+        private void SlideUpdate() {
+
+            Vector3 velocityProjectedOnGround = Vector3.ProjectOnPlane(locomotion.rb.velocity, locomotion.downHit.normal);
+            locomotion.rb.velocity -= velocityProjectedOnGround.normalized * 0.15f;
+
+            float slopeAngle = Vector3.Angle(Vector3.up, locomotion.downHit.normal);
+            if (slopeAngle > 0) {
+
+                Vector3 slopeDownVector = VectorUtils.RotateVectorAroundVector(locomotion.downHit.normal, Vector3.Cross(Vector3.up, locomotion.downHit.normal), 90).normalized;
+                locomotion.rb.velocity += slopeDownVector * locomotion.settings.slideAngleToAccelerationCurve.Evaluate(slopeAngle) * locomotion.settings.slideMaxSlopeAcceleration;
+                //locomotion.rb.velocity += slopeDownVector * 0.05f * Mathf.Sqrt(slopeAngle);
+            }
+
+            if (velocityProjectedOnGround.magnitude < 1.5f)
+                StopSlide();
+            //locomotion.downHit.normal
+        }
+
+        //private void SlideUpdate() {
+
+        //    Vector3 velocityProjectedOnGround = Vector3.ProjectOnPlane(locomotion.rb.velocity, locomotion.downHit.normal);
+        //    locomotion.rb.velocity -= velocityProjectedOnGround.normalized * 0.15f;
+        //    Debug.Log(velocityProjectedOnGround.magnitude);
+        //    if (velocityProjectedOnGround.magnitude < 1.5f)
+        //        StopSlide();
+        //    //locomotion.downHit.normal
+        //}
+
+
+        //private void SlideUpdate() {
+        //    float frictionCoef = 0.8f;
+
+        //    Vector3 velocityProjectedOnGround = Vector3.ProjectOnPlane(locomotion.rb.velocity, locomotion.downHit.normal);
+        //    Vector3 rightAxis = Vector3.Cross(velocityProjectedOnGround.normalized, locomotion.downHit.normal);
+        //    float slopeAngle = Vector3.SignedAngle(Vector3.up, locomotion.downHit.normal, rightAxis);
+        //    Debug.Log("angle: " + slopeAngle);
+        //    Debug.Log(Mathf.Cos(slopeAngle * Mathf.Deg2Rad));
+        //    float normalForce = 50 * 9.81f * Mathf.Cos(slopeAngle * Mathf.Deg2Rad);
+        //    float friction = frictionCoef * normalForce;
+
+        //    locomotion.rb.AddForce(-velocityProjectedOnGround.normalized * friction);
+        //    //locomotion.rb.velocity -= velocityProjectedOnGround.normalized * 0.15f;
+        //    //Debug.Log(velocityProjectedOnGround.magnitude);
+        //    if (velocityProjectedOnGround.magnitude < 1.5f)
+        //        StopSlide();
+        //    //locomotion.downHit.normal
+        //}
 
         // Will be called from the crouch interpolation corutine
         private void CrouchInterpolationUpdateCallback() {
@@ -450,7 +520,6 @@ public class Locomotion {
         }
 
         private void WallrunController_verticalRunStopped() {
-            Debug.Log("Wall run stopped");
             locomotion.EnterState_inAir();
         }
 
