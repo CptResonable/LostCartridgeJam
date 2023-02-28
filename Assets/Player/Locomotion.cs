@@ -161,6 +161,13 @@ public class Locomotion {
             if (locomotion.character.characterInput.action_sprint.isDown)
                 SprintStarted();
 
+            if (locomotion.character.characterInput.action_crouch.isDown) {
+                if (locomotion.localVelocity.z > 2.5f)
+                    StartSlide();
+                else
+                    StartCrouch();
+            }
+
             locomotion.character.fixedUpdateEvent += Character_fixedUpdateEvent;
             locomotion.character.characterInput.action_jump.keyDownEvent += Action_jump_keyDownEvent;
             locomotion.character.characterInput.action_sprint.keyDownEvent += Action_sprint_keyDownEvent;

@@ -30,6 +30,7 @@ public class FPCamera {
         shaker = camera.GetComponent<Shaker>();
 
         character.updateEvent += character_updateEvent;
+        character.lateUpdateEvent += Character_lateUpdateEvent;
         character.fixedUpdateEvent += character_fixedUpdateEvent;
 
         if (character.weaponController.rifle != null)
@@ -40,6 +41,12 @@ public class FPCamera {
 
         character.locomotion.wallrunController.verticalRunStarted += WallrunController_verticalRunStarted;
         character.locomotion.wallrunController.verticalRunStopped += WallrunController_verticalRunStopped;
+        character.locomotion.slideStartedEvent += Locomotion_slideStartedEvent;
+        character.locomotion.slideEndedEvent += Locomotion_slideEndedEvent;
+    }
+
+    private void Character_lateUpdateEvent() {
+        //camera.transform.localPosition -= Vector3.up * 0.5f;
     }
 
     private void character_fixedUpdateEvent() {
@@ -96,6 +103,14 @@ public class FPCamera {
 
     private void WallrunController_verticalRunStopped() {
         animator.SetBool("IsWallClimbing", false);
+    }
+
+    private void Locomotion_slideStartedEvent() {
+        animator.SetBool("IsSliding", true);
+    }
+
+    private void Locomotion_slideEndedEvent() {
+        animator.SetBool("IsSliding", false);
     }
 
     public IEnumerator ApplyRotationOverTime(float totalPitch, float totalYaw, float time, AnimationCurve applicationCurve) {

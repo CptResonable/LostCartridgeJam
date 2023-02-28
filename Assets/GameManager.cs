@@ -30,6 +30,9 @@ public class GameManager : MonoBehaviour {
 
     [SerializeField] private UI_bar barBulletTime;
 
+    float smoothFps = 200f;
+    [SerializeField] private TMP_Text txtFrameRate;
+
     public bool usingBulletTime;
 
     public Player player;
@@ -99,6 +102,10 @@ public class GameManager : MonoBehaviour {
                 }
             }
         }
+
+        if (Time.deltaTime > 0)
+        smoothFps = Mathf.Lerp(smoothFps, 1f / Time.deltaTime, 2 * Time.deltaTime);
+        txtFrameRate.text = "FPS: " + (int)smoothFps;
 
         txtPistolAmmo.text = "Pistol ammo: " + player.weaponController.pistol.bulletsInMagCount + "/  ";
         txtRifleAmmo.text = "Rifle ammo: " + player.weaponController.rifle.bulletsInMagCount + "/" + player.weaponController.rifle.ammoReserve;
