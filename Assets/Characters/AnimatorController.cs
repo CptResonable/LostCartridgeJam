@@ -30,6 +30,11 @@ public class AnimatorController {
         animator.SetFloat("VelocityZ", localVelocity.z / 5);
         animator.SetFloat("VelocityX", localVelocity.x / 5);
         animator.SetFloat("VelocityY", localVelocity.y / 5);
+
+        float bodyToHeadDeltaYaw = Vector3.SignedAngle(character.transform.forward, Vector3.ProjectOnPlane(character.fpCamera.tCamera.forward, character.transform.up), character.transform.up);
+        bodyToHeadDeltaYaw = (Mathf.Clamp(bodyToHeadDeltaYaw, -90, 90) + 90) / 180;
+        animator.SetFloat("SlideBodyToCameraAngle", bodyToHeadDeltaYaw);
+
         //animator.SetBool("IsHanging", character.locomotion.hand_R.grabingLedge);
         animator.Update(Time.deltaTime);
         //character.body.tPelvis.localPosition *= 4;
