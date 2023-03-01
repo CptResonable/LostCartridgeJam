@@ -453,7 +453,7 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: VelocityZ
     m_Mirror: 0
-  m_BlendParameter: VelocityZ
+  m_BlendParameter: SlideBodyToCameraAngle
   m_BlendParameterY: VelocityZ
   m_MinThreshold: 0
   m_MaxThreshold: 1
