@@ -52,7 +52,33 @@ public class Hand : MonoBehaviour {
     }
 
     //public virtual void ManualFixedUpdate() { }
+    protected bool LookForGrip() {
 
+        if (character.locomotion.wallrunController.ledgeGrabPoints.Count == 0)
+            return false;
+
+        if (tPhysicalTarget.position.y > character.locomotion.wallrunController.topGrabPoint.y) {
+
+            Vector3 v3 = Vector3.ProjectOnPlane(VectorUtils.FromToVector(character.locomotion.wallrunController.topGrabPoint, tPhysicalTarget.position), character.transform.forward);
+            Vector3 point = character.locomotion.wallrunController.topGrabPoint + new Vector3(v3.x, 0, v3.z);
+
+            RaycastHit hit;
+            if (Physics.Raycast(point + Vector3.up * 0.1f, Vector3.down, out hit, 0.2f, LayerMasks.i.environment)) {
+                grabPoint = hit.point;
+                grabRotation = Quaternion.LookRotation(-Vector3.Cross(character.locomotion.wallrunController.wallHit.normal, hit.normal), -character.locomotion.wallrunController.wallHit.normal);
+            }
+            else {
+                grabPoint = character.locomotion.wallrunController.topGrabPoint;
+                grabRotation = Quaternion.LookRotation(-Vector3.Cross(character.locomotion.wallrunController.wallHit.normal, Vector3.up), -character.locomotion.wallrunController.wallHit.normal);
+            }
+            grabingLedge = true;
+
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
 
     private void WallrunController_verticalRunStopped() {
         if (grabingLedge)

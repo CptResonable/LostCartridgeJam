@@ -24,6 +24,9 @@ public class WallrunController : MonoBehaviour {
 
     [HideInInspector] public float t; // 0 - 1, wall run progress
 
+    public List<Vector3> ledgeGrabPoints;
+    public Vector3 topGrabPoint;
+
     public event Delegates.EmptyDelegate verticalRunStarted;
     public event Delegates.EmptyDelegate verticalRunStopped;
 
@@ -34,6 +37,8 @@ public class WallrunController : MonoBehaviour {
     private void Update() {
         smoothCharacterVelocity = Vector3.Lerp(smoothCharacterVelocity, character.rb.velocity, Time.deltaTime * 8);
         smoothCharacterHorizontalVelocity = Vector3.ProjectOnPlane(smoothCharacterVelocity, Vector3.up);
+
+        LookForEdge();
 
     }
 
@@ -129,5 +134,50 @@ public class WallrunController : MonoBehaviour {
 
         isWallRunning = false;
         verticalRunStopped?.Invoke();
+    }
+
+    private void LookForEdge() {
+        int rayCount = 10;
+        float raySeperation = 0.2f;
+
+        bool didLastRayHit = false;
+        RaycastHit lastHitHorizontal = new RaycastHit();
+        RaycastHit hitHorizontal;
+
+        ledgeGrabPoints.Clear();
+
+        for (int i = 0; i < rayCount; i++) {
+
+            Vector3 origin = character.transform.position + (Vector3.up * raySeperation * i);
+            if (Physics.Raycast(origin, character.transform.forward, out hitHorizontal, 1, LayerMasks.i.environment)) {
+                if (didLastRayHit) {
+                    if (hitHorizontal.distance > lastHitHorizontal.distance + 0.1f) {
+                        Vector3 verticalEnd = lastHitHorizontal.point + character.transform.forward * 0.05f;
+                        Vector3 verticalOrigin =  new Vector3(verticalEnd.x, origin.y, verticalEnd.z);
+                        VerticalCheck(verticalOrigin, lastHitHorizontal.point + character.transform.forward * 0.05f);
+                    }
+                }
+                didLastRayHit = true;
+                lastHitHorizontal = hitHorizontal;
+                GizmoManager.i.DrawSphere(Time.deltaTime, Color.red, hitHorizontal.point, 0.07f);
+            }
+            else {
+                if (didLastRayHit) {
+                    Vector3 verticalEnd = lastHitHorizontal.point + character.transform.forward * 0.05f;
+                    Vector3 verticalOrigin = new Vector3(verticalEnd.x, origin.y, verticalEnd.z);
+                    VerticalCheck(verticalOrigin, lastHitHorizontal.point + character.transform.forward * 0.05f);
+                    didLastRayHit = false;
+                }
+            }
+        }
+
+        void VerticalCheck(Vector3 origin, Vector3 end) {
+            RaycastHit hit;
+            if (Physics.Linecast(origin, end, out hit, LayerMasks.i.environment)) {
+                GizmoManager.i.DrawSphere(Time.deltaTime, Color.green, hit.point, 0.1f);
+                ledgeGrabPoints.Add(hit.point);
+                topGrabPoint = hit.point;
+            }
+        }
     }
 }

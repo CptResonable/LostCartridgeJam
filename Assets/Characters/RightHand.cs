@@ -40,7 +40,7 @@ public class RightHand : Hand {
         tPhysicalTarget.position = Vector3.Lerp(tPhysicalTarget.position, grabPoint, ledgeGrabInterpolator);
         tPhysicalTarget.rotation = Quaternion.Slerp(tPhysicalTarget.rotation, grabRotation, ledgeGrabInterpolator);
 
-        if (character.locomotion.wallrunController.isWallRunning)
+        if (character.locomotion.wallrunController.isWallRunning && !grabingLedge)
             LookForGrip();
 
         PhysicalHandUpdate();
@@ -78,26 +78,5 @@ public class RightHand : Hand {
         targetVelocity = kmTarget.velocity + targetDeltaPos * errorAdjustmentCoef;
         velocity = Vector3.Lerp(velocity, targetVelocity, Time.fixedDeltaTime * velocityChangeCoef);
         rb.velocity = velocity;
-    }
-
-    private bool LookForGrip() {
-        Vector3 direction = -character.locomotion.wallrunController.wallHit.normal;
-
-        RaycastHit hit1;
-        if (Physics.Raycast(tPhysicalTarget.position - Vector3.up * 0.025f - direction * 0.5f, direction, out hit1, 1f, LayerMasks.i.environment)) {
-            RaycastHit hit2;
-            if (Physics.Raycast(hit1.point + direction * 0.05f + Vector3.up * 0.1f, Vector3.down, out hit2, 0.2f, LayerMasks.i.environment)) {
-                if (Vector3.Angle(hit2.normal, Vector3.up) < 15f && Vector3.Angle(hit2.normal, direction) > 75f) {
-                    grabingLedge = true;
-                    grabPoint = hit2.point + Vector3.up * 0.005f;
-                    grabRotation = Quaternion.LookRotation(-Vector3.Cross(hit1.normal, hit2.normal), -hit1.normal);
-                    return true;
-                }
-            }
-
-            return false;
-        }
-        else
-            return false;
     }
 }
