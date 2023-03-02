@@ -53,7 +53,7 @@ public class Arms {
         if (hipAdsInterpolationCorutine != null)
             character.StopCoroutine(hipAdsInterpolationCorutine);
 
-        if (character.locomotion.state_grounded.isSprinting || character.locomotion.wallrunController.isWallRunning) {
+        if (character.locomotion.state_grounded.isSprinting || character.locomotion.wallrunController.isWallClimbing) {
             animationWeightCorutine = character.StartCoroutine(InterpolationUtils.i.SmoothStep(animationWeightInterpolator.t, 1, 4, animationWeightInterpolator));
         }
         else {

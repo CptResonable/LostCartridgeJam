@@ -63,7 +63,7 @@ public class FPCamera {
         else if (Input.GetKey(KeyCode.E))
             targetRoll -= 30;
 
-        if (character.locomotion.wallrunController.isWallRunning) {
+        if (character.locomotion.wallrunController.isWallClimbing) {
 
             // Y angle between look direction and -wall normal
             targetRoll += Mathf.Sign(character.locomotion.wallrunController.wallCameraAngle) * wallAngleToRollCurve.Evaluate(Mathf.Abs(character.locomotion.wallrunController.wallCameraAngle)) * 40;

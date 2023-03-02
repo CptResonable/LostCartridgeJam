@@ -124,3 +124,71 @@ MonoBehaviour:
   maxVerticalVelocity: 7
   velocityNeededForWallClimb: 1
   maxAngleForWallClimb: 30
+  horizontalForwardRunCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.5
+      inSlope: 8.750001
+      outSlope: 8.750001
+      tangentMode: 0
+      weightedMode: 2
+      inWeight: 0
+      outWeight: 0.1805503
+    - serializedVersion: 3
+      time: 0.36434978
+      value: 0.9907316
+      inSlope: 0.07635938
+      outSlope: 0.07635938
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.09192587
+    - serializedVersion: 3
+      time: 1
+      value: 0.7
+      inSlope: -0.10702245
+      outSlope: -0.10702245
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.08500652
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  horizontalInclinationCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: -0
+      value: 40
+      inSlope: -196.11896
+      outSlope: -196.11896
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.057823133
+    - serializedVersion: 3
+      time: 0.35
+      value: 0
+      inSlope: -1.5464549
+      outSlope: -1.5464549
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.051282052
+    - serializedVersion: 3
+      time: 1
+      value: -30
+      inSlope: -96.63815
+      outSlope: -96.63815
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.04212453
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  horizontalRunDuration: 1.5
+  maxHorizontalVelocity: 6
