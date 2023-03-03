@@ -40,7 +40,10 @@ public class RightHand : Hand {
         tPhysicalTarget.position = Vector3.Lerp(tPhysicalTarget.position, grabPoint, ledgeGrabInterpolator);
         tPhysicalTarget.rotation = Quaternion.Slerp(tPhysicalTarget.rotation, grabRotation, ledgeGrabInterpolator);
 
-        if (character.locomotion.wallrunController.isWallClimbing && !grabingLedge)
+        // Use player velocity to do some prediction (Otherwise hand will drift away from player while falling)
+        tPhysicalTarget.position += character.rb.velocity * Time.fixedDeltaTime;
+
+        if (character.locomotion.wallrunController.isWallRunning && !grabingLedge)
             LookForGrip();
 
         PhysicalHandUpdate();
@@ -48,7 +51,7 @@ public class RightHand : Hand {
 
     private void AnimatorController_animatorUpdatedEvent() {
         float f = arms.animationWeight;
-        if (character.locomotion.wallrunController.isWallClimbing)
+        if (character.locomotion.wallrunController.isWallRunning)
             f *= 0.4f;
         tElbowPole.transform.position = Vector3.Lerp(tElbowNoAnimPoleTarget.position, character.body.postAnimationState.GetBoneState(Body.BoneEnums.rArmR_2).position, f);
     }
