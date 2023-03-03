@@ -131,7 +131,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   layerMask:
     serializedVersion: 2
-    m_Bits: 243
+    m_Bits: 4339
   fleshLayerMask:
     serializedVersion: 2
     m_Bits: 192

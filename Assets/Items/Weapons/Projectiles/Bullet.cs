@@ -49,13 +49,19 @@ public class Bullet : MonoBehaviour {
                 dirtKickup.Initiate(hit.collider.transform, true, bloodColor);
             }
             else {
-                GameObject goDirtKickup = EZ_Pooling.EZ_PoolManager.Spawn(prefab_vfxDirtKickup.transform, hit.point, Quaternion.LookRotation(hit.normal)).gameObject;
-                Vfx_dirtKickup dirtKickup = goDirtKickup.GetComponent<Vfx_dirtKickup>();
 
-                if (hit.collider.transform.name == "Terrain")
-                    dirtKickup.Initiate(hit.collider.transform, true, groundColor);
-                else
-                    dirtKickup.Initiate(hit.collider.transform, true, wallColor);
+                EffectMaterialKeeper materialKeeper;
+                if (hit.transform.TryGetComponent<EffectMaterialKeeper>(out materialKeeper)) {
+                    materialKeeper.PlayBulletHitEffects(hit.point, hit.normal);
+                }
+
+                //GameObject goDirtKickup = EZ_Pooling.EZ_PoolManager.Spawn(prefab_vfxDirtKickup.transform, hit.point, Quaternion.LookRotation(hit.normal)).gameObject;
+                //Vfx_dirtKickup dirtKickup = goDirtKickup.GetComponent<Vfx_dirtKickup>();
+
+                //if (hit.collider.transform.name == "Terrain")
+                //    dirtKickup.Initiate(hit.collider.transform, true, groundColor);
+                //else
+                //    dirtKickup.Initiate(hit.collider.transform, true, wallColor);
             }
 
             DamageReceiver damageReceiver;
