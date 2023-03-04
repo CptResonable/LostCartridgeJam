@@ -57,7 +57,7 @@ public class Hand : MonoBehaviour {
         if (character.locomotion.wallrunController.ledgeGrabPoints.Count == 0)
             return false;
 
-        if (tPhysicalTarget.position.y > character.locomotion.wallrunController.topGrabPoint.y) {
+        if (tPhysicalTarget.position.y + 0.05f > character.locomotion.wallrunController.topGrabPoint.y) {
 
             Vector3 v3 = Vector3.ProjectOnPlane(VectorUtils.FromToVector(character.locomotion.wallrunController.topGrabPoint, tPhysicalTarget.position), character.transform.forward);
             Vector3 point = character.locomotion.wallrunController.topGrabPoint + new Vector3(v3.x, 0, v3.z);

@@ -53845,7 +53845,7 @@ PrefabInstance:
     - target: {fileID: 1285744482911927163, guid: b0a49345d2a43e644944d5f67068cf41,
         type: 3}
       propertyPath: m_Mass
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1285744482911927163, guid: b0a49345d2a43e644944d5f67068cf41,
         type: 3}
@@ -53881,6 +53881,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LinearLimit.limit
       value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 2618979752427033705, guid: b0a49345d2a43e644944d5f67068cf41,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3392244719839400506, guid: b0a49345d2a43e644944d5f67068cf41,
         type: 3}
