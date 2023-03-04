@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   VFX_bulletHit: {fileID: 638455987314716288, guid: ac017b1e7d5ac9d408dfbc0204869dac,
     type: 3}
-  color_bulletHit: {r: 0.3584906, g: 0.3584906, b: 0.3584906, a: 0}
+  color_bulletHit: {r: 0.23584908, g: 0.19426608, b: 0.17243683, a: 0}

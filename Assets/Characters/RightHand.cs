@@ -43,6 +43,8 @@ public class RightHand : Hand {
         // Use player velocity to do some prediction (Otherwise hand will drift away from player while falling)
         tPhysicalTarget.position += character.rb.velocity * Time.fixedDeltaTime;
 
+        WallAvoidance();
+
         if (character.locomotion.wallrunController.isWallRunning && !grabingLedge)
             LookForGrip();
 
@@ -81,5 +83,13 @@ public class RightHand : Hand {
         targetVelocity = kmTarget.velocity + targetDeltaPos * errorAdjustmentCoef;
         velocity = Vector3.Lerp(velocity, targetVelocity, Time.fixedDeltaTime * velocityChangeCoef);
         rb.velocity = velocity;
+    }
+    private void WallAvoidance() {
+        RaycastHit wallHit = character.locomotion.wallrunController.wallHit;
+        RaycastHit hit;
+
+        if (Physics.Raycast(tPhysicalTarget.position + wallHit.normal, -wallHit.normal, out hit, 1.2f, LayerMasks.i.environment)) {
+            tPhysicalTarget.position = hit.point;
+        }
     }
 }

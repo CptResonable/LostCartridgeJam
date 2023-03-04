@@ -871,6 +871,7 @@ MonoBehaviour:
   rbCharacter: {fileID: 5628233934188922882}
   rbHand: {fileID: 1691100416}
   handVelocityCorrectionSpeed: 0
+  bodyVelocityCorrectionSpeed: 19
 --- !u!1 &91187347
 GameObject:
   m_ObjectHideFlags: 0
@@ -54061,6 +54062,11 @@ PrefabInstance:
       propertyPath: legs.foot_R.tIkTarget
       value: 
       objectReference: {fileID: 2925393505217285476}
+    - target: {fileID: 7386630257519315610, guid: b0a49345d2a43e644944d5f67068cf41,
+        type: 3}
+      propertyPath: locomotion.handStuckCorrectionForce
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 7386630257519315611, guid: b0a49345d2a43e644944d5f67068cf41,
         type: 3}
       propertyPath: m_UseGravity

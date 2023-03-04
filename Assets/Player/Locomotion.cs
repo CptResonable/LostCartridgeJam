@@ -9,6 +9,8 @@ public class Locomotion {
 
     [SerializeField] private Transform tTargetRoation;
 
+    [SerializeField] private float handStuckCorrectionForce;
+
     public LocomotionState_grounded state_grounded;
     public LocomotionState_inAir state_inAir;
     public LocomotionState_wallClimbing state_wallClimbing;
@@ -23,6 +25,8 @@ public class Locomotion {
     private float currentHeight = 1;
     private Vector3 inputDir;
     private Vector3 localVelocity;
+
+    private Vector3 meshHandToPhysicalHandError;
 
     public event Delegates.EmptyDelegate sprintStartedEvent;
     public event Delegates.EmptyDelegate sprintEndedEvent;
@@ -60,6 +64,11 @@ public class Locomotion {
         // Convert movement input into world space vector
         inputDir = character.transform.TransformDirection(character.characterInput.moveInput);
 
+        if (meshHandToPhysicalHandError.magnitude > 0.03f) {
+            if (Vector3.Dot(inputDir, meshHandToPhysicalHandError.normalized) < 0)
+                inputDir -= Vector3.Project(inputDir, meshHandToPhysicalHandError.normalized);
+        }
+
         // Set rig base height (Default model is not at the correct height)
         character.tRig.localPosition = -0.75f * Vector3.up;
 
@@ -72,6 +81,16 @@ public class Locomotion {
     }
 
     private void Character_fixedUpdateEvent() {
+
+        meshHandToPhysicalHandError = VectorUtils.FromToVector(character.body.tHandR.position, character.arms.hand_R.transform.position);
+        GizmoManager.i.DrawSphere(Time.deltaTime, Color.green, character.body.tHandR.position, 0.05f);
+        GizmoManager.i.DrawSphere(Time.deltaTime, Color.red, character.arms.hand_R.transform.position, 0.05f);
+
+        if (meshHandToPhysicalHandError.magnitude > 0.1) {
+            Debug.Log("wwada dm: " + meshHandToPhysicalHandError.magnitude);
+            rb.velocity += meshHandToPhysicalHandError * handStuckCorrectionForce;
+        }
+
         HeightCheck();
     }
 
