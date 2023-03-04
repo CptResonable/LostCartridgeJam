@@ -40,6 +40,10 @@ public class RightHand : Hand {
         tPhysicalTarget.position = Vector3.Lerp(tPhysicalTarget.position, grabPoint, ledgeGrabInterpolator);
         tPhysicalTarget.rotation = Quaternion.Slerp(tPhysicalTarget.rotation, grabRotation, ledgeGrabInterpolator);
 
+        Vector3 shoulderToHandTarget = VectorUtils.FromToVector(character.body.tArmR_1.position, tPhysicalTarget.position);
+        if (shoulderToHandTarget.magnitude > 0.55f)
+            tPhysicalTarget.position = character.body.tArmR_1.position + shoulderToHandTarget.normalized * 0.55f;
+
         // Use player velocity to do some prediction (Otherwise hand will drift away from player while falling)
         tPhysicalTarget.position += character.rb.velocity * Time.fixedDeltaTime;
 
