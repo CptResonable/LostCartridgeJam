@@ -165,6 +165,8 @@ public class Locomotion {
         private bool jumpOnCooldown;
         private float timeSinceGroundTouched; // Grace period, stops character from exiting ground state for something like going over a bump
 
+        private float deltaHeight;
+
         public override void Init(Locomotion locomotion) {
             base.Init(locomotion);
             stateID = StateIDEnum.Grounded;
@@ -251,7 +253,7 @@ public class Locomotion {
             if (isCrouching)
                 finalTargetHeight = locomotion.settings.crouchTargetHeight;
 
-            float deltaHeight = locomotion.currentHeight - finalTargetHeight;
+            deltaHeight = locomotion.currentHeight - finalTargetHeight;
 
             if (deltaHeight < 0) {
                 float yVelTarget = (-deltaHeight) * locomotion.settings.bounceUpSpeed;
@@ -279,6 +281,9 @@ public class Locomotion {
                 moveVector += inputDir_forward * locomotion.settings.moveSpeed;
                 moveVector += inputDir_strafe * locomotion.settings.strafeSpeed;
             }
+
+            // Project vector onto ground
+            moveVector = Vector3.ProjectOnPlane(moveVector, locomotion.downHit.normal);
 
             // Lerp character velocity towards new target velocity
             locomotion.rb.velocity = Vector3.Lerp(locomotion.rb.velocity, moveVector + Vector3.up * locomotion.rb.velocity.y, locomotion.settings.moveAcceleration * Time.deltaTime);
@@ -395,6 +400,14 @@ public class Locomotion {
         }
 
         private void SlideUpdate() {
+
+            Debug.Log("dh: " + deltaHeight);
+            if (deltaHeight < 0) {
+                locomotion.rb.velocity = Vector3.ProjectOnPlane(locomotion.rb.velocity, -locomotion.downHit.normal);
+                //if (Vector3.Dot(locomotion.rb.velocity, locomotion.downHit.normal) < 0) {
+                //    locomotion.rb.velocity += Vector3.Project(locomotion.rb.velocity, locomotion.downHit.normal);
+                //}
+            }
 
             Vector3 velocityProjectedOnGround = Vector3.ProjectOnPlane(locomotion.rb.velocity, locomotion.downHit.normal);
             locomotion.rb.velocity -= velocityProjectedOnGround.normalized * 0.15f;

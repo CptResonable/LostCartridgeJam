@@ -22,7 +22,7 @@ MonoBehaviour:
   maxDepthThreshold: 2
   minNormalsThreshold: 0
   maxNormalsThreshold: 1
-  minColorThreshold: 0
+  minColorThreshold: 0.1
   maxColorThreshold: 0.25
   renderEvent: 300
   outlineOnly: 0

@@ -6,4 +6,6 @@ using UnityEngine;
 public class EffectMaterial : ScriptableObject {
     public GameObject VFX_bulletHit;
     public Color color_bulletHit;
+
+    public GameObject SFX_bulletHit;
 }

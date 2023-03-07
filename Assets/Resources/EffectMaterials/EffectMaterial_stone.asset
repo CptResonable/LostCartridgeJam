@@ -15,3 +15,5 @@ MonoBehaviour:
   VFX_bulletHit: {fileID: 638455987314716288, guid: ac017b1e7d5ac9d408dfbc0204869dac,
     type: 3}
   color_bulletHit: {r: 0.23584908, g: 0.19426608, b: 0.17243683, a: 0}
+  SFX_bulletHit: {fileID: 1829890423154730761, guid: 8274a0b1a07477e4a91051efe532c816,
+    type: 3}

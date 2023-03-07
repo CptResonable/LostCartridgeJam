@@ -10,6 +10,8 @@ public class EffectMaterialKeeper : MonoBehaviour {
         Vfx_dirtKickup dirtKickup = goDirtKickup.GetComponent<Vfx_dirtKickup>();
 
         dirtKickup.Initiate(transform, true, effectMaterial.color_bulletHit);
+
+        //AudioManager.i.PlaySoundStatic(effectMaterial.SFX_bulletHit, hitPoint);
     }
 
     public void PlayFootstepEffects() {
