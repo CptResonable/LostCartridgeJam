@@ -19,4 +19,6 @@ public class WallrunSettings : ScriptableObject {
     public AnimationCurve horizontalInclinationCurve;
     public float horizontalRunDuration;
     public float maxHorizontalVelocity;
+    public float velocityNeededForWallRun;
+    public float maxAngleForWallRun;
 }

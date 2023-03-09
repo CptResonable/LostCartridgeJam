@@ -54079,6 +54079,11 @@ PrefabInstance:
       propertyPath: m_Interpolate
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1285744482911927163, guid: b0a49345d2a43e644944d5f67068cf41,
+        type: 3}
+      propertyPath: m_CollisionDetection
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1285744482911927165, guid: b0a49345d2a43e644944d5f67068cf41,
         type: 3}
       propertyPath: m_XMotion

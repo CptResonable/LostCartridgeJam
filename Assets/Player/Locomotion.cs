@@ -14,6 +14,7 @@ public class Locomotion {
     public LocomotionState_grounded state_grounded;
     public LocomotionState_inAir state_inAir;
     public LocomotionState_wallClimbing state_wallClimbing;
+    public LocomotionState_wallRunning state_wallRunning;
     [HideInInspector] public LocomotionState activeState;
 
     private List<Bouncer.BounceInstance> bounceInstances = new List<Bouncer.BounceInstance>();
@@ -52,6 +53,7 @@ public class Locomotion {
         state_grounded.Init(this);
         state_inAir.Init(this);
         state_wallClimbing.Init(this);
+        state_wallRunning.Init(this);
         activeState = state_grounded;
         activeState.EnterState();
     }
@@ -87,7 +89,6 @@ public class Locomotion {
         GizmoManager.i.DrawSphere(Time.deltaTime, Color.red, character.arms.hand_R.transform.position, 0.05f);
 
         if (meshHandToPhysicalHandError.magnitude > 0.1) {
-            Debug.Log("wwada dm: " + meshHandToPhysicalHandError.magnitude);
             rb.velocity += meshHandToPhysicalHandError * handStuckCorrectionForce;
         }
 
@@ -132,9 +133,17 @@ public class Locomotion {
         Debug.Log("New state: Wall climb");
     }
 
+    private void EnterState_wallRunning() {
+        activeState.ExitState();
+        state_wallRunning.EnterState();
+        activeState = state_wallRunning;
+
+        Debug.Log("New state: Wall running");
+    }
+
     [System.Serializable]
     public class LocomotionState {
-        public enum StateIDEnum { Grounded, InAir, WallClimbing }
+        public enum StateIDEnum { Grounded, InAir, WallClimbing, WallRunning }
         [HideInInspector] public StateIDEnum stateID;
 
         protected Locomotion locomotion;
@@ -482,6 +491,7 @@ public class Locomotion {
             locomotion.character.updateEvent += Character_updateEvent;
             locomotion.character.fixedUpdateEvent += Character_fixedUpdateEvent;
             locomotion.wallrunController.verticalRunStarted += WallrunController_verticalRunStarted;
+            locomotion.wallrunController.horizontalRunStarted += WallrunController_horizontalRunStarted;
         }
 
         public override void ExitState() {
@@ -490,6 +500,7 @@ public class Locomotion {
             locomotion.character.updateEvent -= Character_updateEvent;
             locomotion.character.fixedUpdateEvent -= Character_fixedUpdateEvent;
             locomotion.wallrunController.verticalRunStarted -= WallrunController_verticalRunStarted;
+            locomotion.wallrunController.horizontalRunStarted -= WallrunController_horizontalRunStarted;
 
             airTime = 0f;
         }
@@ -524,6 +535,10 @@ public class Locomotion {
 
         private void WallrunController_verticalRunStarted() {
             locomotion.EnterState_wallClimbing();
+        }
+
+        private void WallrunController_horizontalRunStarted() {
+            locomotion.EnterState_wallRunning();
         }
     }
 
@@ -563,6 +578,66 @@ public class Locomotion {
         }
 
         private void Action_jump_keyDownEvent() {
+            locomotion.wallrunController.StopWallClimb();
+
+            Vector3 lookDir = Vector3.ProjectOnPlane(locomotion.character.fpCamera.tCamera.forward, locomotion.wallrunController.wallUpVector).normalized;
+            float lookDirToCameraAngle = Vector3.SignedAngle(lookDir, locomotion.wallrunController.wallHit.normal, locomotion.wallrunController.wallUpVector);
+
+            // Get jump vector by rotating wall normal with camera to wall angle
+            Vector3 jumpVector = Quaternion.AngleAxis(-lookDirToCameraAngle, Vector3.up) * locomotion.wallrunController.wallHit.normal;
+
+            // If character has move input
+            if (locomotion.character.characterInput.moveInput.magnitude > 0.5f) {
+                float wasdAngle = Vector3.SignedAngle(new Vector3(0, 0, 1), locomotion.character.characterInput.moveInput, Vector3.up);
+                jumpVector = Quaternion.AngleAxis(wasdAngle, Vector3.up) * jumpVector;
+            }
+
+            // Stops jump vector from goin into wall, also add some velocity away from wall
+            if (Vector3.Dot(jumpVector, locomotion.wallrunController.wallHit.normal) < 0)
+                jumpVector = Vector3.ProjectOnPlane(jumpVector, locomotion.wallrunController.wallHit.normal) + locomotion.wallrunController.wallHit.normal * 0.2f;
+
+            locomotion.character.rb.velocity = jumpVector * locomotion.settings.wallJumpVelocity + Vector3.up * locomotion.character.rb.velocity.y;
+        }
+    }
+
+    [System.Serializable]
+    public class LocomotionState_wallRunning : LocomotionState {
+        public override void Init(Locomotion locomotion) {
+            base.Init(locomotion);
+            stateID = StateIDEnum.WallRunning;
+        }
+
+        public override void EnterState() {
+            base.EnterState();
+            locomotion.character.fixedUpdateEvent += Character_fixedUpdateEvent;
+            locomotion.wallrunController.horizontalRunStopped += WallrunController_horizontalRunStopped;
+            locomotion.character.characterInput.action_jump.keyDownEvent += Action_jump_keyDownEvent;
+        }
+
+        public override void ExitState() {
+            base.ExitState();
+            locomotion.character.fixedUpdateEvent -= Character_fixedUpdateEvent;
+            locomotion.wallrunController.horizontalRunStopped -= WallrunController_horizontalRunStopped;
+            locomotion.character.characterInput.action_jump.keyDownEvent -= Action_jump_keyDownEvent;
+        }
+
+        private void Character_fixedUpdateEvent() {
+            HorizontalMovement();
+
+            SetTargetRotation();
+        }
+
+        private void SetTargetRotation() {
+            //locomotion.tTargetRoation.rotation = Quaternion.LookRotation(locomotion.wallrunController.wallForwardVector, Vector3.up);
+            locomotion.tTargetRoation.rotation = Quaternion.LookRotation(Vector3.ProjectOnPlane(-locomotion.wallrunController.wallHit.normal, Vector3.up).normalized, Vector3.up);
+        }
+
+        private void WallrunController_horizontalRunStopped() {
+            locomotion.EnterState_inAir();
+            locomotion.rb.velocity += locomotion.wallrunController.wallHit.normal * 2f;
+        }
+
+        private void Action_jump_keyDownEvent() {
             locomotion.wallrunController.StopWallRun();
 
             Vector3 lookDir = Vector3.ProjectOnPlane(locomotion.character.fpCamera.tCamera.forward, locomotion.wallrunController.wallUpVector).normalized;
@@ -582,6 +657,22 @@ public class Locomotion {
                 jumpVector = Vector3.ProjectOnPlane(jumpVector, locomotion.wallrunController.wallHit.normal) + locomotion.wallrunController.wallHit.normal * 0.2f;
 
             locomotion.character.rb.velocity = jumpVector * locomotion.settings.wallJumpVelocity + Vector3.up * locomotion.character.rb.velocity.y;
+        }
+
+        private void HorizontalMovement() {
+
+            // Get forward part of inputDir
+            Vector3 inputDir_forward = Vector3.zero;
+            if (locomotion.character.characterInput.moveInput.z > 0)
+                inputDir_forward = Vector3.Project(locomotion.inputDir, locomotion.character.transform.forward);
+
+            // Get strafe part of input dir my subtracting forward part
+            Vector3 inputDir_strafe = locomotion.inputDir - inputDir_forward;
+
+            Vector3 moveVector = locomotion.wallrunController.wallForwardVector * locomotion.settings.sprintSpeed;
+
+            // Lerp character velocity towards new target velocity
+            locomotion.rb.velocity = Vector3.Lerp(locomotion.rb.velocity, moveVector + Vector3.up * locomotion.rb.velocity.y, locomotion.settings.moveAcceleration * Time.deltaTime);
         }
     }
 }

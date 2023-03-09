@@ -10,12 +10,14 @@ public class WallrunController : MonoBehaviour {
 
     [HideInInspector] public Vector3 runVelocity;
     [HideInInspector] public float wallCameraAngle;
+    [HideInInspector] public float wallForwardCameraAngle;
 
     private Character character;
 
     private bool wallDetected;
     public RaycastHit wallHit;
     public Vector3 wallUpVector; // Just (0, 1, 0) for now. TODO make it actually up vector;
+    public Vector3 wallForwardVector;
     private Coroutine wallRunCorutine;
 
     private Vector3 smoothCharacterVelocity;
@@ -29,6 +31,9 @@ public class WallrunController : MonoBehaviour {
 
     public event Delegates.EmptyDelegate verticalRunStarted;
     public event Delegates.EmptyDelegate verticalRunStopped;
+
+    public event Delegates.EmptyDelegate horizontalRunStarted;
+    public event Delegates.EmptyDelegate horizontalRunStopped;
 
     private void Awake() {
         character = GetComponentInParent<Character>();
@@ -66,12 +71,58 @@ public class WallrunController : MonoBehaviour {
                 if (proj.magnitude > settings.velocityNeededForWallClimb)
                     StartVerticalRun();
             }
+            else if (Mathf.Abs(velocityWallAngle) < settings.maxAngleForWallRun) {
+                if (smoothCharacterVelocity.magnitude > settings.velocityNeededForWallRun)
+                    StartHorizontalRun();
+            }
         }
     }
 
     private void WallClimbCooldownDone() {
         wallClimbOnCooldown = false;
     }
+
+    private void StartHorizontalRun() {
+        isWallRunning = true;
+        wallRunCorutine = StartCoroutine(HorizontalRunCorutine(settings.horizontalRunDuration));
+        wallUpVector = Vector3.up;
+        wallForwardVector = Vector3.ProjectOnPlane(smoothCharacterHorizontalVelocity, wallHit.normal).normalized;
+        horizontalRunStarted?.Invoke();
+    }
+
+    private IEnumerator HorizontalRunCorutine(float duration) {
+
+        //float scale = settings.yVelToVerticalRunScaleCurve.Evaluate(character.rb.velocity.y);
+        //duration *= scale;
+        float scale = 1;
+
+        t = 0;
+
+        while (t < 1) {
+
+            // No longer any wall to run/climb
+            if (!wallDetected)
+                StopWallRun();
+
+            t += Time.fixedDeltaTime / duration;
+            runVelocity = wallForwardVector * settings.verticalRunCurve.Evaluate(t) * settings.maxVerticalVelocity * scale;
+            runVelocity += -wallHit.normal * 1f;
+            wallCameraAngle = Vector3.SignedAngle(Vector3.ProjectOnPlane(character.fpCamera.tCameraTarget.forward, Vector3.up), Vector3.ProjectOnPlane(-wallHit.normal, Vector3.up), Vector3.up);
+
+            Vector3 camForwardProj = Vector3.ProjectOnPlane(character.fpCamera.tCameraTarget.forward, character.locomotion.wallrunController.wallUpVector).normalized;
+            wallForwardCameraAngle = Vector3.SignedAngle(wallForwardVector, camForwardProj, character.locomotion.wallrunController.wallUpVector);
+            Debug.Log("ang: " + wallForwardCameraAngle);
+
+            if (Mathf.Abs(wallForwardCameraAngle) > 90)
+                StopWallRun();
+
+            yield return new WaitForFixedUpdate();
+        }
+
+        isWallRunning = false;
+        horizontalRunStopped?.Invoke();
+    }
+
 
     private void StartVerticalRun() {
         isWallRunning = true;
@@ -80,14 +131,25 @@ public class WallrunController : MonoBehaviour {
         verticalRunStarted?.Invoke();
     }
 
+    public void StopWallClimb() {
+
+        if (isWallRunning) {
+            StopCoroutine(wallRunCorutine);
+            isWallRunning = false;
+            wallClimbOnCooldown = true;
+            Utils.DelayedFunctionCall(WallClimbCooldownDone, 0.15f); // Wall climb cooldown
+            verticalRunStopped?.Invoke();
+        }
+    }
+
     public void StopWallRun() {
 
         if (isWallRunning) {
             StopCoroutine(wallRunCorutine);
             isWallRunning = false;
             wallClimbOnCooldown = true;
-            Utils.DelayedFunctionCall(WallClimbCooldownDone, 0.05f); // Wall climb cooldown
-            verticalRunStopped?.Invoke();
+            Utils.DelayedFunctionCall(WallClimbCooldownDone, 0.15f); // Wall climb cooldown
+            horizontalRunStopped?.Invoke();
         }
     }
 
@@ -102,11 +164,11 @@ public class WallrunController : MonoBehaviour {
 
             // No longer any wall to run/climb
             if (!wallDetected) {
-                StopWallRun();
+                StopWallClimb();
             }
 
             t += Time.fixedDeltaTime / duration;
-            runVelocity = Vector3.up * settings.verticalRunCurve.Evaluate(t) * settings.maxVerticalVelocity * scale;
+            runVelocity = wallUpVector * settings.verticalRunCurve.Evaluate(t) * settings.maxVerticalVelocity * scale;
             runVelocity += -wallHit.normal * 1f;
             wallCameraAngle = Vector3.SignedAngle(Vector3.ProjectOnPlane(character.fpCamera.tCameraTarget.forward, Vector3.up), Vector3.ProjectOnPlane(-wallHit.normal, Vector3.up), Vector3.up);
 
@@ -119,7 +181,7 @@ public class WallrunController : MonoBehaviour {
 
                 // No longer any wall to run/climb
                 if (!wallDetected) {
-                    StopWallRun();
+                    StopWallClimb();
                 }
 
                 t2 += Time.fixedDeltaTime / 0.75f;

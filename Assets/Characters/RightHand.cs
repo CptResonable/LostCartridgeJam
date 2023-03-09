@@ -44,8 +44,9 @@ public class RightHand : Hand {
         if (shoulderToHandTarget.magnitude > 0.55f)
             tPhysicalTarget.position = character.body.tArmR_1.position + shoulderToHandTarget.normalized * 0.55f;
 
-        // Use player velocity to do some prediction (Otherwise hand will drift away from player while falling)
-        tPhysicalTarget.position += character.rb.velocity * Time.fixedDeltaTime;
+        //// Use player velocity to do some prediction (Otherwise hand will drift away from player while falling)
+        //if (tPhysicalTarget.position.y > character.body.tTorso_2.position.y)
+        //    tPhysicalTarget.position += character.rb.velocity * 0.5f * Time.fixedDeltaTime;
 
         WallAvoidance();
 
@@ -89,11 +90,13 @@ public class RightHand : Hand {
         rb.velocity = velocity;
     }
     private void WallAvoidance() {
-        RaycastHit wallHit = character.locomotion.wallrunController.wallHit;
-        RaycastHit hit;
+        if (character.locomotion.wallrunController.isWallRunning) {
+            RaycastHit wallHit = character.locomotion.wallrunController.wallHit;
+            RaycastHit hit;
 
-        if (Physics.Raycast(tPhysicalTarget.position + wallHit.normal, -wallHit.normal, out hit, 1.2f, LayerMasks.i.environment)) {
-            tPhysicalTarget.position = hit.point;
+            if (Physics.Raycast(tPhysicalTarget.position + wallHit.normal, -wallHit.normal, out hit, 1.2f, LayerMasks.i.environment)) {
+                tPhysicalTarget.position = hit.point;
+            }
         }
     }
 }

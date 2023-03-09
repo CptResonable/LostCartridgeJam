@@ -1,1 +1,1 @@
-// Sprinting while wallclimbing causes gun to stick to top of wall
+// Left hand stick to top of wall somtimes

@@ -41,6 +41,8 @@ public class FPCamera {
 
         character.locomotion.wallrunController.verticalRunStarted += WallrunController_verticalRunStarted;
         character.locomotion.wallrunController.verticalRunStopped += WallrunController_verticalRunStopped;
+        character.locomotion.wallrunController.horizontalRunStarted += WallrunController_horizontalRunStarted;
+        character.locomotion.wallrunController.horizontalRunStopped += WallrunController_horizontalRunStopped;
         character.locomotion.slideStartedEvent += Locomotion_slideStartedEvent;
         character.locomotion.slideEndedEvent += Locomotion_slideEndedEvent;
     }
@@ -103,6 +105,17 @@ public class FPCamera {
 
     private void WallrunController_verticalRunStopped() {
         animator.SetBool("IsWallClimbing", false);
+    }
+
+
+    private void WallrunController_horizontalRunStarted() {
+        Vector3 camForwardProj = Vector3.ProjectOnPlane(tCameraTarget.forward, character.locomotion.wallrunController.wallUpVector).normalized;
+        float angle = Vector3.SignedAngle(character.locomotion.wallrunController.wallForwardVector, camForwardProj, character.locomotion.wallrunController.wallUpVector);
+        if (Vector3.Dot(camForwardProj, character.locomotion.wallrunController.wallHit.normal) < 0)
+            character.StartCoroutine(ApplyRotationOverTime(0, -angle, 0.35f, wallRunVerticalTiltBackCurve));
+    }
+
+    private void WallrunController_horizontalRunStopped() {
     }
 
     private void Locomotion_slideStartedEvent() {
