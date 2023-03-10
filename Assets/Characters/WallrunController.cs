@@ -6,6 +6,8 @@ public class WallrunController : MonoBehaviour {
     [SerializeField] private WallrunSettings settings;
 
     public bool isWallRunning;
+    //public bool isWallRunningVertical;
+    //public bool isWallRunningHorizontal;
     private bool wallClimbOnCooldown;
 
     [HideInInspector] public Vector3 runVelocity;
@@ -51,13 +53,67 @@ public class WallrunController : MonoBehaviour {
         wallDetected = false;
     }
 
+
+
     private void OnTriggerStay(Collider other) {
-        if (Physics.Raycast(transform.position + Vector3.down * 0.4f, character.transform.forward, out wallHit, 2, LayerMasks.i.wall)) {
+        if (isWallRunning) {
+            if (Physics.Raycast(transform.position + Vector3.down * 0.4f, -wallHit.normal, out wallHit, 1, LayerMasks.i.wall)) {
+                wallDetected = true;
+            }
+        }
+        else if (Physics.Raycast(transform.position + Vector3.down * 0.4f, character.transform.forward, out wallHit, 2, LayerMasks.i.wall) || isWallRunning) {
             if (Physics.Raycast(transform.position + Vector3.down * 0.4f, -wallHit.normal, out wallHit, 1, LayerMasks.i.wall)) {
                 wallDetected = true;
             }
         }
     }
+
+    //private void OnTriggerStay(Collider other) {
+    //    Vector3 hitNormal = wallHit.normal;
+
+    //    if (Physics.Raycast(transform.position + Vector3.down * 0.4f, character.transform.forward, out wallHit, 2, LayerMasks.i.wall) || isWallRunning) {
+    //        if (wallHit.normal.sqrMagnitude > 0.5f)
+
+    //            if (Physics.Raycast(transform.position + Vector3.down * 0.4f, -hitNormal, out wallHit, 1, LayerMasks.i.wall)) {
+    //                wallDetected = true;
+    //            }
+    //            else {
+    //                Debug.Log("WHY?!");
+    //                Debug.Log(-wallHit.normal);
+    //            }
+    //    }
+    //}
+
+    //private void OnTriggerStay(Collider other) {
+    //    Vector3 hitNormal = wallHit.normal;
+
+    //    if (Physics.Raycast(transform.position + Vector3.down * 0.4f, character.transform.forward, out wallHit, 2, LayerMasks.i.wall) || isWallRunning) {
+    //        if (wallHit.normal.sqrMagnitude > 0.5f)
+
+    //        if (Physics.Raycast(transform.position + Vector3.down * 0.4f, -hitNormal, out wallHit, 1, LayerMasks.i.wall)) {
+    //            wallDetected = true;
+    //        }
+    //        else {
+    //            Debug.Log("WHY?!");
+    //            Debug.Log(-wallHit.normal);
+    //        }
+    //    }
+    //}
+
+
+    //private void OnTriggerStay(Collider other) {
+    //    bool firtRayHit = false;
+    //    if (Physics.Raycast(transform.position + Vector3.down * 0.4f, character.transform.forward, out wallHit, 2, LayerMasks.i.wall)) {
+    //        firtRayHit = true;
+    //    }
+    //    //else if ()
+
+    //    if (firtRayHit) {
+    //        if (Physics.Raycast(transform.position + Vector3.down * 0.4f, -wallHit.normal, out wallHit, 1, LayerMasks.i.wall)) {
+    //            wallDetected = true;
+    //        }
+    //    }
+    //}
 
     public void AttemptWallRun() {
 
@@ -113,13 +169,15 @@ public class WallrunController : MonoBehaviour {
             wallForwardCameraAngle = Vector3.SignedAngle(wallForwardVector, camForwardProj, character.locomotion.wallrunController.wallUpVector);
             Debug.Log("ang: " + wallForwardCameraAngle);
 
-            if (Mathf.Abs(wallForwardCameraAngle) > 90)
-                StopWallRun();
+            //if (Mathf.Abs(wallForwardCameraAngle) > 90) {
+            //    Debug.Log("hey wyf: " + wallForwardCameraAngle);
+            //    StopWallRun();
+            //}
 
             yield return new WaitForFixedUpdate();
         }
 
-        isWallRunning = false;
+        StopWallRun();
         horizontalRunStopped?.Invoke();
     }
 
@@ -194,7 +252,7 @@ public class WallrunController : MonoBehaviour {
             }
         }
 
-        isWallRunning = false;
+        StopWallClimb();
         verticalRunStopped?.Invoke();
     }
 

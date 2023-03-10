@@ -16,6 +16,7 @@ public class Locomotion {
     public LocomotionState_wallClimbing state_wallClimbing;
     public LocomotionState_wallRunning state_wallRunning;
     [HideInInspector] public LocomotionState activeState;
+    public LocomotionState.StateIDEnum activeStateEnum = LocomotionState.StateIDEnum.Grounded;
 
     private List<Bouncer.BounceInstance> bounceInstances = new List<Bouncer.BounceInstance>();
 
@@ -108,6 +109,7 @@ public class Locomotion {
         activeState.ExitState();
         state_inAir.EnterState();
         activeState = state_inAir;
+        activeStateEnum = LocomotionState.StateIDEnum.InAir;
 
         Debug.Log("New state: AIR");
     }
@@ -121,6 +123,7 @@ public class Locomotion {
         activeState.ExitState();
         state_grounded.EnterState();
         activeState = state_grounded;
+        activeStateEnum = LocomotionState.StateIDEnum.Grounded;
 
         Debug.Log("New state: GROUND");
     }
@@ -129,6 +132,7 @@ public class Locomotion {
         activeState.ExitState();
         state_wallClimbing.EnterState();
         activeState = state_wallClimbing;
+        activeStateEnum = LocomotionState.StateIDEnum.WallClimbing;
 
         Debug.Log("New state: Wall climb");
     }
@@ -137,6 +141,7 @@ public class Locomotion {
         activeState.ExitState();
         state_wallRunning.EnterState();
         activeState = state_wallRunning;
+        activeStateEnum = LocomotionState.StateIDEnum.WallRunning;
 
         Debug.Log("New state: Wall running");
     }
@@ -410,7 +415,6 @@ public class Locomotion {
 
         private void SlideUpdate() {
 
-            Debug.Log("dh: " + deltaHeight);
             if (deltaHeight < 0) {
                 locomotion.rb.velocity = Vector3.ProjectOnPlane(locomotion.rb.velocity, -locomotion.downHit.normal);
                 //if (Vector3.Dot(locomotion.rb.velocity, locomotion.downHit.normal) < 0) {
@@ -628,8 +632,8 @@ public class Locomotion {
         }
 
         private void SetTargetRotation() {
-            //locomotion.tTargetRoation.rotation = Quaternion.LookRotation(locomotion.wallrunController.wallForwardVector, Vector3.up);
-            locomotion.tTargetRoation.rotation = Quaternion.LookRotation(Vector3.ProjectOnPlane(-locomotion.wallrunController.wallHit.normal, Vector3.up).normalized, Vector3.up);
+            locomotion.tTargetRoation.rotation = Quaternion.LookRotation(locomotion.wallrunController.wallForwardVector, Vector3.up);
+            //locomotion.tTargetRoation.rotation = Quaternion.LookRotation(Vector3.ProjectOnPlane(-locomotion.wallrunController.wallHit.normal, Vector3.up).normalized, Vector3.up);
         }
 
         private void WallrunController_horizontalRunStopped() {
