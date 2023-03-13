@@ -38,6 +38,8 @@ public class Arms {
         character.locomotion.sprintEndedEvent += Locomotion_sprintEndedEvent;
         character.locomotion.wallrunController.verticalRunStarted += WallrunController_verticalRunStarted;
         character.locomotion.wallrunController.verticalRunStopped += WallrunController_verticalRunStopped;
+        character.locomotion.wallrunController.horizontalRunStarted += WallrunController_horizontalRunStarted;
+        character.locomotion.wallrunController.horizontalRunStopped += WallrunController_horizontalRunStopped;
     }
 
     private void Player_fixedUpdateEvent() {
@@ -49,7 +51,7 @@ public class Arms {
         animationWeight = Mathf.Lerp(animationWeightInterpolator.t, 1, character.weaponController.weaponSwapAnimationThing);
     }
 
-    private void EvanulateTargetAnimationWeight() {
+    private void EvalulateTargetAnimationWeight() {
         if (hipAdsInterpolationCorutine != null)
             character.StopCoroutine(hipAdsInterpolationCorutine);
 
@@ -76,18 +78,27 @@ public class Arms {
     }
 
     private void Locomotion_sprintStartedEvent() {
-        EvanulateTargetAnimationWeight();
+        EvalulateTargetAnimationWeight();
     }
 
     private void Locomotion_sprintEndedEvent() {
-        EvanulateTargetAnimationWeight();
+        EvalulateTargetAnimationWeight();
     }
 
     private void WallrunController_verticalRunStarted() {
-        EvanulateTargetAnimationWeight();
+        EvalulateTargetAnimationWeight();
     }
 
     private void WallrunController_verticalRunStopped() {
-        EvanulateTargetAnimationWeight();
+        EvalulateTargetAnimationWeight();
     }
+
+    private void WallrunController_horizontalRunStarted() {
+        //EvalulateTargetAnimationWeight();
+    }
+
+    private void WallrunController_horizontalRunStopped() {
+        //EvalulateTargetAnimationWeight();
+    }
+
 }

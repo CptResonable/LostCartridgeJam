@@ -66,7 +66,7 @@ Shader "PP_cel"
 
                 //float greyscale = max(fragColor.r, max(fragColor.g, fragColor.b));
                 float greyscale = 0.3086 * fragColor.r + 0.6094 * fragColor.g + 0.0820 * fragColor.b;
-                greyscale = pow(greyscale, gamma);
+                greyscale = pow(greyscale, gamma) + 0.005f;
 
                 float lower = floor(greyscale * levels) / levels;
                 float lowerDiff = abs(greyscale - lower);

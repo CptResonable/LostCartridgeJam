@@ -9,6 +9,7 @@ public class WallrunController : MonoBehaviour {
     //public bool isWallRunningVertical;
     //public bool isWallRunningHorizontal;
     private bool wallClimbOnCooldown;
+    public Enums.Side wallRunSide;
 
     [HideInInspector] public Vector3 runVelocity;
     [HideInInspector] public float wallCameraAngle;
@@ -143,6 +144,12 @@ public class WallrunController : MonoBehaviour {
         wallRunCorutine = StartCoroutine(HorizontalRunCorutine(settings.horizontalRunDuration));
         wallUpVector = Vector3.up;
         wallForwardVector = Vector3.ProjectOnPlane(smoothCharacterHorizontalVelocity, wallHit.normal).normalized;
+
+        if (Vector3.Angle(wallHit.normal, character.transform.right) < 90)
+            wallRunSide = Enums.Side.left;
+        else
+            wallRunSide = Enums.Side.right;
+
         horizontalRunStarted?.Invoke();
     }
 

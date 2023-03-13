@@ -67,6 +67,11 @@ public class AnimatorController {
     }
 
     private void WallrunController_horizontalRunStarted() {
+        if (character.locomotion.wallrunController.wallRunSide == Enums.Side.left)
+            animator.SetFloat("LeftOrRightWallRun", 0);
+        else
+            animator.SetFloat("LeftOrRightWallRun", 1);
+
         animator.SetBool("IsWallRunning", true);
     }
 

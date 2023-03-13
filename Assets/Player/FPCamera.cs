@@ -54,12 +54,35 @@ public class FPCamera {
     private void character_fixedUpdateEvent() {
     }
 
+    float tiltAmount;
     public void character_updateEvent() {
+
+        float lastYaw = yaw;
         pitch -= character.characterInput.mouseMovement.yDelta * Settings.MOUSE_SENSITIVITY;
         pitch = Mathf.Clamp(pitch, -89, 89);
-        yaw += character.characterInput.mouseMovement.xDelta * Settings.MOUSE_SENSITIVITY;
 
+        float yawChange = character.characterInput.mouseMovement.xDelta * Settings.MOUSE_SENSITIVITY;
+        yaw += yawChange;
 
+        if (yaw > 360)
+            yaw -= 360;
+        if (yaw <= 0)
+            yaw = 360 + yaw;
+
+        //if (character.locomotion.activeStateEnum == Locomotion.LocomotionState.StateIDEnum.WallRunning) {
+        //    float angle = Vector3.SignedAngle(Vector3.forward, character.locomotion.wallrunController.wallForwardVector, Vector3.up);
+        //    angle += 360;
+        //    float deltaAngle = Mathf.DeltaAngle(angle, yaw);
+
+        //    //if (deltaAngle > 89)
+        //    //    yaw = angle + 89;
+        //    //if (deltaAngle < -89)
+        //    //    yaw = angle - 89;
+        //    if (deltaAngle > 88)
+        //        yaw = angle + 88;
+        //    if (deltaAngle < -88)
+        //        yaw = angle - 88;
+        //}
         if (character.locomotion.activeStateEnum == Locomotion.LocomotionState.StateIDEnum.WallRunning) {
             float angle = Vector3.SignedAngle(Vector3.forward, character.locomotion.wallrunController.wallForwardVector, Vector3.up);
             angle += 360;
@@ -73,6 +96,21 @@ public class FPCamera {
                 yaw = angle + 88;
             if (deltaAngle < -88)
                 yaw = angle - 88;
+
+            if (character.locomotion.wallrunController.wallRunSide == Enums.Side.left)
+                tiltAmount = -160;
+            else
+                tiltAmount = 160;
+        }
+        else if (character.locomotion.activeStateEnum == Locomotion.LocomotionState.StateIDEnum.WallClimbing) {
+            float angle = Vector3.SignedAngle(Vector3.forward, character.locomotion.wallrunController.wallHit.normal, Vector3.up) + 180;
+
+            float dl = Mathf.DeltaAngle(lastYaw, angle);
+            float dn = Mathf.DeltaAngle(yaw, angle);
+            if (Mathf.Sign(dl) != Mathf.Sign(dn) && Mathf.Abs(dl) > 90)
+                yaw = lastYaw;
+
+            tiltAmount = -Mathf.DeltaAngle(yaw, angle - 180);
         }
 
         //if (character.locomotion.activeStateEnum == Locomotion.LocomotionState.StateIDEnum.WallRunning) {
@@ -92,14 +130,6 @@ public class FPCamera {
         //}
 
 
-        if (yaw > 360)
-            yaw -= 360;
-        if (yaw < 0)
-            yaw = 360 + yaw;
-
-        Debug.Log("yaw: " + yaw);
-
-
         float targetRoll = 0;
         if (Input.GetKey(KeyCode.Q))
             targetRoll += 30;
@@ -109,7 +139,8 @@ public class FPCamera {
         if (character.locomotion.wallrunController.isWallRunning) {
 
             // Y angle between look direction and -wall normal
-            targetRoll += Mathf.Sign(character.locomotion.wallrunController.wallCameraAngle) * wallAngleToRollCurve.Evaluate(Mathf.Abs(character.locomotion.wallrunController.wallCameraAngle)) * 40;
+            //targetRoll += Mathf.Sign(character.locomotion.wallrunController.wallCameraAngle) * wallAngleToRollCurve.Evaluate(Mathf.Abs(character.locomotion.wallrunController.wallCameraAngle)) * 40;
+            targetRoll += Mathf.Sign(tiltAmount) * wallAngleToRollCurve.Evaluate(Mathf.Abs(character.locomotion.wallrunController.wallCameraAngle)) * 40;
         }
 
         roll = Mathf.Lerp(roll, targetRoll, Time.deltaTime * 12);
@@ -136,10 +167,60 @@ public class FPCamera {
     //    pitch = Mathf.Clamp(pitch, -89, 89);
     //    yaw += character.characterInput.mouseMovement.xDelta * Settings.MOUSE_SENSITIVITY;
 
+
+    //    if (character.locomotion.activeStateEnum == Locomotion.LocomotionState.StateIDEnum.WallRunning) {
+    //        float angle = Vector3.SignedAngle(Vector3.forward, character.locomotion.wallrunController.wallForwardVector, Vector3.up);
+    //        angle += 360;
+    //        float deltaAngle = Mathf.DeltaAngle(angle, yaw);
+
+    //        //if (deltaAngle > 89)
+    //        //    yaw = angle + 89;
+    //        //if (deltaAngle < -89)
+    //        //    yaw = angle - 89;
+    //        if (deltaAngle > 88)
+    //            yaw = angle + 88;
+    //        if (deltaAngle < -88)
+    //            yaw = angle - 88;
+    //    }
+    //    //else if (character.locomotion.activeStateEnum == Locomotion.LocomotionState.StateIDEnum.WallClimbing) {
+    //    //    float angle = Vector3.SignedAngle(Vector3.forward, character.locomotion.wallrunController.wallHit.normal, Vector3.up) + 90;
+    //    //    angle += 360;
+    //    //    float deltaAngle = Mathf.DeltaAngle(angle, yaw);
+
+    //    //    //if (deltaAngle > 89)
+    //    //    //    yaw = angle + 89;
+    //    //    //if (deltaAngle < -89)
+    //    //    //    yaw = angle - 89;
+    //    //    if (deltaAngle > 88)
+    //    //        yaw = angle + 88;
+    //    //    if (deltaAngle < -88)
+    //    //        yaw = angle - 88;
+    //    //}
+
+    //    //if (character.locomotion.activeStateEnum == Locomotion.LocomotionState.StateIDEnum.WallRunning) {
+    //    //    float angle = Vector3.SignedAngle(Vector3.forward, character.locomotion.wallrunController.wallForwardVector, Vector3.up);
+    //    //    if (angle < 0)
+    //    //        angle = 360 + angle;
+
+    //    //    Debug.Log("angel: " + angle);
+
+    //    //    yaw += 360;
+    //    //    angle += 360;
+
+    //    //    //yaw = angle;
+
+    //    //    yaw = Mathf.Clamp(yaw, angle - 90, angle + 90);
+    //    //    yaw -= 360;
+    //    //}
+
+
     //    if (yaw > 360)
     //        yaw -= 360;
     //    if (yaw < 0)
     //        yaw = 360 + yaw;
+
+    //    Debug.Log("yaw: " + yaw);
+
 
     //    float targetRoll = 0;
     //    if (Input.GetKey(KeyCode.Q))
@@ -166,65 +247,6 @@ public class FPCamera {
     //    tCamera.Rotate(lastForwardVector.normalized, roll * lastForwardVector.magnitude, Space.Self);
     //    tCamera.Rotate(Vector3.up, yaw, Space.Self);
     //    tCamera.Rotate(Vector3.right, pitch, Space.Self);
-    //    //tCamera.rotation = Quaternion.Euler(pitch, yaw, roll);
-
-    //    headbobAmount = Mathf.Lerp(headbobAmount, character.rb.velocity.magnitude / 4, Time.deltaTime * 4);
-    //    animator.SetFloat("Velocity", headbobAmount);
-    //}
-
-    //public void character_updateEvent() {
-    //    pitch -= character.characterInput.mouseMovement.yDelta * Settings.MOUSE_SENSITIVITY;
-    //    pitch = Mathf.Clamp(pitch, -89, 89);
-    //    yaw += character.characterInput.mouseMovement.xDelta * Settings.MOUSE_SENSITIVITY;
-
-    //    if (yaw > 360)
-    //        yaw -= 360;
-    //    if (yaw < 0)
-    //        yaw = 360 + yaw;
-
-    //    //if (yaw < -360)
-    //    //    yaw += 360;
-    //    Debug.Log("yaw " + yaw);
-
-    //    float targetRoll = 0;
-    //    if (Input.GetKey(KeyCode.Q))
-    //        targetRoll += 30;
-    //    else if (Input.GetKey(KeyCode.E))
-    //        targetRoll -= 30;
-
-    //    if (character.locomotion.wallrunController.isWallRunning) {
-
-    //        // Y angle between look direction and -wall normal
-    //        targetRoll += Mathf.Sign(character.locomotion.wallrunController.wallCameraAngle) * wallAngleToRollCurve.Evaluate(Mathf.Abs(character.locomotion.wallrunController.wallCameraAngle)) * 40;
-    //    }
-
-    //    roll = Mathf.Lerp(roll, targetRoll, Time.deltaTime * 12);
-
-    //    if (camera != null) {
-    //        camera.fieldOfView = Mathf.Lerp(Settings.FOV_HIP, Settings.FOV_ADS, character.arms.hipAdsInterpolator.t);
-    //    }
-
-    //    //Vector3 lastForwardVector = Vector3.ProjectOnPlane(tCamera.transform.forward, Vector3.up);
-    //    Vector3 lastForwardVector = new Vector3(tCamera.transform.forward.x, 0, tCamera.transform.forward.z);
-    //    tCamera.rotation = Quaternion.identity;
-
-    //    if (character.locomotion.activeStateEnum == Locomotion.LocomotionState.StateIDEnum.WallRunning) {
-    //        Vector3 camForwardProj = Vector3.ProjectOnPlane(tCamera.forward, character.locomotion.wallrunController.wallUpVector).normalized;
-    //        float angle = Vector3.SignedAngle(character.locomotion.wallrunController.wallForwardVector, camForwardProj, character.locomotion.wallrunController.wallUpVector);
-
-    //        if (angle + yaw >= 89) {
-    //            yaw = 89 - angle;
-    //        }
-    //        tCamera.Rotate(Vector3.up, yaw, Space.Self);
-    //        //if (Vector3.Dot(camForwardProj, character.locomotion.wallrunController.wallHit.normal) < 0)
-    //        //    character.StartCoroutine(ApplyRotationOverTime(0, -angle, 0.35f, wallRunVerticalTiltBackCurve));
-    //    }
-    //    else {
-    //        tCamera.Rotate(Vector3.up, yaw, Space.Self);
-    //    }
-    //    tCamera.Rotate(lastForwardVector.normalized, roll * lastForwardVector.magnitude, Space.World);
-    //    tCamera.Rotate(Vector3.right, pitch, Space.Self);
-
     //    //tCamera.rotation = Quaternion.Euler(pitch, yaw, roll);
 
     //    headbobAmount = Mathf.Lerp(headbobAmount, character.rb.velocity.magnitude / 4, Time.deltaTime * 4);
