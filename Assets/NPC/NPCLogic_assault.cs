@@ -120,8 +120,8 @@ public class NPCLogic_assault : NPCLogic {
             input.moveInput = moveDir;
     }
 
-    private void Dash() {
-        dashAttackCooldown = 1;
-        character.DashAttack(toTargetVector);
-    }
+    //private void Dash() {
+    //    dashAttackCooldown = 1;
+    //    character.DashAttack(toTargetVector);
+    //}
 }

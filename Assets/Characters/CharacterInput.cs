@@ -19,7 +19,7 @@ public class CharacterInput : MonoBehaviour {
     public MouseMovement mouseMovement;
     public Vector3 moveInput;
 
-    public void Init() {
+    public virtual void Init(Character character) {
         actions.Add(action_moveForward);
         actions.Add(action_moveBackward);
         actions.Add(action_moveLeft);
@@ -39,6 +39,10 @@ public class KeyAction {
     public bool isDown;
     public event Delegates.EmptyDelegate keyDownEvent;
     public event Delegates.EmptyDelegate keyUpEvent;
+
+    public void Init(Character character) {
+        character.updateEvent += Player_updateEvent;
+    }
 
     public void InitPlayer(Player player) {
         player.updateEvent += Player_updateEvent;
@@ -73,14 +77,19 @@ public class MouseMovement {
     public float xDelta, yDelta;
 
     public MouseMovement(Player player) {
-        player.updateEvent += Player_updateEvent;
+        player.updateEvent += Character_updateEvent;
     }
 
     public MouseMovement(NPC npc) {
         npc.updateEvent += Npc_updateEvent;
     }
 
-    private void Player_updateEvent() {
+    public MouseMovement(Character character) {
+        character.updateEvent += Character_updateEvent;
+    }
+
+    private void Character_updateEvent() {
+        Debug.Log("HMMMMM");
         xDelta = Input.GetAxis("Mouse X");
         yDelta = Input.GetAxis("Mouse Y");
     }

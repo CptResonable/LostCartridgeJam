@@ -71,7 +71,7 @@ public class NPCLogic_zombie : NPCLogic {
     }
 
     private void Dash() {
-        dashAttackCooldown = 1.5F;
-        character.DashAttack(toTargetVector);
+        //dashAttackCooldown = 1.5F;
+        //character.DashAttack(toTargetVector);
     }
 }

@@ -5,18 +5,18 @@ using UnityEngine;
 public class NPCInput : CharacterInput {
     private NPCLogic npcLogic;
 
-    public void Init(NPC npc) {
-        base.Init();
+    public override void Init(Character character) {
+        base.Init(character);
 
-        mouseMovement = new MouseMovement(npc);
+        mouseMovement = new MouseMovement(character);
 
         foreach (KeyAction action in actions) {
             action.InitNPC();
         }
 
-        npcLogic = npc.GetComponent<NPCLogic>();
+        npcLogic = character.GetComponent<NPCLogic>();
 
-        npc.updateEvent += NPC_updateEvent;
+        character.updateEvent += NPC_updateEvent;
     }
 
     private void NPC_updateEvent() {

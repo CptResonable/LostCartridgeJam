@@ -7,9 +7,9 @@ public class Player : Character {
     [SerializeField] private Camera deathCamera;
 
     protected void Awake() {
-        PlayerInput playerInput = GetComponent<PlayerInput>();
-        playerInput.Init(this);
-        characterInput = playerInput;
+        //PlayerInput playerInput = GetComponent<PlayerInput>();
+        //playerInput.Init(this);
+        //characterInput = playerInput;
         damageEffectController.Init(this);
         health.diedEvent += Health_diedEvent;
 

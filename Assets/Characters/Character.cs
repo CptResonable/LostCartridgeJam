@@ -30,6 +30,9 @@ public class Character : MonoBehaviour {
         rb = GetComponent<Rigidbody>();
         capColider = GetComponent<CapsuleCollider>();
 
+        characterInput = GetComponent<CharacterInput>();
+        characterInput.Init(this);
+
         animatorController.Init(this);
         fpCamera.Initialize(this);
         locomotion.Initialize(this);

@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 
 public class NPCLogic : MonoBehaviour {
-    protected NPC character;
+    protected Character character;
     protected Character target;
 
     [SerializeField] protected NavMeshAgent navMeshAgent;
@@ -12,7 +12,7 @@ public class NPCLogic : MonoBehaviour {
 
     protected virtual void Awake() {
         target = GameManager.i.player;
-        character = GetComponent<NPC>();
+        character = GetComponent<Character>();
     }
 
     public virtual void UpdateInput(CharacterInput input) {

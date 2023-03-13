@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerInput : CharacterInput {
-    public void Init(Player player) {
-        base.Init();
+    public override void Init(Character character) {
+        base.Init(character);
 
-        mouseMovement = new MouseMovement(player);
+        mouseMovement = new MouseMovement(character);
 
         foreach (KeyAction action in actions) {
-            action.InitPlayer(player);
+            action.Init(character);
         }
 
-        player.updateEvent += Player_updateEvent;
+        character.updateEvent += Character_updateEvent;
     }
 
-    private void Player_updateEvent() {
+    private void Character_updateEvent() {
         moveInput = Vector3.zero;
 
         if (action_moveForward.isDown)
