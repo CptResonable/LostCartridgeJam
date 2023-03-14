@@ -47904,7 +47904,7 @@ MonoBehaviour:
   barBulletTime: {fileID: 1588902308}
   txtFrameRate: {fileID: 1909031549}
   usingBulletTime: 0
-  player: {fileID: 5628233934188922875}
+  player: {fileID: 5628233934188922882}
   gameState: 0
   kills: 0
   enemiesAlive: 0
@@ -53714,8 +53714,7 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 290740198623596247, guid: b0a49345d2a43e644944d5f67068cf41, type: 3}
+    m_RemovedComponents: []
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: b0a49345d2a43e644944d5f67068cf41, type: 3}
 --- !u!222 &4365220202602850304
@@ -53798,16 +53797,16 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 0.84
---- !u!114 &5628233934188922875 stripped
+--- !u!114 &5628233934188922882 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7386630257519315610, guid: b0a49345d2a43e644944d5f67068cf41,
+  m_CorrespondingSourceObject: {fileID: 2949893265196670149, guid: b0a49345d2a43e644944d5f67068cf41,
     type: 3}
   m_PrefabInstance: {fileID: 2925393505217285473}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0717d7910b249da46a0240d4df700d5b, type: 3}
+  m_Script: {fileID: 11500000, guid: 8b3da83c4bd5fa64e886d4b47b4ce659, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!224 &8066438523968599461

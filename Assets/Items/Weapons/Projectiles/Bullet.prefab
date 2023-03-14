@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 4654413305667957166}
   - component: {fileID: 1799010053361208610}
   - component: {fileID: 6339742286192655509}
-  - component: {fileID: 4191872919921723084}
   - component: {fileID: 190644715523745550}
   - component: {fileID: 962106130471605484}
   - component: {fileID: 658237997999191081}
@@ -88,19 +87,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &4191872919921723084
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2038401751905426901}
-  m_Material: {fileID: 13400000, guid: 9fea306c83f100f4a92a745992199a2f, type: 2}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &190644715523745550
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -131,10 +117,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   layerMask:
     serializedVersion: 2
-    m_Bits: 4339
+    m_Bits: 20531
   fleshLayerMask:
     serializedVersion: 2
-    m_Bits: 192
+    m_Bits: 16384
   rb: {fileID: 190644715523745550}
   prefab_vfxDirtKickup: {fileID: 638455987314716288, guid: ac017b1e7d5ac9d408dfbc0204869dac,
     type: 3}

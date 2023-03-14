@@ -122,7 +122,7 @@ GameObject:
   - component: {fileID: 1351529216369181540}
   - component: {fileID: 4426195808786246278}
   - component: {fileID: 4426195808786246276}
-  m_Layer: 6
+  m_Layer: 14
   m_Name: Leg_1_L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -154,7 +154,7 @@ CapsuleCollider:
   m_GameObject: {fileID: 23759926104145182}
   m_Material: {fileID: 13400000, guid: cc46677681074564fa49bd1c1d6c48ba, type: 2}
   m_IsTrigger: 0
-  m_Enabled: 0
+  m_Enabled: 1
   m_Radius: 0.1
   m_Height: 0.4
   m_Direction: 1
@@ -4143,7 +4143,7 @@ GameObject:
   - component: {fileID: 5174719549354585873}
   - component: {fileID: 4426195808410874708}
   - component: {fileID: 4426195808410874714}
-  m_Layer: 6
+  m_Layer: 14
   m_Name: Leg_1_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4175,7 +4175,7 @@ CapsuleCollider:
   m_GameObject: {fileID: 2293959661649007102}
   m_Material: {fileID: 13400000, guid: cc46677681074564fa49bd1c1d6c48ba, type: 2}
   m_IsTrigger: 0
-  m_Enabled: 0
+  m_Enabled: 1
   m_Radius: 0.1
   m_Height: 0.4
   m_Direction: 1
@@ -4426,7 +4426,7 @@ GameObject:
   - component: {fileID: 2532803490732934258}
   - component: {fileID: 4426195809877687556}
   - component: {fileID: 4426195809877687562}
-  m_Layer: 6
+  m_Layer: 14
   m_Name: Leg_2_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4458,7 +4458,7 @@ CapsuleCollider:
   m_GameObject: {fileID: 2383920409844578012}
   m_Material: {fileID: 13400000, guid: cc46677681074564fa49bd1c1d6c48ba, type: 2}
   m_IsTrigger: 0
-  m_Enabled: 0
+  m_Enabled: 1
   m_Radius: 0.1
   m_Height: 0.4
   m_Direction: 1
@@ -8136,7 +8136,7 @@ GameObject:
   - component: {fileID: 6080783289905341424}
   - component: {fileID: 4426195809001623801}
   - component: {fileID: 4426195809001623806}
-  m_Layer: 6
+  m_Layer: 14
   m_Name: Pelvis
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8170,7 +8170,7 @@ BoxCollider:
   m_GameObject: {fileID: 4940629251497857603}
   m_Material: {fileID: 13400000, guid: cc46677681074564fa49bd1c1d6c48ba, type: 2}
   m_IsTrigger: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 0.35, y: 0.2, z: 0.2}
   m_Center: {x: 0, y: 0, z: 0}
@@ -9313,7 +9313,7 @@ GameObject:
   - component: {fileID: 1210934228387646271}
   - component: {fileID: 4426195808522962732}
   - component: {fileID: 4426195808522962733}
-  m_Layer: 6
+  m_Layer: 14
   m_Name: Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9346,7 +9346,7 @@ SphereCollider:
   m_GameObject: {fileID: 5861667604736208130}
   m_Material: {fileID: 13400000, guid: cc46677681074564fa49bd1c1d6c48ba, type: 2}
   m_IsTrigger: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.2
   m_Center: {x: 0, y: 0.18, z: 0}
@@ -9821,7 +9821,7 @@ GameObject:
   - component: {fileID: 3165213374399272670}
   - component: {fileID: 4426195810041360413}
   - component: {fileID: 4426195810041360419}
-  m_Layer: 6
+  m_Layer: 14
   m_Name: Leg_2_L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9853,7 +9853,7 @@ CapsuleCollider:
   m_GameObject: {fileID: 6663109715247826018}
   m_Material: {fileID: 13400000, guid: cc46677681074564fa49bd1c1d6c48ba, type: 2}
   m_IsTrigger: 0
-  m_Enabled: 0
+  m_Enabled: 1
   m_Radius: 0.1
   m_Height: 0.4
   m_Direction: 1
@@ -11821,7 +11821,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8319979553668956880}
-  - component: {fileID: 1581911666499056239}
   m_Layer: 6
   m_Name: AIchar
   m_TagString: Untagged
@@ -11851,24 +11850,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1581911666499056239
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8319979553668956895}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 87ee63dd0e63b784bae60eb588dea522, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tMeshHand: {fileID: 930417532397665294}
-  tPhysicalHand: {fileID: 3072389854620561628}
-  rbCharacter: {fileID: 8319979554255464824}
-  rbHand: {fileID: 298351981991139480}
-  handVelocityCorrectionSpeed: 0
-  bodyVelocityCorrectionSpeed: 19
 --- !u!1 &8319979554255464805
 GameObject:
   m_ObjectHideFlags: 0
@@ -12214,6 +12195,12 @@ MonoBehaviour:
   action_crouch:
     keyCode: 0
     isDown: 0
+  action_leanLeft:
+    keyCode: 0
+    isDown: 0
+  action_leanRight:
+    keyCode: 0
+    isDown: 0
   action_equipSlot1:
     keyCode: 0
     isDown: 0
@@ -12449,7 +12436,7 @@ GameObject:
   - component: {fileID: 6771563699169911840}
   - component: {fileID: 4426195809317892365}
   - component: {fileID: 4426195809317892370}
-  m_Layer: 6
+  m_Layer: 14
   m_Name: Torso_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12483,7 +12470,7 @@ BoxCollider:
   m_GameObject: {fileID: 8505575185337076641}
   m_Material: {fileID: 13400000, guid: cc46677681074564fa49bd1c1d6c48ba, type: 2}
   m_IsTrigger: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 0.35, y: 0.25, z: 0.2}
   m_Center: {x: 0, y: 0.21, z: 0}
@@ -12706,7 +12693,7 @@ GameObject:
   - component: {fileID: 4956242238437039670}
   - component: {fileID: 4426195809089710338}
   - component: {fileID: 4426195809089710339}
-  m_Layer: 6
+  m_Layer: 14
   m_Name: Torso_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12738,7 +12725,7 @@ BoxCollider:
   m_GameObject: {fileID: 8562831488852517705}
   m_Material: {fileID: 13400000, guid: cc46677681074564fa49bd1c1d6c48ba, type: 2}
   m_IsTrigger: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 0.35, y: 0.25, z: 0.2}
   m_Center: {x: 0, y: 0.21, z: 0}

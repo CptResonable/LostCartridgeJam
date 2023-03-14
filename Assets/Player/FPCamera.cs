@@ -131,9 +131,9 @@ public class FPCamera {
 
 
         float targetRoll = 0;
-        if (Input.GetKey(KeyCode.Q))
+        if (character.characterInput.action_leanLeft.isDown)
             targetRoll += 30;
-        else if (Input.GetKey(KeyCode.E))
+        else if (character.characterInput.action_leanRight.isDown)
             targetRoll -= 30;
 
         if (character.locomotion.wallrunController.isWallRunning) {

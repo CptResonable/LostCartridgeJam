@@ -43,6 +43,7 @@ public class Bullet : MonoBehaviour {
         RaycastHit hit;
         if (Physics.Linecast(lastPosition, transform.position, out hit, layerMask)) {
 
+            Debug.Log("HIT! " + hit.collider.gameObject);
             if (fleshLayerMask.Contains(hit.collider.gameObject.layer)) {
                 GameObject goDirtKickup = EZ_Pooling.EZ_PoolManager.Spawn(prefab_vfxDirtKickup.transform, hit.point, Quaternion.LookRotation(hit.normal)).gameObject;
                 Vfx_dirtKickup dirtKickup = goDirtKickup.GetComponent<Vfx_dirtKickup>();
