@@ -4064,6 +4064,8 @@ MonoBehaviour:
   targetHandPosition: {x: 0.1, y: -0.225, z: 0.25}
   targetAdsHandPosition: {x: 0, y: -0.146, z: 0.3}
   bulletInChaimber: 1
+  isReloading: 0
+  magIn: 1
   bulletsInMagCount: 11
   hasSlideStop: 1
 --- !u!1 &2246763002775668355
@@ -8624,6 +8626,8 @@ MonoBehaviour:
   targetHandPosition: {x: 0.135, y: -0.225, z: 0.2}
   targetAdsHandPosition: {x: 0, y: -0.162, z: 0.2}
   bulletInChaimber: 1
+  isReloading: 0
+  magIn: 1
   bulletsInMagCount: 30
   hasSlideStop: 1
 --- !u!1 &5183979284969657284
@@ -12210,6 +12214,12 @@ MonoBehaviour:
   action_crouch:
     keyCode: 0
     isDown: 0
+  action_equipSlot1:
+    keyCode: 0
+    isDown: 0
+  action_equipSlot2:
+    keyCode: 0
+    isDown: 0
   moveInput: {x: 0, y: 0, z: 0}
 --- !u!114 &5436195490140588741
 MonoBehaviour:
@@ -12227,7 +12237,7 @@ MonoBehaviour:
   environmentLayerMask:
     serializedVersion: 2
     m_Bits: 0
-  perlinScale: 0
+  perlinScale: 0.01
   losCheckLayerMask:
     serializedVersion: 2
     m_Bits: 0

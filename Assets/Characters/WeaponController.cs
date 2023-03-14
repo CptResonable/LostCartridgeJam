@@ -35,8 +35,10 @@ public class WeaponController {
         character.characterInput.action_ads.keyUpEvent += Action_ads_keyUpEvent;
 
         character.characterInput.action_reload.keyDownEvent += Action_reload_keyDownEvent;
-
         character.characterInput.action_attack.keyDownEvent += Action_attack_keyDownEvent;
+
+        character.characterInput.action_equipSlot1.keyDownEvent += Action_equipSlot1_keyDownEvent;
+        character.characterInput.action_equipSlot2.keyDownEvent += Action_equipSlot2_keyDownEvent;
 
         if (equipedGun != null) {
             equipedGun.reloadStartedEvent += EquipedGun_reloadStartedEvent;
@@ -76,7 +78,40 @@ public class WeaponController {
     }
 
     private void Action_reload_keyDownEvent() {
-        equipedGun.Reload();
+
+        if (!equipedGun.isReloading)
+            equipedGun.Reload();
+    }
+
+    private void Action_equipSlot1_keyDownEvent() {
+        Debug.Log("SWAP!");
+        if (equipedGun != pistol) {
+            if (weaponSwapCorutine != null)
+                character.StopCoroutine(weaponSwapCorutine);
+
+            character.StartCoroutine(WeaponSwapCorutine(pistol));
+
+            //EquipGun(pistol);
+            JointDrive jd = handJoint.slerpDrive;
+            jd.positionSpring = 100;
+            jd.positionDamper = 2f;
+            handJoint.slerpDrive = jd;
+        }
+    }
+
+    private void Action_equipSlot2_keyDownEvent() {
+        if (equipedGun != rifle) {
+            if (weaponSwapCorutine != null)
+                character.StopCoroutine(weaponSwapCorutine);
+
+            character.StartCoroutine(WeaponSwapCorutine(rifle));
+
+            //EquipGun(rifle);
+            JointDrive jd = handJoint.slerpDrive;
+            jd.positionSpring = 180;
+            jd.positionDamper = 3.5f;
+            handJoint.slerpDrive = jd;
+        }
     }
 
     private void Character_updateEvent() {
@@ -85,49 +120,33 @@ public class WeaponController {
             tOffHandPosition.position = equipedGun.tOffHandTarget.position;
             tOffHandPosition.rotation = equipedGun.tOffHandTarget.rotation;
         }
+
         //if (character.isPlayer) {
         //    if (Input.GetKeyDown(KeyCode.Alpha2) && equipedGun != rifle) {
-        //        EquipGun(rifle);
+        //        if (weaponSwapCorutine != null)
+        //            character.StopCoroutine(weaponSwapCorutine);
+
+        //        character.StartCoroutine(WeaponSwapCorutine(rifle));
+
+        //        //EquipGun(rifle);
         //        JointDrive jd = handJoint.slerpDrive;
         //        jd.positionSpring = 180;
         //        jd.positionDamper = 3.5f;
         //        handJoint.slerpDrive = jd;
         //    }
         //    else if (Input.GetKeyDown(KeyCode.Alpha1) && equipedGun != pistol) {
-        //        EquipGun(pistol);
+        //        if (weaponSwapCorutine != null)
+        //            character.StopCoroutine(weaponSwapCorutine);
+
+        //        character.StartCoroutine(WeaponSwapCorutine(pistol));
+
+        //        //EquipGun(pistol);
         //        JointDrive jd = handJoint.slerpDrive;
         //        jd.positionSpring = 100;
         //        jd.positionDamper = 2f;
         //        handJoint.slerpDrive = jd;
         //    }
         //}
-
-        if (character.isPlayer) {
-            if (Input.GetKeyDown(KeyCode.Alpha2) && equipedGun != rifle) {
-                if (weaponSwapCorutine != null)
-                    character.StopCoroutine(weaponSwapCorutine);
-
-                character.StartCoroutine(WeaponSwapCorutine(rifle));
-
-                //EquipGun(rifle);
-                JointDrive jd = handJoint.slerpDrive;
-                jd.positionSpring = 180;
-                jd.positionDamper = 3.5f;
-                handJoint.slerpDrive = jd;
-            }
-            else if (Input.GetKeyDown(KeyCode.Alpha1) && equipedGun != pistol) {
-                if (weaponSwapCorutine != null)
-                    character.StopCoroutine(weaponSwapCorutine);
-
-                character.StartCoroutine(WeaponSwapCorutine(pistol));
-
-                //EquipGun(pistol);
-                JointDrive jd = handJoint.slerpDrive;
-                jd.positionSpring = 100;
-                jd.positionDamper = 2f;
-                handJoint.slerpDrive = jd;
-            }
-        }
 
 
         if (equipedGun != null) {

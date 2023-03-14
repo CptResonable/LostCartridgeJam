@@ -2478,6 +2478,12 @@ MonoBehaviour:
   action_crouch:
     keyCode: 99
     isDown: 0
+  action_equipSlot1:
+    keyCode: 49
+    isDown: 0
+  action_equipSlot2:
+    keyCode: 50
+    isDown: 0
   moveInput: {x: 0, y: 0, z: 0}
 --- !u!114 &5628233934188922880
 MonoBehaviour:

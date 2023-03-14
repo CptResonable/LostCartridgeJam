@@ -21,6 +21,11 @@ public class NPCLogic_assault : NPCLogic {
         base.Awake();
 
         perlinOffset = Random.Range(0f, 20000f);
+        //input.action_equipSlot2.Click();
+    }
+
+    private void Start() {
+
     }
 
     public override void UpdateInput(CharacterInput input) {
@@ -34,8 +39,16 @@ public class NPCLogic_assault : NPCLogic {
 
         Shooting();
 
+        if (Input.GetKeyDown(KeyCode.H))
+            input.action_equipSlot1.Click();
 
-        if (character.weaponController.equipedGun.bulletsInMagCount <= 0)
+        if (Input.GetKeyDown(KeyCode.J))
+            input.action_equipSlot2.Click();
+
+
+
+        Debug.Log(character.weaponController.equipedGun.bulletsInMagCount);
+        if (character.weaponController.equipedGun.bulletsInMagCount <= 0 && !character.weaponController.equipedGun.bulletInChaimber && character.weaponController.equipedGun.magIn)
             input.action_reload.Click();
         //dashAttackCooldown -= Time.deltaTime;
         //if (dashAttackCooldown < 0 && toTargetVector.magnitude < 2)
@@ -46,6 +59,7 @@ public class NPCLogic_assault : NPCLogic {
 
         //RaycastHit lineHit;
         if (!Physics.Linecast(character.transform.position + Vector3.up, target.transform.position + Vector3.up, losCheckLayerMask) && !burstOnCooldown) {
+            burstOnCooldown = true;
             StartCoroutine(BurstCorutine());
             //input.action_attack.isDown = true;
         }
@@ -57,7 +71,6 @@ public class NPCLogic_assault : NPCLogic {
     private IEnumerator BurstCorutine() {
         yield return new WaitForSeconds(Random.Range(0.3f, 0.8f));
         isBursting = true;
-        burstOnCooldown = true;
         float burstDuration = Random.Range(0.2f, 1.5f);
         input.action_attack.isDown = true;
         yield return new WaitForSeconds(burstDuration);

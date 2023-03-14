@@ -45,6 +45,8 @@ public class Gun : MonoBehaviour {
     private float timeSinceLastShot = 0;
 
     public bool bulletInChaimber = true;
+    public bool isReloading = false;
+    public bool magIn = true;
     public int bulletsInMagCount = 30;
     private Coroutine reloadCorutine;
     //public bool isReloading = false;
@@ -109,12 +111,14 @@ public class Gun : MonoBehaviour {
             }
         }
 
+        isReloading = true;
         reloadStartedEvent?.Invoke(reloadTime);
 
         gunAnimationController.InitReload();
     }
 
     public void ReloadCanceled() {
+        isReloading = false;
     }
 
     private void Fire() {
@@ -141,6 +145,7 @@ public class Gun : MonoBehaviour {
 
     private void ChaimerBullet() {
         bulletsInMagCount--;
+        Debug.Log("b: " + bulletsInMagCount);
         bulletInChaimber = true;
 
         bulletChaimeredEvent?.Invoke();
@@ -149,9 +154,13 @@ public class Gun : MonoBehaviour {
     #region Animation events
     private void GunAnimationController_boltRackedEvent() {
         ChaimerBullet();
+
+        if (isReloading)
+            isReloading = false;
     }
 
     private void GunAnimationController_magDroppedEvent() {
+        magIn = false;
         bulletsInMagCount = 0;
         tMag.gameObject.SetActive(false);
     }
@@ -167,6 +176,11 @@ public class Gun : MonoBehaviour {
             ammoReserve -= (magSize - bulletsInMagCount);
             bulletsInMagCount = magSize;
         }
+
+        magIn = true;
+
+        if (bulletInChaimber)
+            isReloading = false;
     }
     #endregion
 
