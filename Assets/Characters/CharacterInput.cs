@@ -93,7 +93,6 @@ public class MouseMovement {
     }
 
     private void Character_updateEvent() {
-        Debug.Log("HMMMMM");
         xDelta = Input.GetAxis("Mouse X");
         yDelta = Input.GetAxis("Mouse Y");
     }

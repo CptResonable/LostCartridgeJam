@@ -145,7 +145,6 @@ public class Gun : MonoBehaviour {
 
     private void ChaimerBullet() {
         bulletsInMagCount--;
-        Debug.Log("b: " + bulletsInMagCount);
         bulletInChaimber = true;
 
         bulletChaimeredEvent?.Invoke();

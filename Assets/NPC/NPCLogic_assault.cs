@@ -12,8 +12,6 @@ public class NPCLogic_assault : NPCLogic {
 
     private float dashAttackCooldown;
 
-    private CharacterInput input;
-
     private bool isBursting = false;
     private bool burstOnCooldown = false;
 
@@ -21,11 +19,10 @@ public class NPCLogic_assault : NPCLogic {
         base.Awake();
 
         perlinOffset = Random.Range(0f, 20000f);
-        //input.action_equipSlot2.Click();
     }
 
     private void Start() {
-
+        input.action_equipSlot2.Click();
     }
 
     public override void UpdateInput(CharacterInput input) {
@@ -45,9 +42,6 @@ public class NPCLogic_assault : NPCLogic {
         if (Input.GetKeyDown(KeyCode.J))
             input.action_equipSlot2.Click();
 
-
-
-        Debug.Log(character.weaponController.equipedGun.bulletsInMagCount);
         if (character.weaponController.equipedGun.bulletsInMagCount <= 0 && !character.weaponController.equipedGun.bulletInChaimber && character.weaponController.equipedGun.magIn)
             input.action_reload.Click();
         //dashAttackCooldown -= Time.deltaTime;

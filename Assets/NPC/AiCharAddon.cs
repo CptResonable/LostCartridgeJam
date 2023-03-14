@@ -9,7 +9,6 @@ public class AiCharAddon : MonoBehaviour {
     private void Awake() {
         character = GetComponent<Character>();
         input = GetComponent<NPCInput>();
-
         input.Init(character);
     }
 }
