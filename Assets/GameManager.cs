@@ -35,7 +35,7 @@ public class GameManager : MonoBehaviour {
 
     public bool usingBulletTime;
 
-    public Player player;
+    public Character player;
 
     public enum GameState { Menu, Playing, Paused, GameOver }
     public GameState gameState;
