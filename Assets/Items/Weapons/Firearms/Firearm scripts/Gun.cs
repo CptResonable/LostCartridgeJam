@@ -53,6 +53,8 @@ public class Gun : MonoBehaviour {
 
     public bool hasSlideStop = true;
 
+    private List<Collider> colliders = new List<Collider>();
+
     public delegate void GunFiredDelegate(Vector3 rotationalRecoil, Vector3 translationalRecoil);
     public event GunFiredDelegate gunFiredEvent;
     public event Delegates.FloatDelegate reloadStartedEvent;
@@ -62,6 +64,11 @@ public class Gun : MonoBehaviour {
     public event Delegates.EmptyDelegate unequipedEvent;
 
     private void Awake() {
+        Transform tColliders = transform.GetChild(0).Find("Colliders");
+        for (int i = 0; i < tColliders.childCount; i++) {
+            colliders.Add(tColliders.GetChild(i).GetComponent<Collider>());
+        }
+
         gunAnimationController = GetComponentInChildren<GunAnimationController>();
 
         gunAnimationController.magInsertedEvent += GunAnimationController_magInsertedEvent;
@@ -72,9 +79,33 @@ public class Gun : MonoBehaviour {
     public void Equip(Character character) {
         this.character = character;
         equipedEvent?.Invoke();
+
+        //Collider col1;
+        //Rigidbody rb;
+
+        for (int i = 0; i < character.body.tBones.Length; i++) {
+            Collider col;
+            if (character.body.tBones[i].TryGetComponent<Collider>(out col)) {
+                for (int j = 0; j < colliders.Count; j++) {
+                    Physics.IgnoreCollision(col, colliders[j], true);
+                }
+            }
+        }        
     }
 
     public void Unequip() {
+
+        if (character != null) {
+            for (int i = 0; i < character.body.tBones.Length; i++) {
+                Collider col;
+                if (character.body.tBones[i].TryGetComponent<Collider>(out col)) {
+                    for (int j = 0; j < colliders.Count; j++) {
+                        Physics.IgnoreCollision(col, colliders[j], false);
+                    }
+                }
+            }
+        }
+
         character = null;
         unequipedEvent?.Invoke(); 
     }
