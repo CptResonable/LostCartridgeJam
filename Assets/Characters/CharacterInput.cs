@@ -93,7 +93,8 @@ public class MouseMovement {
     }
 
     public MouseMovement(Character character) {
-        character.updateEvent += Character_updateEvent;
+        if (character.isPlayer)
+            character.updateEvent += Character_updateEvent;
     }
 
     private void Character_updateEvent() {

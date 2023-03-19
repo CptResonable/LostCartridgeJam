@@ -14,6 +14,7 @@ public class Character : MonoBehaviour {
     public Health health;
     public Body body;
     public Legs legs;
+    public DamageReactionController damageReactionController;
 
     public Rigidbody rb;
 
@@ -42,6 +43,7 @@ public class Character : MonoBehaviour {
         health.Init(this);
         body.Init(this);
         legs.Init(this);
+        damageReactionController.Init(this);
 
         health.diedEvent += Health_diedEvent;
     }

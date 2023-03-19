@@ -45,9 +45,9 @@ public class Bullet : MonoBehaviour {
 
             Debug.Log("HIT! " + hit.collider.gameObject);
             if (fleshLayerMask.Contains(hit.collider.gameObject.layer)) {
-                GameObject goDirtKickup = EZ_Pooling.EZ_PoolManager.Spawn(prefab_vfxDirtKickup.transform, hit.point, Quaternion.LookRotation(hit.normal)).gameObject;
-                Vfx_dirtKickup dirtKickup = goDirtKickup.GetComponent<Vfx_dirtKickup>();
-                dirtKickup.Initiate(hit.collider.transform, true, bloodColor);
+                //GameObject goDirtKickup = EZ_Pooling.EZ_PoolManager.Spawn(prefab_vfxDirtKickup.transform, hit.point, Quaternion.LookRotation(hit.normal)).gameObject;
+                //Vfx_dirtKickup dirtKickup = goDirtKickup.GetComponent<Vfx_dirtKickup>();
+                //dirtKickup.Initiate(hit.collider.transform, true, bloodColor);
             }
             else {
 
@@ -67,8 +67,7 @@ public class Bullet : MonoBehaviour {
 
             DamageReceiver damageReceiver;
             if (hit.collider.TryGetComponent<DamageReceiver>(out damageReceiver)) {
-                damageReceiver.ReceiveDamage(damage);
-
+                damageReceiver.ReceiveDamage_bulletHit(damage, hit.point, VectorUtils.FromToVector(lastPosition, transform.position).normalized);
             }
 
             meshRenderer.enabled = false;

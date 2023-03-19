@@ -33,8 +33,8 @@ public class RightHand : Hand {
         WeaponTargetUpdate();
 
         // Interpolate between weapon hand target and animation position/rotation
-        tPhysicalTarget.position = Vector3.Lerp(tWeaponTarget.position, character.body.postAnimationState.GetBoneState(Body.BoneEnums.rHandR).position, arms.animationWeight);
-        tPhysicalTarget.rotation = Quaternion.Slerp(tWeaponTarget.rotation, character.body.postAnimationState.GetBoneState(Body.BoneEnums.rHandR).rotation, arms.animationWeight);
+        tPhysicalTarget.position = Vector3.Lerp(tWeaponTarget.position, character.body.postAnimationState.GetBoneState(Body.BoneEnums.HandR).position, arms.animationWeight);
+        tPhysicalTarget.rotation = Quaternion.Slerp(tWeaponTarget.rotation, character.body.postAnimationState.GetBoneState(Body.BoneEnums.HandR).rotation, arms.animationWeight);
 
         // Set postion/rotation to ledge grab point if grabing ledge
         tPhysicalTarget.position = Vector3.Lerp(tPhysicalTarget.position, grabPoint, ledgeGrabInterpolator);
@@ -60,7 +60,7 @@ public class RightHand : Hand {
         float f = arms.animationWeight;
         if (character.locomotion.wallrunController.isWallRunning)
             f *= 0.4f;
-        tElbowPole.transform.position = Vector3.Lerp(tElbowNoAnimPoleTarget.position, character.body.postAnimationState.GetBoneState(Body.BoneEnums.rArmR_2).position, f);
+        tElbowPole.transform.position = Vector3.Lerp(tElbowNoAnimPoleTarget.position, character.body.postAnimationState.GetBoneState(Body.BoneEnums.ArmR_2).position, f);
     }
 
     private void WeaponTargetUpdate() {

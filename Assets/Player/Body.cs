@@ -9,7 +9,7 @@ public class Body {
 
     public BodyStateData postAnimationState = new BodyStateData();
 
-    public enum BoneEnums { rPelvis, rTorso_1, rTorso_2, rHead, rLegL_1, rLegL_2, rLegR_1, rLegR_2, rArmL_1, rArmL_2, rHandL, rArmR_1, rArmR_2, rHandR };
+    public enum BoneEnums { Pelvis, Torso_1, Torso_2, Head, LegL_1, LegL_2, LegR_1, LegR_2, ArmL_1, ArmL_2, HandL, ArmR_1, ArmR_2, HandR };
 
     [HideInInspector] public Transform[] tBones;
     [HideInInspector] public RagdollBone[] ragdollBones;

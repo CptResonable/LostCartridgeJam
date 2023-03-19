@@ -12055,7 +12055,7 @@ MonoBehaviour:
     tArmControllerBase: {fileID: 4426195809930414227}
     animationWeight: 0
   health:
-    maxHP: 100
+    maxHP: 10000
     damageReceivers:
     - {fileID: 4426195809001623806}
     - {fileID: 4426195809089710339}
