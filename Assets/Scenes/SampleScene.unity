@@ -53573,11 +53573,6 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 5436195490140588741, guid: ae0e1d2a5bee36f4eb0243d5fe498f9b,
-        type: 3}
-      propertyPath: perlinScale
-      value: 20
-      objectReference: {fileID: 0}
     - target: {fileID: 8319979553668956880, guid: ae0e1d2a5bee36f4eb0243d5fe498f9b,
         type: 3}
       propertyPath: m_RootOrder

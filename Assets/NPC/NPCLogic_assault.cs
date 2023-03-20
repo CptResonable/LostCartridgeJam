@@ -31,10 +31,10 @@ public class NPCLogic_assault : NPCLogic {
 
         toTargetVector = VectorUtils.FromToVector(input.transform.position, target.transform.position);
 
-        //Rotation(input);
-        //Translation(input);
+        Rotation(input);
+        Translation(input);
 
-        //Shooting();
+        Shooting();
 
         if (Input.GetKeyDown(KeyCode.H))
             input.action_equipSlot1.Click();
@@ -80,8 +80,9 @@ public class NPCLogic_assault : NPCLogic {
     //}
 
     private void Rotation(CharacterInput input) {
-        float dAngle = Vector3.SignedAngle(transform.forward, toTargetVector, Vector3.up);
-        input.mouseMovement.xDelta = (Mathf.Sign(dAngle) * Mathf.Sqrt(Mathf.Abs(dAngle)) * 0.15f) / Settings.MOUSE_SENSITIVITY;
+        Vector3 lookFlatDirection = Vector3.ProjectOnPlane(character.fpCamera.tCameraTarget.forward, Vector3.up);
+        float dAngle = Vector3.SignedAngle(lookFlatDirection, toTargetVector, Vector3.up);
+        input.mouseMovement.xDelta = (Mathf.Sign(dAngle) * Mathf.Sqrt(Mathf.Abs(dAngle)) * 0.2f) / Settings.MOUSE_SENSITIVITY;
 
         float dAnglePitch = Vector3.SignedAngle(character.body.tHead.forward, toTargetVector, character.transform.right);
         //Debug.DrawRay(input.transform.position, toTargetVector, Color.red);

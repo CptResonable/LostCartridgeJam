@@ -12224,7 +12224,7 @@ MonoBehaviour:
   environmentLayerMask:
     serializedVersion: 2
     m_Bits: 0
-  perlinScale: 0.01
+  perlinScale: 0.2
   losCheckLayerMask:
     serializedVersion: 2
     m_Bits: 0
