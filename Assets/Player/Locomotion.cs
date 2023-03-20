@@ -644,24 +644,65 @@ public class Locomotion {
         private void Action_jump_keyDownEvent() {
             locomotion.wallrunController.StopWallRun();
 
-            Vector3 lookDir = Vector3.ProjectOnPlane(locomotion.character.fpCamera.tCamera.forward, locomotion.wallrunController.wallUpVector).normalized;
-            float lookDirToCameraAngle = Vector3.SignedAngle(lookDir, locomotion.wallrunController.wallHit.normal, locomotion.wallrunController.wallUpVector);
-
-            // Get jump vector by rotating wall normal with camera to wall angle
-            Vector3 jumpVector = Quaternion.AngleAxis(-lookDirToCameraAngle, Vector3.up) * locomotion.wallrunController.wallHit.normal;
-
-            // If character has move input
-            if (locomotion.character.characterInput.moveInput.magnitude > 0.5f) {
-                float wasdAngle = Vector3.SignedAngle(new Vector3(0, 0, 1), locomotion.character.characterInput.moveInput, Vector3.up);
-                jumpVector = Quaternion.AngleAxis(wasdAngle, Vector3.up) * jumpVector;
+            //Vector3 lookDir = Vector3.ProjectOnPlane(locomotion.character.fpCamera.tCamera.forward, locomotion.wallrunController.wallUpVector).normalized;
+            Vector3 lookDir = locomotion.character.fpCamera.tCamera.forward;
+            float lookUpAngle = Vector3.Angle(locomotion.wallrunController.wallUpVector, lookDir);
+            Debug.Log("Look up angle: " + lookUpAngle);
+            if (lookUpAngle < 45) {
+                Debug.Log("WHADTYSYAY");
+                Vector3 rotateAxis = Vector3.Cross(locomotion.wallrunController.wallUpVector, lookDir);
+                lookDir = VectorUtils.RotateVectorAroundVector(lookDir, rotateAxis, 45 - lookUpAngle);
+                GizmoManager.i.DrawLine(10, Color.red, locomotion.character.fpCamera.tCamera.position, locomotion.character.fpCamera.tCamera.position + lookDir * 4);
             }
+            else
+                GizmoManager.i.DrawLine(10, Color.green, locomotion.character.fpCamera.tCamera.position, locomotion.character.fpCamera.tCamera.position + lookDir * 4);
 
-            // Stops jump vector from goin into wall, also add some velocity away from wall
-            if (Vector3.Dot(jumpVector, locomotion.wallrunController.wallHit.normal) < 0)
-                jumpVector = Vector3.ProjectOnPlane(jumpVector, locomotion.wallrunController.wallHit.normal) + locomotion.wallrunController.wallHit.normal * 0.2f;
+            Vector3 projectedVelocity = Vector3.Project(new Vector3(locomotion.character.rb.velocity.x, 0, locomotion.character.rb.velocity.z), lookDir);
+            //Vector3 jumpVector = lookDir * 4 + projectedVelocity + Vector3.up * (1 + locomotion.character.rb.velocity.y);
+            Vector3 jumpVector = lookDir * 4 + Vector3.up * 1 + locomotion.character.rb.velocity * 0.5f;
+            //Vector3 jumpVector = lookDir * 3 + Vector3.up * 1;
 
-            locomotion.character.rb.velocity = jumpVector * locomotion.settings.wallJumpVelocity + Vector3.up * locomotion.character.rb.velocity.y;
+            locomotion.character.rb.velocity = jumpVector;
+
+            //float lookDirToCameraAngle = Vector3.SignedAngle(lookDir, locomotion.wallrunController.wallHit.normal, locomotion.wallrunController.wallUpVector);
+
+            //// Get jump vector by rotating wall normal with camera to wall angle
+            //Vector3 jumpVector = Quaternion.AngleAxis(-lookDirToCameraAngle, Vector3.up) * locomotion.wallrunController.wallHit.normal;
+
+            //// If character has move input
+            //if (locomotion.character.characterInput.moveInput.magnitude > 0.5f) {
+            //    float wasdAngle = Vector3.SignedAngle(new Vector3(0, 0, 1), locomotion.character.characterInput.moveInput, Vector3.up);
+            //    jumpVector = Quaternion.AngleAxis(wasdAngle, Vector3.up) * jumpVector;
+            //}
+
+            //// Stops jump vector from goin into wall, also add some velocity away from wall
+            //if (Vector3.Dot(jumpVector, locomotion.wallrunController.wallHit.normal) < 0)
+            //    jumpVector = Vector3.ProjectOnPlane(jumpVector, locomotion.wallrunController.wallHit.normal) + locomotion.wallrunController.wallHit.normal * 0.2f;
+
+           // locomotion.character.rb.velocity = jumpVector * locomotion.settings.wallJumpVelocity + Vector3.up * locomotion.character.rb.velocity.y;
         }
+
+        //private void Action_jump_keyDownEvent() {
+        //    locomotion.wallrunController.StopWallRun();
+
+        //    Vector3 lookDir = Vector3.ProjectOnPlane(locomotion.character.fpCamera.tCamera.forward, locomotion.wallrunController.wallUpVector).normalized;
+        //    float lookDirToCameraAngle = Vector3.SignedAngle(lookDir, locomotion.wallrunController.wallHit.normal, locomotion.wallrunController.wallUpVector);
+
+        //    // Get jump vector by rotating wall normal with camera to wall angle
+        //    Vector3 jumpVector = Quaternion.AngleAxis(-lookDirToCameraAngle, Vector3.up) * locomotion.wallrunController.wallHit.normal;
+
+        //    // If character has move input
+        //    if (locomotion.character.characterInput.moveInput.magnitude > 0.5f) {
+        //        float wasdAngle = Vector3.SignedAngle(new Vector3(0, 0, 1), locomotion.character.characterInput.moveInput, Vector3.up);
+        //        jumpVector = Quaternion.AngleAxis(wasdAngle, Vector3.up) * jumpVector;
+        //    }
+
+        //    // Stops jump vector from goin into wall, also add some velocity away from wall
+        //    if (Vector3.Dot(jumpVector, locomotion.wallrunController.wallHit.normal) < 0)
+        //        jumpVector = Vector3.ProjectOnPlane(jumpVector, locomotion.wallrunController.wallHit.normal) + locomotion.wallrunController.wallHit.normal * 0.2f;
+
+        //    locomotion.character.rb.velocity = jumpVector * locomotion.settings.wallJumpVelocity + Vector3.up * locomotion.character.rb.velocity.y;
+        //}
 
         private void HorizontalMovement() {
 

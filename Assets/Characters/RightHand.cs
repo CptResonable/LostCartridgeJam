@@ -50,7 +50,7 @@ public class RightHand : Hand {
 
         WallAvoidance();
 
-        if (character.locomotion.wallrunController.isWallRunning && !grabingLedge)
+        if (character.locomotion.activeStateEnum == Locomotion.LocomotionState.StateIDEnum.WallClimbing && !grabingLedge)
             LookForGrip();
 
         PhysicalHandUpdate();
