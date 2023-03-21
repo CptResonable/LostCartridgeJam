@@ -574,7 +574,10 @@ public class Locomotion {
         }
 
         private void SetTargetRotation() {
-            locomotion.tTargetRoation.rotation = Quaternion.LookRotation(Vector3.ProjectOnPlane(-locomotion.wallrunController.wallHit.normal, Vector3.up).normalized, Vector3.up);
+            //locomotion.tTargetRoation.rotation = Quaternion.LookRotation(Vector3.ProjectOnPlane(-locomotion.wallrunController.wallHit.normal, Vector3.up).normalized, Vector3.up);
+            float deltaYaw = Vector3.SignedAngle(Vector3.ProjectOnPlane(-locomotion.character.locomotion.wallrunController.wallHit.normal, Vector3.up), Vector3.ProjectOnPlane(locomotion.character.fpCamera.tCamera.forward, Vector3.up), Vector3.up);
+            Vector3 targetDir = VectorUtils.RotateVectorAroundVector(Vector3.ProjectOnPlane(-locomotion.wallrunController.wallHit.normal, Vector3.up).normalized, Vector3.up, deltaYaw * 0.33f);
+            locomotion.tTargetRoation.rotation = Quaternion.LookRotation(targetDir, Vector3.up);
         }
 
         private void WallrunController_verticalRunStopped() {

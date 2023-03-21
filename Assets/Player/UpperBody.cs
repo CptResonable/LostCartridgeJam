@@ -26,7 +26,7 @@ public class UpperBody {
         Debug.Log("dp: " + deltaPitch);
         float deltaYaw = Vector3.SignedAngle(Vector3.ProjectOnPlane(character.transform.forward, Vector3.up), Vector3.ProjectOnPlane(character.fpCamera.tCamera.forward, Vector3.up), Vector3.up);
         if (character.locomotion.activeStateEnum == Locomotion.LocomotionState.StateIDEnum.WallClimbing)
-            deltaYaw = Vector3.SignedAngle(Vector3.ProjectOnPlane(-character.locomotion.wallrunController.wallHit.normal, Vector3.up), Vector3.ProjectOnPlane(character.fpCamera.tCamera.forward, Vector3.up), Vector3.up);
+            deltaYaw = Vector3.SignedAngle(Vector3.ProjectOnPlane(-character.locomotion.wallrunController.wallHit.normal, Vector3.up), Vector3.ProjectOnPlane(character.fpCamera.tCamera.forward, Vector3.up), Vector3.up) * 0.5f;
 
         float deltaRoll = Vector3.SignedAngle(character.transform.right, Vector3.ProjectOnPlane(character.transform.right, character.fpCamera.tCamera.up), character.transform.forward);
 
@@ -85,13 +85,13 @@ public class UpperBody {
         //character.body.tTorso_1.Rotate(Vector3.forward, deltaRoll * 0.5f + bonusEulers_torso1.z, Space.Self);
         //character.body.tTorso_2.Rotate(Vector3.forward, deltaRoll * 0.5f + bonusEulers_torso2.z, Space.Self);
 
-        //// Rotate torso when aimng guns
-        //if (character.weaponController.equipedGun != null && !character.locomotion.state_grounded.isSprinting)
-        //    equipmentInducedTorsoYaw = Mathf.Lerp(equipmentInducedTorsoYaw, 30, Time.deltaTime * 3f);
-        //else
-        //    equipmentInducedTorsoYaw = Mathf.Lerp(equipmentInducedTorsoYaw, 0, Time.deltaTime * 3f);
+        // Rotate torso when aimng guns
+        if (character.weaponController.equipedGun != null && !character.locomotion.state_grounded.isSprinting)
+            equipmentInducedTorsoYaw = Mathf.Lerp(equipmentInducedTorsoYaw, 30, Time.deltaTime * 3f);
+        else
+            equipmentInducedTorsoYaw = Mathf.Lerp(equipmentInducedTorsoYaw, 0, Time.deltaTime * 3f);
 
-        //character.body.tTorso_2.Rotate(Vector3.up * equipmentInducedTorsoYaw, Space.Self);
+        character.body.tTorso_2.Rotate(Vector3.up * equipmentInducedTorsoYaw, Space.Self);
 
         character.body.tHead.rotation = character.fpCamera.tCamera.rotation; // Set head rotation to camera rotation
         character.fpCamera.tCamera.position = character.fpCamera.tCameraTarget.position; // Set camera position
