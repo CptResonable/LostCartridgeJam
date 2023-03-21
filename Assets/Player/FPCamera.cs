@@ -69,20 +69,6 @@ public class FPCamera {
         if (yaw <= 0)
             yaw = 360 + yaw;
 
-        //if (character.locomotion.activeStateEnum == Locomotion.LocomotionState.StateIDEnum.WallRunning) {
-        //    float angle = Vector3.SignedAngle(Vector3.forward, character.locomotion.wallrunController.wallForwardVector, Vector3.up);
-        //    angle += 360;
-        //    float deltaAngle = Mathf.DeltaAngle(angle, yaw);
-
-        //    //if (deltaAngle > 89)
-        //    //    yaw = angle + 89;
-        //    //if (deltaAngle < -89)
-        //    //    yaw = angle - 89;
-        //    if (deltaAngle > 88)
-        //        yaw = angle + 88;
-        //    if (deltaAngle < -88)
-        //        yaw = angle - 88;
-        //}
         if (character.locomotion.activeStateEnum == Locomotion.LocomotionState.StateIDEnum.WallRunning) {
             float angle = Vector3.SignedAngle(Vector3.forward, character.locomotion.wallrunController.wallForwardVector, Vector3.up);
             angle += 360;
@@ -113,23 +99,6 @@ public class FPCamera {
             tiltAmount = -Mathf.DeltaAngle(yaw, angle - 180);
         }
 
-        //if (character.locomotion.activeStateEnum == Locomotion.LocomotionState.StateIDEnum.WallRunning) {
-        //    float angle = Vector3.SignedAngle(Vector3.forward, character.locomotion.wallrunController.wallForwardVector, Vector3.up);
-        //    if (angle < 0)
-        //        angle = 360 + angle;
-
-        //    Debug.Log("angel: " + angle);
-
-        //    yaw += 360;
-        //    angle += 360;
-
-        //    //yaw = angle;
-
-        //    yaw = Mathf.Clamp(yaw, angle - 90, angle + 90);
-        //    yaw -= 360;
-        //}
-
-
         float targetRoll = 0;
         if (character.characterInput.action_leanLeft.isDown)
             targetRoll += 30;
@@ -139,8 +108,7 @@ public class FPCamera {
         if (character.locomotion.wallrunController.isWallRunning) {
 
             // Y angle between look direction and -wall normal
-            //targetRoll += Mathf.Sign(character.locomotion.wallrunController.wallCameraAngle) * wallAngleToRollCurve.Evaluate(Mathf.Abs(character.locomotion.wallrunController.wallCameraAngle)) * 40;
-            targetRoll += Mathf.Sign(tiltAmount) * wallAngleToRollCurve.Evaluate(Mathf.Abs(character.locomotion.wallrunController.wallCameraAngle)) * 40;
+            //targetRoll += Mathf.Sign(tiltAmount) * wallAngleToRollCurve.Evaluate(Mathf.Abs(character.locomotion.wallrunController.wallCameraAngle)) * 40;
         }
 
         roll = Mathf.Lerp(roll, targetRoll, Time.deltaTime * 12);

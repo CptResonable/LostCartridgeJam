@@ -647,9 +647,7 @@ public class Locomotion {
             //Vector3 lookDir = Vector3.ProjectOnPlane(locomotion.character.fpCamera.tCamera.forward, locomotion.wallrunController.wallUpVector).normalized;
             Vector3 lookDir = locomotion.character.fpCamera.tCamera.forward;
             float lookUpAngle = Vector3.Angle(locomotion.wallrunController.wallUpVector, lookDir);
-            Debug.Log("Look up angle: " + lookUpAngle);
             if (lookUpAngle < 45) {
-                Debug.Log("WHADTYSYAY");
                 Vector3 rotateAxis = Vector3.Cross(locomotion.wallrunController.wallUpVector, lookDir);
                 lookDir = VectorUtils.RotateVectorAroundVector(lookDir, rotateAxis, 45 - lookUpAngle);
                 GizmoManager.i.DrawLine(10, Color.red, locomotion.character.fpCamera.tCamera.position, locomotion.character.fpCamera.tCamera.position + lookDir * 4);

@@ -18,8 +18,16 @@ public class UpperBody {
 
 
     private void Character_updateEvent() {
-        float deltaPitch = Vector3.SignedAngle(character.transform.forward, Vector3.ProjectOnPlane(character.transform.forward, character.fpCamera.tCamera.up), character.transform.right);
+        //float deltaPitch = Vector3.SignedAngle(character.transform.forward, Vector3.ProjectOnPlane(character.transform.forward, character.fpCamera.tCamera.up), character.transform.right);
+        float deltaPitch = -Vector3.SignedAngle(character.fpCamera.tCamera.forward, Vector3.ProjectOnPlane(character.fpCamera.tCamera.forward, character.transform.up), character.fpCamera.tCamera.right);
+
+        //if (character.locomotion.activeStateEnum == Locomotion.LocomotionState.StateIDEnum.WallClimbing)
+        //    deltaPitch = 0;
+        Debug.Log("dp: " + deltaPitch);
         float deltaYaw = Vector3.SignedAngle(Vector3.ProjectOnPlane(character.transform.forward, Vector3.up), Vector3.ProjectOnPlane(character.fpCamera.tCamera.forward, Vector3.up), Vector3.up);
+        if (character.locomotion.activeStateEnum == Locomotion.LocomotionState.StateIDEnum.WallClimbing)
+            deltaYaw = Vector3.SignedAngle(Vector3.ProjectOnPlane(-character.locomotion.wallrunController.wallHit.normal, Vector3.up), Vector3.ProjectOnPlane(character.fpCamera.tCamera.forward, Vector3.up), Vector3.up);
+
         float deltaRoll = Vector3.SignedAngle(character.transform.right, Vector3.ProjectOnPlane(character.transform.right, character.fpCamera.tCamera.up), character.transform.forward);
 
         // Scale down pitch if standing next to wall etc, this is to stop head/torso cliping into geometry
@@ -50,27 +58,40 @@ public class UpperBody {
 
         Vector3 bonusEulers_torso1 = Vector3.zero;
         Vector3 bonusEulers_torso2 = Vector3.zero;
-        for (int i = 0; i < modifiers.Count; i++) {
-            bonusEulers_torso1 += modifiers[i].bonusEuler_torso1;
-            bonusEulers_torso2 += modifiers[i].bonusEuler_torso2;
+        //for (int i = 0; i < modifiers.Count; i++) {
+        //    bonusEulers_torso1 += modifiers[i].bonusEuler_torso1;
+        //    bonusEulers_torso2 += modifiers[i].bonusEuler_torso2;
+        //}
+
+
+        //character.body.tTorso_1.Rotate(Vector3.right, deltaPitch * 0.35f + bonusEulers_torso1.x, Space.Self);
+        //character.body.tTorso_2.Rotate(Vector3.right, deltaPitch * 0.35f + bonusEulers_torso2.x, Space.Self);
+
+        if (character.locomotion.activeStateEnum == Locomotion.LocomotionState.StateIDEnum.WallClimbing) {
+            character.body.tTorso_1.Rotate(character.transform.right, -20, Space.World);
+            character.body.tTorso_2.Rotate(character.transform.right, -15, Space.World);
+        }
+        else {
+            character.body.tTorso_1.Rotate(character.fpCamera.tCamera.right, deltaPitch * 0.35f + bonusEulers_torso1.x, Space.World);
+            character.body.tTorso_2.Rotate(character.fpCamera.tCamera.right, deltaPitch * 0.35f + bonusEulers_torso2.x, Space.World);
         }
 
-        character.body.tTorso_1.Rotate(Vector3.up, deltaYaw * 0.35f + bonusEulers_torso1.y, Space.Self);
-        character.body.tTorso_2.Rotate(Vector3.up, deltaYaw * 0.35f + bonusEulers_torso2.y, Space.Self);
+        character.body.tTorso_1.Rotate(character.body.tTorso_1.up, deltaYaw * 0.35f + bonusEulers_torso1.y, Space.World);
+        character.body.tTorso_2.Rotate(character.body.tTorso_1.up, deltaYaw * 0.35f + bonusEulers_torso2.y, Space.World);
 
-        character.body.tTorso_1.Rotate(Vector3.right, deltaPitch * 0.35f + bonusEulers_torso1.x, Space.Self);
-        character.body.tTorso_2.Rotate(Vector3.right, deltaPitch * 0.35f + bonusEulers_torso2.x, Space.Self);
+        //character.body.tTorso_1.Rotate(Vector3.up, deltaYaw * 0.20f + bonusEulers_torso1.y, Space.Self);
+        //character.body.tTorso_2.Rotate(Vector3.up, deltaYaw * 0.20f + bonusEulers_torso2.y, Space.Self);
 
-        character.body.tTorso_1.Rotate(Vector3.forward, deltaRoll * 0.5f + bonusEulers_torso1.z, Space.Self);
-        character.body.tTorso_2.Rotate(Vector3.forward, deltaRoll * 0.5f + bonusEulers_torso2.z, Space.Self);
+        //character.body.tTorso_1.Rotate(Vector3.forward, deltaRoll * 0.5f + bonusEulers_torso1.z, Space.Self);
+        //character.body.tTorso_2.Rotate(Vector3.forward, deltaRoll * 0.5f + bonusEulers_torso2.z, Space.Self);
 
-        // Rotate torso when aimng guns
-        if (character.weaponController.equipedGun != null && !character.locomotion.state_grounded.isSprinting)
-            equipmentInducedTorsoYaw = Mathf.Lerp(equipmentInducedTorsoYaw, 30, Time.deltaTime * 3f);
-        else
-            equipmentInducedTorsoYaw = Mathf.Lerp(equipmentInducedTorsoYaw, 0, Time.deltaTime * 3f);
+        //// Rotate torso when aimng guns
+        //if (character.weaponController.equipedGun != null && !character.locomotion.state_grounded.isSprinting)
+        //    equipmentInducedTorsoYaw = Mathf.Lerp(equipmentInducedTorsoYaw, 30, Time.deltaTime * 3f);
+        //else
+        //    equipmentInducedTorsoYaw = Mathf.Lerp(equipmentInducedTorsoYaw, 0, Time.deltaTime * 3f);
 
-        character.body.tTorso_2.Rotate(Vector3.up * equipmentInducedTorsoYaw, Space.Self);
+        //character.body.tTorso_2.Rotate(Vector3.up * equipmentInducedTorsoYaw, Space.Self);
 
         character.body.tHead.rotation = character.fpCamera.tCamera.rotation; // Set head rotation to camera rotation
         character.fpCamera.tCamera.position = character.fpCamera.tCameraTarget.position; // Set camera position
