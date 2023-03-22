@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using VacuumBreather;
 
 [System.Serializable]
 public class Locomotion {
@@ -10,6 +11,7 @@ public class Locomotion {
     [SerializeField] private Transform tTargetRoation;
 
     [SerializeField] private float handStuckCorrectionForce;
+    [SerializeField] private Vector3 handStuckPidValues;
 
     public LocomotionState_grounded state_grounded;
     public LocomotionState_inAir state_inAir;
@@ -89,11 +91,30 @@ public class Locomotion {
         GizmoManager.i.DrawSphere(Time.deltaTime, Color.green, character.body.tHandR.position, 0.05f);
         GizmoManager.i.DrawSphere(Time.deltaTime, Color.red, character.arms.hand_R.transform.position, 0.05f);
 
-        if (meshHandToPhysicalHandError.magnitude > 0.1) {
-            rb.velocity += meshHandToPhysicalHandError * handStuckCorrectionForce;
-        }
+        //if (meshHandToPhysicalHandError.magnitude > 0.1) {
+        //    rb.velocity += meshHandToPhysicalHandError * handStuckCorrectionForce;
+        //}
+        HandFix();
 
         HeightCheck();
+    }
+
+    private Vector3 lastError;
+    private void HandFix() {
+
+        PidController pidController = new PidController(handStuckPidValues.x, handStuckPidValues.y, handStuckPidValues.z);
+
+        Vector3 delta = VectorUtils.FromToVector(lastError, meshHandToPhysicalHandError);
+
+        if (meshHandToPhysicalHandError.magnitude > 0.1) {
+
+            float x = pidController.ComputeOutput(meshHandToPhysicalHandError.x, delta.x, Time.fixedDeltaTime);
+            float y = pidController.ComputeOutput(meshHandToPhysicalHandError.y, delta.y, Time.fixedDeltaTime);
+            float z = pidController.ComputeOutput(meshHandToPhysicalHandError.z, delta.z, Time.fixedDeltaTime);
+
+            rb.AddForce(x, y, z, ForceMode.Acceleration);
+        }
+        lastError = meshHandToPhysicalHandError;
     }
 
     private void HeightCheck() {
@@ -166,7 +187,7 @@ public class Locomotion {
 
     [System.Serializable]
     public class LocomotionState_grounded : LocomotionState {
-        private UpperBody.UpperBodyRotationModifier upperBodyRotationModifier;
+        private UpperBody.UpperBodyRotationModifier upperBodyRotationModifier_crouch;
 
         public bool isSprinting;
         public bool isCrouching;
@@ -185,9 +206,9 @@ public class Locomotion {
             base.Init(locomotion);
             stateID = StateIDEnum.Grounded;
 
-            upperBodyRotationModifier = new UpperBody.UpperBodyRotationModifier(Vector3.zero, Vector3.zero);
+            upperBodyRotationModifier_crouch = new UpperBody.UpperBodyRotationModifier(Vector3.zero, Vector3.zero);
             Debug.Log(locomotion.character.upperBody);
-            locomotion.character.upperBody.AddModifier(upperBodyRotationModifier);
+            locomotion.character.upperBody.AddModifier(upperBodyRotationModifier_crouch);
         }
 
         public override void EnterState() {
@@ -472,7 +493,7 @@ public class Locomotion {
         private void CrouchInterpolationUpdateCallback() {
 
             // Set crouch body rotation adjustments
-            upperBodyRotationModifier.UpdateBonusEulers(Vector3.Lerp(Vector3.zero, new Vector3(60, 0, 0), crouchBodyRotationInterpolator.t), Vector3.Lerp(Vector3.zero, new Vector3(-10, 0, 0), crouchBodyRotationInterpolator.t));
+            upperBodyRotationModifier_crouch.UpdateBonusEulers(Vector3.Lerp(Vector3.zero, new Vector3(60, 0, 0), crouchBodyRotationInterpolator.t), Vector3.Lerp(Vector3.zero, new Vector3(-10, 0, 0), crouchBodyRotationInterpolator.t));
             //upperBodyRotationModifier.UpdateBonusEulers(Vector3.Lerp(Vector3.zero, new Vector3(0, 0, 0), crouchBodyRotationInterpolator.t), new Vector3(0, 0, 0));
             locomotion.character.tRig.localRotation = Quaternion.Lerp(Quaternion.identity, Quaternion.Euler(-20, 0, 0), crouchBodyRotationInterpolator.t);
         }

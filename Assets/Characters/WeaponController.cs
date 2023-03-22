@@ -16,6 +16,7 @@ public class WeaponController {
     public float weaponSwapProgress = 0;
     public float weaponSwapAnimationThing = 0;
     private Coroutine weaponSwapCorutine;
+    private UpperBody.UpperBodyRotationModifier upperBodyRotationModifier_weaponYaw = new UpperBody.UpperBodyRotationModifier(Vector3.zero, new Vector3(0, 30, 0));
 
     private Character character;
 
@@ -46,6 +47,8 @@ public class WeaponController {
 
         if (character.isPlayer)
             EquipGun(pistol);
+
+        character.upperBody.AddModifier(upperBodyRotationModifier_weaponYaw);
     }
 
     private void EquipGun(Gun gun) {
@@ -116,39 +119,19 @@ public class WeaponController {
 
     private void Character_updateEvent() {
 
+        // Set off hand position and rotation
         if (equipedGun != null) {
             tOffHandPosition.position = equipedGun.tOffHandTarget.position;
             tOffHandPosition.rotation = equipedGun.tOffHandTarget.rotation;
         }
 
-        //if (character.isPlayer) {
-        //    if (Input.GetKeyDown(KeyCode.Alpha2) && equipedGun != rifle) {
-        //        if (weaponSwapCorutine != null)
-        //            character.StopCoroutine(weaponSwapCorutine);
+        // Rotate torso 2
+        if (character.locomotion.activeStateEnum == Locomotion.LocomotionState.StateIDEnum.Grounded && !character.locomotion.state_grounded.isSprinting && !character.locomotion.state_grounded.isSliding)
+            upperBodyRotationModifier_weaponYaw.bonusEuler_torso2 = Vector3.Lerp(upperBodyRotationModifier_weaponYaw.bonusEuler_torso2, new Vector3(0, 30, 0), Time.deltaTime * 4);
+        else
+            upperBodyRotationModifier_weaponYaw.bonusEuler_torso2 = Vector3.Lerp(upperBodyRotationModifier_weaponYaw.bonusEuler_torso2, new Vector3(0, 0, 0), Time.deltaTime * 4);
 
-        //        character.StartCoroutine(WeaponSwapCorutine(rifle));
-
-        //        //EquipGun(rifle);
-        //        JointDrive jd = handJoint.slerpDrive;
-        //        jd.positionSpring = 180;
-        //        jd.positionDamper = 3.5f;
-        //        handJoint.slerpDrive = jd;
-        //    }
-        //    else if (Input.GetKeyDown(KeyCode.Alpha1) && equipedGun != pistol) {
-        //        if (weaponSwapCorutine != null)
-        //            character.StopCoroutine(weaponSwapCorutine);
-
-        //        character.StartCoroutine(WeaponSwapCorutine(pistol));
-
-        //        //EquipGun(pistol);
-        //        JointDrive jd = handJoint.slerpDrive;
-        //        jd.positionSpring = 100;
-        //        jd.positionDamper = 2f;
-        //        handJoint.slerpDrive = jd;
-        //    }
-        //}
-
-
+        // Automatic fire
         if (equipedGun != null) {
             if (!equipedGun.isAuto)
                 return;
