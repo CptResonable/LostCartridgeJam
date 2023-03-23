@@ -96,8 +96,11 @@ public class WallrunController : MonoBehaviour {
     private void StartHorizontalRun() {
 
         float initVerticalVelocity = character.rb.velocity.y + Vector3.Project(character.rb.velocity, wallHit.normal).magnitude;
+
+        // Cant start wall run if ill go downwards
         if (initVerticalVelocity < 0)
             return;
+
         initVerticalVelocity = Mathf.Sqrt(initVerticalVelocity) * 2;
 
         isWallRunning = true;
@@ -130,19 +133,10 @@ public class WallrunController : MonoBehaviour {
             if (!wallDetected)
                 StopWallRun();
 
-            t += Time.fixedDeltaTime / duration;
-            runVelocity = wallForwardVector * settings.verticalRunCurve.Evaluate(t) * settings.maxVerticalVelocity * scale;
-            runVelocity += -wallHit.normal * 1f;
             wallCameraAngle = Vector3.SignedAngle(Vector3.ProjectOnPlane(character.fpCamera.tCameraTarget.forward, Vector3.up), Vector3.ProjectOnPlane(-wallHit.normal, Vector3.up), Vector3.up);
 
             Vector3 camForwardProj = Vector3.ProjectOnPlane(character.fpCamera.tCameraTarget.forward, character.locomotion.wallrunController.wallUpVector).normalized;
             wallForwardCameraAngle = Vector3.SignedAngle(wallForwardVector, camForwardProj, character.locomotion.wallrunController.wallUpVector);
-
-            //if (Mathf.Abs(wallForwardCameraAngle) > 90) {
-            //    Debug.Log("hey wyf: " + wallForwardCameraAngle);
-            //    StopWallRun();
-            //}
-
             yield return new WaitForFixedUpdate();
         }
 

@@ -45,6 +45,7 @@ public class FPCamera {
         character.locomotion.wallrunController.horizontalRunStopped += WallrunController_horizontalRunStopped;
         character.locomotion.slideStartedEvent += Locomotion_slideStartedEvent;
         character.locomotion.slideEndedEvent += Locomotion_slideEndedEvent;
+        character.locomotion.jumpStartedEvent += Locomotion_jumpStartedEvent;
     }
 
     private void Character_lateUpdateEvent() {
@@ -257,6 +258,11 @@ public class FPCamera {
     private void Locomotion_slideEndedEvent() {
         animator.SetBool("IsSliding", false);
     }
+    private void Locomotion_jumpStartedEvent() {
+        animator.SetTrigger("Jump");
+        shaker.Shake(1, 0.18f);
+    }
+
 
     public IEnumerator ApplyRotationOverTime(float totalPitch, float totalYaw, float time, AnimationCurve applicationCurve) {
         float t = 0;

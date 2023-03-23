@@ -22,9 +22,9 @@ public class AnimatorController {
         character.locomotion.wallrunController.horizontalRunStarted += WallrunController_horizontalRunStarted;
         character.locomotion.wallrunController.horizontalRunStopped += WallrunController_horizontalRunStopped;
 
-
         character.locomotion.slideStartedEvent += Locomotion_slideStartedEvent;
         character.locomotion.slideEndedEvent += Locomotion_slideEndedEvent;
+        character.locomotion.jumpStartedEvent += Locomotion_jumpStartedEvent;
     }
 
     private void Character_updateEvent() {
@@ -85,5 +85,9 @@ public class AnimatorController {
 
     private void Locomotion_slideEndedEvent() {
         animator.SetBool("IsSliding", false);
+    }
+
+    private void Locomotion_jumpStartedEvent() {
+        animator.SetTrigger("Jump");
     }
 }
