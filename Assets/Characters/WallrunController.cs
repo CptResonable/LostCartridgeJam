@@ -69,67 +69,21 @@ public class WallrunController : MonoBehaviour {
         }
     }
 
-    //private void OnTriggerStay(Collider other) {
-    //    Vector3 hitNormal = wallHit.normal;
-
-    //    if (Physics.Raycast(transform.position + Vector3.down * 0.4f, character.transform.forward, out wallHit, 2, LayerMasks.i.wall) || isWallRunning) {
-    //        if (wallHit.normal.sqrMagnitude > 0.5f)
-
-    //            if (Physics.Raycast(transform.position + Vector3.down * 0.4f, -hitNormal, out wallHit, 1, LayerMasks.i.wall)) {
-    //                wallDetected = true;
-    //            }
-    //            else {
-    //                Debug.Log("WHY?!");
-    //                Debug.Log(-wallHit.normal);
-    //            }
-    //    }
-    //}
-
-    //private void OnTriggerStay(Collider other) {
-    //    Vector3 hitNormal = wallHit.normal;
-
-    //    if (Physics.Raycast(transform.position + Vector3.down * 0.4f, character.transform.forward, out wallHit, 2, LayerMasks.i.wall) || isWallRunning) {
-    //        if (wallHit.normal.sqrMagnitude > 0.5f)
-
-    //        if (Physics.Raycast(transform.position + Vector3.down * 0.4f, -hitNormal, out wallHit, 1, LayerMasks.i.wall)) {
-    //            wallDetected = true;
-    //        }
-    //        else {
-    //            Debug.Log("WHY?!");
-    //            Debug.Log(-wallHit.normal);
-    //        }
-    //    }
-    //}
-
-
-    //private void OnTriggerStay(Collider other) {
-    //    bool firtRayHit = false;
-    //    if (Physics.Raycast(transform.position + Vector3.down * 0.4f, character.transform.forward, out wallHit, 2, LayerMasks.i.wall)) {
-    //        firtRayHit = true;
-    //    }
-    //    //else if ()
-
-    //    if (firtRayHit) {
-    //        if (Physics.Raycast(transform.position + Vector3.down * 0.4f, -wallHit.normal, out wallHit, 1, LayerMasks.i.wall)) {
-    //            wallDetected = true;
-    //        }
-    //    }
-    //}
-
     public void AttemptWallRun() {
 
         if (!wallDetected) // No wall to run/climb
             return;
 
         if (!isWallRunning && !wallClimbOnCooldown) {
-            velocityWallAngle = Vector3.SignedAngle(-wallHit.normal, smoothCharacterHorizontalVelocity, Vector3.up);
+            Vector3 cameraVelocityMiddleVector = Vector3.Slerp(Vector3.ProjectOnPlane(character.fpCamera.tCameraTarget.forward, Vector3.up), smoothCharacterHorizontalVelocity, 0.5f);
+            velocityWallAngle = Vector3.SignedAngle(-wallHit.normal, cameraVelocityMiddleVector, Vector3.up);
             if (Mathf.Abs(velocityWallAngle) < settings.maxAngleForWallClimb) {
                 Vector3 proj = Vector3.Project(smoothCharacterVelocity, -wallHit.normal);
                 if (proj.magnitude > settings.velocityNeededForWallClimb)
                     StartVerticalRun();
             }
             else if (Mathf.Abs(velocityWallAngle) < settings.maxAngleForWallRun) {
-                if (smoothCharacterVelocity.magnitude > settings.velocityNeededForWallRun)
+                if (smoothCharacterHorizontalVelocity.magnitude > settings.velocityNeededForWallRun)
                     StartHorizontalRun();
             }
         }
@@ -140,10 +94,19 @@ public class WallrunController : MonoBehaviour {
     }
 
     private void StartHorizontalRun() {
+
+        float initVerticalVelocity = character.rb.velocity.y + Vector3.Project(character.rb.velocity, wallHit.normal).magnitude;
+        if (initVerticalVelocity < 0)
+            return;
+        initVerticalVelocity = Mathf.Sqrt(initVerticalVelocity) * 2;
+
         isWallRunning = true;
         wallRunCorutine = StartCoroutine(HorizontalRunCorutine(settings.horizontalRunDuration));
         wallUpVector = Vector3.up;
         wallForwardVector = Vector3.ProjectOnPlane(smoothCharacterHorizontalVelocity, wallHit.normal).normalized;
+
+        //character.rb.velocity += Vector3.Project(character.rb.velocity, wallHit.normal).magnitude * Vector3.up;
+        character.rb.velocity = new Vector3(character.rb.velocity.x, initVerticalVelocity, character.rb.velocity.z);
 
         if (Vector3.Angle(wallHit.normal, character.transform.right) < 90)
             wallRunSide = Enums.Side.left;
@@ -174,7 +137,6 @@ public class WallrunController : MonoBehaviour {
 
             Vector3 camForwardProj = Vector3.ProjectOnPlane(character.fpCamera.tCameraTarget.forward, character.locomotion.wallrunController.wallUpVector).normalized;
             wallForwardCameraAngle = Vector3.SignedAngle(wallForwardVector, camForwardProj, character.locomotion.wallrunController.wallUpVector);
-            Debug.Log("ang: " + wallForwardCameraAngle);
 
             //if (Mathf.Abs(wallForwardCameraAngle) > 90) {
             //    Debug.Log("hey wyf: " + wallForwardCameraAngle);

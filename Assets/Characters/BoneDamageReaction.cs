@@ -27,8 +27,6 @@ public class BoneDamageReaction {
 
     public void ApplyAndUpdate() {
         //tBone.Rotate(new Vector3(0, yaw, pitch), Space.Self);
-        if (tBone == character.body.tTorso_1)
-            Debug.Log(rotation);
         tBone.Rotate(rotation, Space.World);
         rotation = Vector3.Lerp(rotation, Vector3.zero, 2 * Time.deltaTime);
     }

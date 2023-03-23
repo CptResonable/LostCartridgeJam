@@ -108,7 +108,7 @@ public class FPCamera {
         if (character.locomotion.wallrunController.isWallRunning) {
 
             // Y angle between look direction and -wall normal
-            //targetRoll += Mathf.Sign(tiltAmount) * wallAngleToRollCurve.Evaluate(Mathf.Abs(character.locomotion.wallrunController.wallCameraAngle)) * 40;
+            targetRoll += Mathf.Sign(tiltAmount) * wallAngleToRollCurve.Evaluate(Mathf.Abs(character.locomotion.wallrunController.wallCameraAngle)) * 30;
         }
 
         roll = Mathf.Lerp(roll, targetRoll, Time.deltaTime * 12);

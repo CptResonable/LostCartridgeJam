@@ -122,7 +122,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   verticalRunDuration: 1
   maxVerticalVelocity: 7
-  velocityNeededForWallClimb: 1
+  velocityNeededForWallClimb: 2
   maxAngleForWallClimb: 30
   horizontalForwardRunCurve:
     serializedVersion: 2
