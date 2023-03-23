@@ -362,10 +362,29 @@ public class Locomotion {
         private void OnBounceFinished(Bouncer.BounceInstance bounceInstance) {
             locomotion.bounceInstances.Remove(bounceInstance);
             isPreparingJump = false;
+
             Jump();
         }
 
         private void Jump() {
+
+            // Add velocity in input direction
+            if (locomotion.inputDir.magnitude > 0.5f) {
+                Vector3 horizontalVelocity = new Vector3(locomotion.rb.velocity.x, 0, locomotion.rb.velocity.z);
+                float initVel = horizontalVelocity.magnitude;
+                Vector3 projecterdHVel = Vector3.Project(horizontalVelocity, locomotion.inputDir);
+                horizontalVelocity = projecterdHVel + projecterdHVel.normalized * 1.5f;
+
+                float maxVel = locomotion.settings.sprintSpeed;
+                if (initVel > maxVel)
+                    maxVel = initVel;
+
+                if (horizontalVelocity.magnitude > maxVel)
+                    horizontalVelocity = horizontalVelocity.normalized * maxVel;
+
+                locomotion.rb.velocity = horizontalVelocity;
+            }
+
             locomotion.rb.velocity = new Vector3(locomotion.rb.velocity.x, locomotion.settings.jumpVelocity, locomotion.rb.velocity.z);
             jumpOnCooldown = true;
 
@@ -540,6 +559,7 @@ public class Locomotion {
         private void Character_fixedUpdateEvent() {
             StillInAirCheck();
             VerticalMovement();
+            HorizontalMovement();
             SetTargetRotation();
 
             airTime += Time.deltaTime;
@@ -556,6 +576,21 @@ public class Locomotion {
 
         private void VerticalMovement() {
             locomotion.rb.AddForce(Vector3.down * 9.81f * locomotion.settings.airTimeToGravityScale.Evaluate(airTime), ForceMode.Acceleration);
+        }
+
+        private void HorizontalMovement() {
+
+            if (locomotion.inputDir.magnitude < 0.5f)
+                return;
+
+            Vector3 horizontalVelocity = new Vector3(locomotion.rb.velocity.x, 0, locomotion.rb.velocity.z);
+            Vector3 projecterdHVel = Vector3.Project(horizontalVelocity, locomotion.inputDir);
+
+            float targetSpeed = locomotion.settings.sprintSpeed;
+            if (projecterdHVel.magnitude > locomotion.settings.sprintSpeed)
+                targetSpeed = projecterdHVel.magnitude;
+
+            locomotion.rb.velocity = Vector3.Lerp(locomotion.rb.velocity, locomotion.inputDir * targetSpeed + Vector3.up * locomotion.rb.velocity.y, locomotion.settings.moveAcceleration * 0.15f * Time.deltaTime);
         }
 
         private void WallrunController_verticalRunStarted() {
