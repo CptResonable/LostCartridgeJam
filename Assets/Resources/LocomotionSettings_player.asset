@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0822db46a6e9da141b24faf3d8dce969, type: 3}
   m_Name: LocomotionSettings_player
   m_EditorClassIdentifier: 
-  moveSpeed: 3
-  strafeSpeed: 3
-  sprintSpeed: 5
+  moveSpeed: 4
+  strafeSpeed: 4
+  sprintSpeed: 6
   sprintStrafeSpeed: 3
-  moveAcceleration: 10
+  moveAcceleration: 5
   bounceUpSpeed: 10
   yVelLerpSpeed: 20
   jumpVelocity: 7
