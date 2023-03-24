@@ -29,6 +29,8 @@ public class Locomotion {
     private float currentHeight = 1;
     private Vector3 inputDir;
     private Vector3 localVelocity;
+    private Vector3 lastVelocity;
+    private Vector3 acceleration;
 
     private Vector3 meshHandToPhysicalHandError;
 
@@ -46,7 +48,6 @@ public class Locomotion {
     public delegate void LandedDelegate(float airTime);
     public event LandedDelegate landedEvent;
 
-
     public void Initialize(Character character) {
         this.character = character;
         rb = character.GetComponent<Rigidbody>();
@@ -63,16 +64,12 @@ public class Locomotion {
 
     private void Character_updateEvent() {
 
+
         // Get local velocity
         localVelocity = character.transform.InverseTransformVector(rb.velocity);
 
         // Convert movement input into world space vector
         inputDir = character.transform.TransformDirection(character.characterInput.moveInput);
-
-        if (meshHandToPhysicalHandError.magnitude > 0.03f) {
-            if (Vector3.Dot(inputDir, meshHandToPhysicalHandError.normalized) < 0)
-                inputDir -= Vector3.Project(inputDir, meshHandToPhysicalHandError.normalized);
-        }
 
         // Set rig base height (Default model is not at the correct height)
         character.tRig.localPosition = -0.75f * Vector3.up;
@@ -82,25 +79,34 @@ public class Locomotion {
             character.tRig.position += instance.offset;
         }
 
+        //character.tRig.localRotation = Quaternion.identity;
+        //Vector3 horizontalAcceleration = Vector3.ProjectOnPlane(acceleration * -1.65f, character.tRig.up);
+        //leanVector = Vector3.Lerp(leanVector, horizontalAcceleration, Time.deltaTime * 2f);
+        //Vector3 accelerationTiltAxis = Vector3.Cross(leanVector, character.tRig.up);
+        //character.tRig.Rotate(accelerationTiltAxis, leanVector.magnitude, Space.World);
         //GizmoManager.i.DrawSphere(Time.deltaTime, Color.red, character.transform.TransformPoint(rb.centerOfMass), 0.2f);
     }
 
+    Vector3 leanVector;
+
     private void Character_fixedUpdateEvent() {
 
-        meshHandToPhysicalHandError = VectorUtils.FromToVector(character.body.tHandR.position, character.arms.hand_R.transform.position);
-        GizmoManager.i.DrawSphere(Time.deltaTime, Color.green, character.body.tHandR.position, 0.05f);
-        GizmoManager.i.DrawSphere(Time.deltaTime, Color.red, character.arms.hand_R.transform.position, 0.05f);
+        // Calculate acceleration
+        acceleration = VectorUtils.FromToVector(lastVelocity, rb.velocity) / Time.deltaTime;
 
         //if (meshHandToPhysicalHandError.magnitude > 0.1) {
         //    rb.velocity += meshHandToPhysicalHandError * handStuckCorrectionForce;
         //}
         HandFix();
-
         HeightCheck();
+
+        lastVelocity = rb.velocity;
     }
 
-    private Vector3 lastError;
     private void HandFix() {
+
+        Vector3 lastError = meshHandToPhysicalHandError;
+        meshHandToPhysicalHandError = VectorUtils.FromToVector(character.body.tHandR.position, character.arms.hand_R.transform.position);
 
         PidController pidController = new PidController(handStuckPidValues.x, handStuckPidValues.y, handStuckPidValues.z);
 
@@ -114,7 +120,6 @@ public class Locomotion {
 
             rb.AddForce(x, y, z, ForceMode.Acceleration);
         }
-        lastError = meshHandToPhysicalHandError;
     }
 
     private void HeightCheck() {

@@ -2320,6 +2320,7 @@ MonoBehaviour:
     wallrunController: {fileID: 1648869761888032421}
     tTargetRoation: {fileID: 1104308678}
     handStuckCorrectionForce: 2
+    handStuckPidValues: {x: 0, y: 0, z: 0}
     state_grounded:
       stateID: 0
       isSprinting: 0
