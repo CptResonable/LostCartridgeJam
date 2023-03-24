@@ -10,6 +10,7 @@ public class CharacterSoundManager : MonoBehaviour {
         character.locomotion.jumpStartedEvent += Locomotion_jumpStartedEvent;
         character.locomotion.landedEvent += Locomotion_landedEvent;
         character.locomotion.wallrunController.verticalRunStarted += WallrunController_verticalRunStarted;
+        character.locomotion.wallrunController.horizontalRunStarted += WallrunController_horizontalRunStarted;
     }
 
     private void Locomotion_jumpStartedEvent() {
@@ -21,6 +22,10 @@ public class CharacterSoundManager : MonoBehaviour {
     }
 
     private void WallrunController_verticalRunStarted() {
+        AudioManager.i.PlaySoundStatic(AudioManager.i.sfxLibrary.wallClimb_01, character.transform.position);
+    }
+
+    private void WallrunController_horizontalRunStarted() {
         AudioManager.i.PlaySoundStatic(AudioManager.i.sfxLibrary.wallClimb_01, character.transform.position);
     }
 }
