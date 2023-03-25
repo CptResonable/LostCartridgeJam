@@ -48,6 +48,8 @@ public class RightHand : Hand {
         //if (tPhysicalTarget.position.y > character.body.tTorso_2.position.y)
         //    tPhysicalTarget.position += character.rb.velocity * 0.5f * Time.fixedDeltaTime;
 
+        tPhysicalTarget.position += character.rb.velocity * 0.5f * Time.fixedDeltaTime;
+
         WallAvoidance();
 
         if (character.locomotion.activeStateEnum == Locomotion.LocomotionState.StateIDEnum.WallClimbing && !grabingLedge)

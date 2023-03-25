@@ -259,7 +259,7 @@ public class Locomotion {
             VerticalMovement();
 
             if (isSliding)
-                SlideUpdate();
+                HorizontalMovement2();
             else
                 HorizontalMovement();
 
@@ -297,6 +297,12 @@ public class Locomotion {
 
             if (deltaHeight < 0) {
                 float yVelTarget = (-deltaHeight) * locomotion.settings.bounceUpSpeed;
+
+                // Add slope Y vector when going down, reduces bouncing
+                float y = Vector3.ProjectOnPlane(locomotion.rb.velocity, locomotion.downHit.normal).y;
+                if (y < 0) 
+                    yVelTarget += y;
+
                 locomotion.rb.velocity = Vector3.Lerp(locomotion.rb.velocity, new Vector3(locomotion.rb.velocity.x, yVelTarget, locomotion.rb.velocity.z), locomotion.settings.yVelLerpSpeed * Time.deltaTime);
             }
         }
@@ -325,9 +331,39 @@ public class Locomotion {
             // Project vector onto ground
             moveVector = Vector3.ProjectOnPlane(moveVector, locomotion.downHit.normal);
 
+            Vector3 projectedUp = Vector3.Project(Vector3.up * locomotion.rb.velocity.y, locomotion.downHit.normal);
+
             // Lerp character velocity towards new target velocity
-            locomotion.rb.velocity = Vector3.Lerp(locomotion.rb.velocity, moveVector + Vector3.up * locomotion.rb.velocity.y, locomotion.settings.moveAcceleration * Time.deltaTime);
+            locomotion.rb.velocity = Vector3.Lerp(locomotion.rb.velocity, moveVector + projectedUp, locomotion.settings.moveAcceleration * Time.deltaTime);
         }
+
+        //private void HorizontalMovement() {
+
+        //    // Get forward part of inputDir
+        //    Vector3 inputDir_forward = Vector3.zero;
+        //    if (locomotion.character.characterInput.moveInput.z > 0)
+        //        inputDir_forward = Vector3.Project(locomotion.inputDir, locomotion.character.transform.forward);
+
+        //    // Get strafe part of input dir my subtracting forward part
+        //    Vector3 inputDir_strafe = locomotion.inputDir - inputDir_forward;
+
+        //    // Create move vector
+        //    Vector3 moveVector = Vector3.zero;
+        //    if (isSprinting) {
+        //        moveVector += inputDir_forward * locomotion.settings.sprintSpeed;
+        //        moveVector += inputDir_strafe * locomotion.settings.sprintStrafeSpeed;
+        //    }
+        //    else {
+        //        moveVector += inputDir_forward * locomotion.settings.moveSpeed;
+        //        moveVector += inputDir_strafe * locomotion.settings.strafeSpeed;
+        //    }
+
+        //    // Project vector onto ground
+        //    moveVector = Vector3.ProjectOnPlane(moveVector, locomotion.downHit.normal);
+
+        //    // Lerp character velocity towards new target velocity
+        //    locomotion.rb.velocity = Vector3.Lerp(locomotion.rb.velocity, moveVector + Vector3.up * locomotion.rb.velocity.y, locomotion.settings.moveAcceleration * Time.deltaTime);
+        //}
 
         #region Sprint
         private void Action_sprint_keyDownEvent() {
@@ -458,40 +494,81 @@ public class Locomotion {
             locomotion.slideEndedEvent?.Invoke();
         }
 
-        private void SlideUpdate() {
+        //private void SlideUpdate() {
 
-            if (deltaHeight < 0) {
-                locomotion.rb.velocity = Vector3.ProjectOnPlane(locomotion.rb.velocity, -locomotion.downHit.normal);
-                //if (Vector3.Dot(locomotion.rb.velocity, locomotion.downHit.normal) < 0) {
-                //    locomotion.rb.velocity += Vector3.Project(locomotion.rb.velocity, locomotion.downHit.normal);
-                //}
+        //    if (deltaHeight < 0) {
+        //        locomotion.rb.velocity = Vector3.ProjectOnPlane(locomotion.rb.velocity, -locomotion.downHit.normal);
+        //        //if (Vector3.Dot(locomotion.rb.velocity, locomotion.downHit.normal) < 0) {
+        //        //    locomotion.rb.velocity += Vector3.Project(locomotion.rb.velocity, locomotion.downHit.normal);
+        //        //}
+        //    }
+
+        //    Vector3 velocityProjectedOnGround = Vector3.ProjectOnPlane(locomotion.rb.velocity, locomotion.downHit.normal);
+        //    locomotion.rb.velocity -= velocityProjectedOnGround.normalized * 0.15f;
+
+        //    float slopeAngle = Vector3.Angle(Vector3.up, locomotion.downHit.normal);
+        //    if (slopeAngle > 0) {
+
+        //        Vector3 slopeDownVector = VectorUtils.RotateVectorAroundVector(locomotion.downHit.normal, Vector3.Cross(Vector3.up, locomotion.downHit.normal), 90).normalized;
+        //        locomotion.rb.velocity += slopeDownVector * locomotion.settings.slideAngleToAccelerationCurve.Evaluate(slopeAngle) * locomotion.settings.slideMaxSlopeAcceleration;
+        //        //locomotion.rb.velocity += slopeDownVector * 0.05f * Mathf.Sqrt(slopeAngle);
+        //    }
+
+        //    if (velocityProjectedOnGround.magnitude < 1.5f)
+        //        StopSlide();
+        //    //locomotion.downHit.normal
+        //}
+
+        private void HorizontalMovement2() {
+
+            // Get forward part of inputDir
+            Vector3 inputDir_forward = Vector3.zero;
+            if (locomotion.character.characterInput.moveInput.z > 0)
+                inputDir_forward = Vector3.Project(locomotion.inputDir, locomotion.character.transform.forward);
+
+            // Get strafe part of input dir my subtracting forward part
+            Vector3 inputDir_strafe = locomotion.inputDir - inputDir_forward;
+
+            // Create move vector
+            Vector3 moveVector = Vector3.zero;
+            if (isSprinting) {
+                moveVector += inputDir_forward * locomotion.settings.sprintSpeed;
+                moveVector += inputDir_strafe * locomotion.settings.sprintStrafeSpeed;
             }
+            else {
+                moveVector += inputDir_forward * locomotion.settings.moveSpeed;
+                moveVector += inputDir_strafe * locomotion.settings.strafeSpeed;
+            }
+
+            // Project vector onto ground
+            moveVector = Vector3.ProjectOnPlane(locomotion.rb.velocity, locomotion.downHit.normal);
+
+            Vector3 projectedUp = Vector3.Project(Vector3.up * locomotion.rb.velocity.y, locomotion.downHit.normal);
+
+            // Lerp character velocity towards new target velocity
+            locomotion.rb.velocity = Vector3.Lerp(locomotion.rb.velocity, moveVector + projectedUp, locomotion.settings.moveAcceleration * Time.deltaTime) - moveVector.normalized * 0.1f;
+
+            Vector3 downSlopeVector = new Vector3(locomotion.downHit.normal.x, 0, locomotion.downHit.normal.z);
+            if (downSlopeVector.sqrMagnitude > 0.01f) {
+                Vector3 axis = Vector3.Cross(locomotion.downHit.normal, downSlopeVector).normalized;
+                downSlopeVector = VectorUtils.RotateVectorAroundVector(downSlopeVector, axis, 90 - Vector3.SignedAngle(locomotion.downHit.normal, downSlopeVector, axis));
+                locomotion.rb.velocity += downSlopeVector * 30 * Time.deltaTime;
+                GizmoManager.i.DrawLine(Time.deltaTime, Color.blue, locomotion.character.transform.position, locomotion.character.transform.position + downSlopeVector * 10);
+            }
+
+            if (moveVector.magnitude < 1.5f)
+                StopSlide();
+        }
+
+        private void SlideUpdate() {
 
             Vector3 velocityProjectedOnGround = Vector3.ProjectOnPlane(locomotion.rb.velocity, locomotion.downHit.normal);
             locomotion.rb.velocity -= velocityProjectedOnGround.normalized * 0.15f;
-
-            float slopeAngle = Vector3.Angle(Vector3.up, locomotion.downHit.normal);
-            if (slopeAngle > 0) {
-
-                Vector3 slopeDownVector = VectorUtils.RotateVectorAroundVector(locomotion.downHit.normal, Vector3.Cross(Vector3.up, locomotion.downHit.normal), 90).normalized;
-                locomotion.rb.velocity += slopeDownVector * locomotion.settings.slideAngleToAccelerationCurve.Evaluate(slopeAngle) * locomotion.settings.slideMaxSlopeAcceleration;
-                //locomotion.rb.velocity += slopeDownVector * 0.05f * Mathf.Sqrt(slopeAngle);
-            }
 
             if (velocityProjectedOnGround.magnitude < 1.5f)
                 StopSlide();
             //locomotion.downHit.normal
         }
-
-        //private void SlideUpdate() {
-
-        //    Vector3 velocityProjectedOnGround = Vector3.ProjectOnPlane(locomotion.rb.velocity, locomotion.downHit.normal);
-        //    locomotion.rb.velocity -= velocityProjectedOnGround.normalized * 0.15f;
-        //    Debug.Log(velocityProjectedOnGround.magnitude);
-        //    if (velocityProjectedOnGround.magnitude < 1.5f)
-        //        StopSlide();
-        //    //locomotion.downHit.normal
-        //}
 
 
         //private void SlideUpdate() {
