@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c09727bad44f01c47ad7f8de9f560f19, type: 3}
-  m_Name: EffectMaterial_stone
+  m_Name: EffectMaterial_flesh
   m_EditorClassIdentifier: 
   VFX_bulletHit: {fileID: 638455987314716288, guid: ac017b1e7d5ac9d408dfbc0204869dac,
     type: 3}
-  color_bulletHit: {r: 0.23584908, g: 0.19426608, b: 0.17243683, a: 0}
-  size: 0.1
-  SFX_bulletHit: {fileID: 1829890423154730761, guid: 8274a0b1a07477e4a91051efe532c816,
+  color_bulletHit: {r: 0.38679248, g: 0, b: 0.0060436325, a: 1}
+  size: 0.04
+  SFX_bulletHit: {fileID: 1829890423154730761, guid: 9c61ee973050d664597c52c3a0d41cfb,
     type: 3}

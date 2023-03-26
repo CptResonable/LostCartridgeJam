@@ -26,6 +26,7 @@ public class NPCLogic_assault : NPCLogic {
     }
 
     public override void UpdateInput(CharacterInput input) {
+        return;
         base.UpdateInput(input);
         this.input = input;
 

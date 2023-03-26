@@ -42,27 +42,11 @@ public class Bullet : MonoBehaviour {
 
         RaycastHit hit;
         if (Physics.Linecast(lastPosition, transform.position, out hit, layerMask)) {
+            Debug.Log(hit.collider.transform.name);
+            EffectMaterialKeeper materialKeeper;
+            if (hit.transform.TryGetComponent<EffectMaterialKeeper>(out materialKeeper)) {
 
-            Debug.Log("HIT! " + hit.collider.gameObject);
-            if (fleshLayerMask.Contains(hit.collider.gameObject.layer)) {
-                //GameObject goDirtKickup = EZ_Pooling.EZ_PoolManager.Spawn(prefab_vfxDirtKickup.transform, hit.point, Quaternion.LookRotation(hit.normal)).gameObject;
-                //Vfx_dirtKickup dirtKickup = goDirtKickup.GetComponent<Vfx_dirtKickup>();
-                //dirtKickup.Initiate(hit.collider.transform, true, bloodColor);
-            }
-            else {
-
-                EffectMaterialKeeper materialKeeper;
-                if (hit.transform.TryGetComponent<EffectMaterialKeeper>(out materialKeeper)) {
-                    materialKeeper.PlayBulletHitEffects(hit.point, hit.normal);
-                }
-
-                //GameObject goDirtKickup = EZ_Pooling.EZ_PoolManager.Spawn(prefab_vfxDirtKickup.transform, hit.point, Quaternion.LookRotation(hit.normal)).gameObject;
-                //Vfx_dirtKickup dirtKickup = goDirtKickup.GetComponent<Vfx_dirtKickup>();
-
-                //if (hit.collider.transform.name == "Terrain")
-                //    dirtKickup.Initiate(hit.collider.transform, true, groundColor);
-                //else
-                //    dirtKickup.Initiate(hit.collider.transform, true, wallColor);
+                materialKeeper.PlayBulletHitEffects(hit.point, hit.normal);
             }
 
             DamageReceiver damageReceiver;
@@ -79,6 +63,49 @@ public class Bullet : MonoBehaviour {
 
         lastPosition = transform.position;
     }
+    //private void FixedUpdate() {
+    //    if (!isActive)
+    //        return;
+
+    //    RaycastHit hit;
+    //    if (Physics.Linecast(lastPosition, transform.position, out hit, layerMask)) {
+
+    //        Debug.Log("HIT! " + hit.collider.gameObject);
+    //        if (fleshLayerMask.Contains(hit.collider.gameObject.layer)) {
+    //            //GameObject goDirtKickup = EZ_Pooling.EZ_PoolManager.Spawn(prefab_vfxDirtKickup.transform, hit.point, Quaternion.LookRotation(hit.normal)).gameObject;
+    //            //Vfx_dirtKickup dirtKickup = goDirtKickup.GetComponent<Vfx_dirtKickup>();
+    //            //dirtKickup.Initiate(hit.collider.transform, true, bloodColor);
+    //        }
+    //        else {
+
+    //            EffectMaterialKeeper materialKeeper;
+    //            if (hit.transform.TryGetComponent<EffectMaterialKeeper>(out materialKeeper)) {
+    //                materialKeeper.PlayBulletHitEffects(hit.point, hit.normal);
+    //            }
+
+    //            //GameObject goDirtKickup = EZ_Pooling.EZ_PoolManager.Spawn(prefab_vfxDirtKickup.transform, hit.point, Quaternion.LookRotation(hit.normal)).gameObject;
+    //            //Vfx_dirtKickup dirtKickup = goDirtKickup.GetComponent<Vfx_dirtKickup>();
+
+    //            //if (hit.collider.transform.name == "Terrain")
+    //            //    dirtKickup.Initiate(hit.collider.transform, true, groundColor);
+    //            //else
+    //            //    dirtKickup.Initiate(hit.collider.transform, true, wallColor);
+    //        }
+
+    //        DamageReceiver damageReceiver;
+    //        if (hit.collider.TryGetComponent<DamageReceiver>(out damageReceiver)) {
+    //            damageReceiver.ReceiveDamage_bulletHit(damage, hit.point, VectorUtils.FromToVector(lastPosition, transform.position).normalized);
+    //        }
+
+    //        meshRenderer.enabled = false;
+    //        isActive = false;
+
+    //        rb.isKinematic = true;
+    //        StartCoroutine(DespawnDelayConrutine(3));
+    //    }
+
+    //    lastPosition = transform.position;
+    //}
 
     private IEnumerator DespawnDelayConrutine(float delay) {
         yield return new WaitForSeconds(delay);

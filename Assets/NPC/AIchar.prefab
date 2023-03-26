@@ -11867,6 +11867,7 @@ GameObject:
   - component: {fileID: 6624677086548124703}
   - component: {fileID: 7800562880278432759}
   - component: {fileID: 5436195490140588741}
+  - component: {fileID: 2941149383754168249}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -12022,6 +12023,7 @@ MonoBehaviour:
     wallrunController: {fileID: 222332282512848198}
     tTargetRoation: {fileID: 1581911667622398501}
     handStuckCorrectionForce: 2
+    handStuckPidValues: {x: 0, y: 0, z: 0}
     state_grounded:
       stateID: 0
       isSprinting: 0
@@ -12228,6 +12230,19 @@ MonoBehaviour:
   losCheckLayerMask:
     serializedVersion: 2
     m_Bits: 0
+--- !u!114 &2941149383754168249
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8319979554255464805}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee7faf5573d025a49910e9d11ac011b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effectMaterial: {fileID: 11400000, guid: 3c3faaba2dd5fdd48bc5e6b0770af0df, type: 2}
 --- !u!1 &8319979554327006153
 GameObject:
   m_ObjectHideFlags: 0

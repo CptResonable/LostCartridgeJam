@@ -28,13 +28,13 @@ Material:
     - _AlphaCutoff: 0.5
     - _InitTime: 0
     - _InitTime1: 0
-    - _Lifetime: 4
+    - _Lifetime: 0.5
     - _Lifetime1: 2
     - _Shininess: 0.1
     - _Size: 0.1
     - _Size1: 0.02
     m_Colors:
-    - _Color0: {r: 0.40566036, g: 0.31532338, b: 0.18178177, a: 0}
+    - _Color0: {r: 0.5754717, g: 0.019001435, b: 0.051330358, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
     - _MainColor: {r: 0.39215687, g: 0.39215687, b: 0.39215687, a: 1}
     - _NoiseOffset: {r: 0, g: 0, b: 0, a: 0}
