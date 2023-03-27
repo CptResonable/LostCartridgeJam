@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Gun : MonoBehaviour {
+public class Gun : Equipable {
     [SerializeField] private float timeBetweenShots;
     [SerializeField] private Transform tMuzzle;
     [SerializeField] private Transform tMag;
@@ -29,8 +29,6 @@ public class Gun : MonoBehaviour {
     [SerializeField] private float horizontalChangeSpeed;
     [SerializeField] public bool isAuto;
 
-    private Character character;
-
     public GunAnimationController gunAnimationController;
 
     public bool consumeAmmo;
@@ -53,8 +51,6 @@ public class Gun : MonoBehaviour {
 
     public bool hasSlideStop = true;
 
-    private List<Collider> colliders = new List<Collider>();
-
     public delegate void GunFiredDelegate(Vector3 rotationalRecoil, Vector3 translationalRecoil);
     public event GunFiredDelegate gunFiredEvent;
     public event Delegates.FloatDelegate reloadStartedEvent;
@@ -63,8 +59,8 @@ public class Gun : MonoBehaviour {
     public event Delegates.EmptyDelegate equipedEvent;
     public event Delegates.EmptyDelegate unequipedEvent;
 
-    private void Awake() {
-        FindColliders(transform);
+    protected override void Awake() {
+        base.Awake();
 
         gunAnimationController = GetComponentInChildren<GunAnimationController>();
 
@@ -73,51 +69,16 @@ public class Gun : MonoBehaviour {
         gunAnimationController.boltRackedEvent += GunAnimationController_boltRackedEvent;
     }
 
-    void FindColliders(Transform t) {
-        Collider col;
-        if (t.TryGetComponent<Collider>(out col))
-            colliders.Add(col);
-
-        for (int i = 0; i < t.childCount; i++) {
-            FindColliders(t.GetChild(i));
-        }
+    public override void Equip(Character character) {
+        base.Equip(character);
     }
 
-    public void Equip(Character character) {
-        this.character = character;
-        equipedEvent?.Invoke();
-
-        //Collider col1;
-        //Rigidbody rb;
-
-        for (int i = 0; i < character.body.tBones.Length; i++) {
-            Collider col;
-            if (character.body.tBones[i].TryGetComponent<Collider>(out col)) {
-                for (int j = 0; j < colliders.Count; j++) {
-                    Physics.IgnoreCollision(col, colliders[j], true);
-                }
-            }
-        }        
+    public override void Unequip() {
+        base.Unequip();
     }
 
-    public void Unequip() {
-
-        if (character != null) {
-            for (int i = 0; i < character.body.tBones.Length; i++) {
-                Collider col;
-                if (character.body.tBones[i].TryGetComponent<Collider>(out col)) {
-                    for (int j = 0; j < colliders.Count; j++) {
-                        Physics.IgnoreCollision(col, colliders[j], false);
-                    }
-                }
-            }
-        }
-
-        character = null;
-        unequipedEvent?.Invoke(); 
-    }
-
-    private void LateUpdate() {
+    protected override void LateUpdate() {
+        base.LateUpdate();
 
         cooldown -= Time.deltaTime;
 

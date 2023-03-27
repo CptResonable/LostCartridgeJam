@@ -17,6 +17,15 @@ public class Equipable : MonoBehaviour {
         FindColliders(transform);
     }
 
+    protected virtual void Update() {
+    }
+
+    protected virtual void LateUpdate() {
+    }
+
+    protected virtual void FixedUpdate() {
+    }
+
     void FindColliders(Transform t) {
         Collider col;
         if (t.TryGetComponent<Collider>(out col))
@@ -59,4 +68,5 @@ public class Equipable : MonoBehaviour {
         character = null;
         unequipedEvent?.Invoke();
     }
+
 }
