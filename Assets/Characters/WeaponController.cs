@@ -79,7 +79,8 @@ public class WeaponController {
     }
 
     private void Action_attack_keyDownEvent() {
-        equipedGun.TryFire(true);
+        if (state == State.weaponEquiped)
+            equipedGun.TryFire(true);
     }
 
     private void EquipedGun_reloadStartedEvent(float reloadTime) {
@@ -123,8 +124,18 @@ public class WeaponController {
     }
 
     private void Action_unEquip_keyDownEvent() {
-        if (state == State.weaponEquiped)
-            character.StartCoroutine(UnEquipCorutine());
+        if (state == State.nothingEquiped)
+            return;
+
+        equipedGun.ReloadCanceled();
+        equipedGun.reloadStartedEvent -= EquipedGun_reloadStartedEvent;
+        equipedGun.Unequip();
+        equipedGun.gameObject.SetActive(false);
+        equipedGun = null;
+
+        state = State.nothingEquiped;
+
+        weaponUnEquipedEvent?.Invoke();
     }
 
     private void Character_updateEvent() {
@@ -146,9 +157,9 @@ public class WeaponController {
             if (!equipedGun.isAuto)
                 return;
         }
-
-        if (character.characterInput.action_attack.isDown )
-            equipedGun.TryFire(false);
+        if (state == State.weaponEquiped)
+            if (character.characterInput.action_attack.isDown)
+                equipedGun.TryFire(false);
     }
 
     private IEnumerator WeaponSwapCorutine(Gun newWeapon) {

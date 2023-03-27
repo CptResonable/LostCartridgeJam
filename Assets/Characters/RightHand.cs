@@ -30,7 +30,8 @@ public class RightHand : Hand {
     protected override void Character_fixedUpdateEvent() {
         base.Character_fixedUpdateEvent();
 
-        WeaponTargetUpdate();
+        if (character.weaponController.state == WeaponController.State.weaponEquiped)
+            WeaponTargetUpdate();
 
         // Interpolate between weapon hand target and animation position/rotation
         tPhysicalTarget.position = Vector3.Lerp(tWeaponTarget.position, character.body.postAnimationState.GetBoneState(Body.BoneEnums.HandR).position, arms.animationWeight);

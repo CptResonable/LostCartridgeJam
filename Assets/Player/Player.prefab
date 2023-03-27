@@ -2339,7 +2339,7 @@ MonoBehaviour:
   weaponController:
     pistol: {fileID: 7755853891988902356}
     rifle: {fileID: 3737601585298911470}
-    equipedGun: {fileID: 3737601585298911470}
+    equipedGun: {fileID: 0}
     tHandTarget: {fileID: 2925393505618189473}
     tOffHandPosition: {fileID: 2925393505419985796}
     handJoint: {fileID: 1285744482911927165}
