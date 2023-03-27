@@ -28,11 +28,15 @@ public class Arms {
         hand_L.Init(character);
         hand_L.rb.inertiaTensor = hand_R.rb.inertiaTensor;
 
+        EvalulateTargetAnimationWeight();
+
         character.fixedUpdateEvent += Player_fixedUpdateEvent;
         character.lateUpdateEvent += Character_lateUpdateEvent;
 
         character.weaponController.adsEnteredEvent += WeaponController_adsEnteredEvent;
         character.weaponController.adsExitedEvent += WeaponController_adsExitedEvent;
+        character.weaponController.weaponEquipedEvent += WeaponController_weaponEquipedEvent;
+        character.weaponController.weaponUnEquipedEvent += WeaponController_weaponUnEquipedEvent;
 
         character.locomotion.sprintStartedEvent += Locomotion_sprintStartedEvent;
         character.locomotion.sprintEndedEvent += Locomotion_sprintEndedEvent;
@@ -55,7 +59,7 @@ public class Arms {
         if (hipAdsInterpolationCorutine != null)
             character.StopCoroutine(hipAdsInterpolationCorutine);
 
-        if (character.locomotion.state_grounded.isSprinting || character.locomotion.wallrunController.isWallRunning) {
+        if (character.locomotion.state_grounded.isSprinting || character.locomotion.wallrunController.isWallRunning ||character.weaponController.state == WeaponController.State.nothingEquiped) {
             animationWeightCorutine = character.StartCoroutine(InterpolationUtils.i.SmoothStep(animationWeightInterpolator.t, 1, 4, animationWeightInterpolator));
         }
         else {
@@ -75,6 +79,15 @@ public class Arms {
             character.StopCoroutine(hipAdsInterpolationCorutine);
 
         hipAdsInterpolationCorutine = character.StartCoroutine(InterpolationUtils.i.SmoothStep(hipAdsInterpolator.t, 0, 4, hipAdsInterpolator));
+    }
+
+    private void WeaponController_weaponEquipedEvent() {
+        hipAdsInterpolationCorutine = character.StartCoroutine(InterpolationUtils.i.SmoothStep(hipAdsInterpolator.t, 0, 4, hipAdsInterpolator));
+        EvalulateTargetAnimationWeight();
+    }
+
+    private void WeaponController_weaponUnEquipedEvent() {
+        EvalulateTargetAnimationWeight();
     }
 
     private void Locomotion_sprintStartedEvent() {

@@ -2343,6 +2343,7 @@ MonoBehaviour:
     tHandTarget: {fileID: 2925393505618189473}
     tOffHandPosition: {fileID: 2925393505419985796}
     handJoint: {fileID: 1285744482911927165}
+    state: 0
     weaponSwapProgress: 0
     weaponSwapAnimationThing: 0
     isADS: 0
@@ -2465,6 +2466,9 @@ MonoBehaviour:
     isDown: 0
   action_equipSlot2:
     keyCode: 50
+    isDown: 0
+  action_unEquip:
+    keyCode: 120
     isDown: 0
   moveInput: {x: 0, y: 0, z: 0}
 --- !u!114 &5628233934188922880

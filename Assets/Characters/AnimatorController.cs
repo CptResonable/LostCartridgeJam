@@ -16,6 +16,7 @@ public class AnimatorController {
         this.character = character;
 
         character.updateEvent += Character_updateEvent;
+        character.lateUpdateEvent += Character_lateUpdateEvent;
 
         character.locomotion.wallrunController.verticalRunStarted += WallrunController_verticalRunStarted;
         character.locomotion.wallrunController.verticalRunStopped += WallrunController_verticalRunStopped;
@@ -25,6 +26,10 @@ public class AnimatorController {
         character.locomotion.slideStartedEvent += Locomotion_slideStartedEvent;
         character.locomotion.slideEndedEvent += Locomotion_slideEndedEvent;
         character.locomotion.jumpStartedEvent += Locomotion_jumpStartedEvent;
+    }
+
+    private void Character_lateUpdateEvent() {
+        //animator.Update(0);
     }
 
     private void Character_updateEvent() {

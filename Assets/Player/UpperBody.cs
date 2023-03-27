@@ -5,7 +5,6 @@ using UnityEngine;
 [System.Serializable]
 public class UpperBody {
     private Character character;
-    private float equipmentInducedTorsoYaw;
 
     // Additive piich yaw and roll
     private Vector3 pyrTorso1, pyrTorso2;

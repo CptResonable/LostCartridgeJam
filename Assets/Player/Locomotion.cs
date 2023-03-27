@@ -259,7 +259,7 @@ public class Locomotion {
             VerticalMovement();
 
             if (isSliding)
-                HorizontalMovement2();
+                HorizontalMovement_slide();
             else
                 HorizontalMovement();
 
@@ -489,37 +489,8 @@ public class Locomotion {
             locomotion.slideStartedEvent?.Invoke();
         }
 
-        private void StopSlide() {
-            isSliding = false;
-            locomotion.slideEndedEvent?.Invoke();
-        }
 
-        //private void SlideUpdate() {
-
-        //    if (deltaHeight < 0) {
-        //        locomotion.rb.velocity = Vector3.ProjectOnPlane(locomotion.rb.velocity, -locomotion.downHit.normal);
-        //        //if (Vector3.Dot(locomotion.rb.velocity, locomotion.downHit.normal) < 0) {
-        //        //    locomotion.rb.velocity += Vector3.Project(locomotion.rb.velocity, locomotion.downHit.normal);
-        //        //}
-        //    }
-
-        //    Vector3 velocityProjectedOnGround = Vector3.ProjectOnPlane(locomotion.rb.velocity, locomotion.downHit.normal);
-        //    locomotion.rb.velocity -= velocityProjectedOnGround.normalized * 0.15f;
-
-        //    float slopeAngle = Vector3.Angle(Vector3.up, locomotion.downHit.normal);
-        //    if (slopeAngle > 0) {
-
-        //        Vector3 slopeDownVector = VectorUtils.RotateVectorAroundVector(locomotion.downHit.normal, Vector3.Cross(Vector3.up, locomotion.downHit.normal), 90).normalized;
-        //        locomotion.rb.velocity += slopeDownVector * locomotion.settings.slideAngleToAccelerationCurve.Evaluate(slopeAngle) * locomotion.settings.slideMaxSlopeAcceleration;
-        //        //locomotion.rb.velocity += slopeDownVector * 0.05f * Mathf.Sqrt(slopeAngle);
-        //    }
-
-        //    if (velocityProjectedOnGround.magnitude < 1.5f)
-        //        StopSlide();
-        //    //locomotion.downHit.normal
-        //}
-
-        private void HorizontalMovement2() {
+        private void HorizontalMovement_slide() {
 
             // Get forward part of inputDir
             Vector3 inputDir_forward = Vector3.zero;
@@ -546,7 +517,7 @@ public class Locomotion {
             Vector3 projectedUp = Vector3.Project(Vector3.up * locomotion.rb.velocity.y, locomotion.downHit.normal);
 
             // Lerp character velocity towards new target velocity
-            locomotion.rb.velocity = Vector3.Lerp(locomotion.rb.velocity, moveVector + projectedUp, locomotion.settings.moveAcceleration * Time.deltaTime) - moveVector.normalized * 0.1f;
+            locomotion.rb.velocity = Vector3.Lerp(locomotion.rb.velocity, moveVector + projectedUp, locomotion.settings.moveAcceleration * Time.deltaTime) - moveVector.normalized * 0.12f;
 
             Vector3 downSlopeVector = new Vector3(locomotion.downHit.normal.x, 0, locomotion.downHit.normal.z);
             if (downSlopeVector.sqrMagnitude > 0.01f) {
@@ -560,35 +531,11 @@ public class Locomotion {
                 StopSlide();
         }
 
-        private void SlideUpdate() {
 
-            Vector3 velocityProjectedOnGround = Vector3.ProjectOnPlane(locomotion.rb.velocity, locomotion.downHit.normal);
-            locomotion.rb.velocity -= velocityProjectedOnGround.normalized * 0.15f;
-
-            if (velocityProjectedOnGround.magnitude < 1.5f)
-                StopSlide();
-            //locomotion.downHit.normal
+        private void StopSlide() {
+            isSliding = false;
+            locomotion.slideEndedEvent?.Invoke();
         }
-
-
-        //private void SlideUpdate() {
-        //    float frictionCoef = 0.8f;
-
-        //    Vector3 velocityProjectedOnGround = Vector3.ProjectOnPlane(locomotion.rb.velocity, locomotion.downHit.normal);
-        //    Vector3 rightAxis = Vector3.Cross(velocityProjectedOnGround.normalized, locomotion.downHit.normal);
-        //    float slopeAngle = Vector3.SignedAngle(Vector3.up, locomotion.downHit.normal, rightAxis);
-        //    Debug.Log("angle: " + slopeAngle);
-        //    Debug.Log(Mathf.Cos(slopeAngle * Mathf.Deg2Rad));
-        //    float normalForce = 50 * 9.81f * Mathf.Cos(slopeAngle * Mathf.Deg2Rad);
-        //    float friction = frictionCoef * normalForce;
-
-        //    locomotion.rb.AddForce(-velocityProjectedOnGround.normalized * friction);
-        //    //locomotion.rb.velocity -= velocityProjectedOnGround.normalized * 0.15f;
-        //    //Debug.Log(velocityProjectedOnGround.magnitude);
-        //    if (velocityProjectedOnGround.magnitude < 1.5f)
-        //        StopSlide();
-        //    //locomotion.downHit.normal
-        //}
 
         // Will be called from the crouch interpolation corutine
         private void CrouchInterpolationUpdateCallback() {
