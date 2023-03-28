@@ -107,8 +107,8 @@ public class GameManager : MonoBehaviour {
         smoothFps = Mathf.Lerp(smoothFps, 1f / Time.deltaTime, 2 * Time.deltaTime);
         txtFrameRate.text = "FPS: " + (int)smoothFps;
 
-        txtPistolAmmo.text = "Pistol ammo: " + player.weaponController.pistol.bulletsInMagCount + "/  ";
-        txtRifleAmmo.text = "Rifle ammo: " + player.weaponController.rifle.bulletsInMagCount + "/" + player.weaponController.rifle.ammoReserve;
+        //txtPistolAmmo.text = "Pistol ammo: " + player.weaponController.pistol.bulletsInMagCount + "/  ";
+        //txtRifleAmmo.text = "Rifle ammo: " + player.weaponController.rifle.bulletsInMagCount + "/" + player.weaponController.rifle.ammoReserve;
     }
 
     private void Player_diedEvent() {

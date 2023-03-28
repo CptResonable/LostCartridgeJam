@@ -805,6 +805,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e018a40c3136584a87f8fc9421b4960, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  equipmentState: 0
+  jointDriveSpring: 180
+  jointDriveDamper: 3.5
+  character: {fileID: 0}
   timeBetweenShots: 0.1
   tMuzzle: {fileID: 31990487392740302}
   tMag: {fileID: 807141359073220809}

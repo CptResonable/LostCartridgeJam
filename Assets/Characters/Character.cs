@@ -9,6 +9,7 @@ public class Character : MonoBehaviour {
     public UpperBody upperBody;
     public Locomotion locomotion;
     public WeaponController weaponController;
+    public EquipmentManager equipmentManager;
     public AnimatorController animatorController;
     public Arms arms;
     public Health health;
@@ -37,7 +38,8 @@ public class Character : MonoBehaviour {
         animatorController.Init(this);
         fpCamera.Initialize(this);
         locomotion.Initialize(this);
-        weaponController.Init(this);
+        //weaponController.Init(this);
+        equipmentManager.Init(this);
         upperBody.Init(this);
         arms.Init(this);
         health.Init(this);

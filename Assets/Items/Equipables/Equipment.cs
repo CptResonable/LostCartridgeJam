@@ -2,11 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Equipable : MonoBehaviour {
-    [HideInInspector] public Character character;
+public class Equipment : MonoBehaviour {
+    public enum EquipmentState { Equiped, InInventory, OnGround }
+    public EquipmentState equipmentState;
 
-    public enum EquipableState { Equiped, InInventory, OnGround }
-    public EquipableState equipmentState;
+    public Transform tRightHandOffset;
+    public Transform tOffHandTarget;
+    public Vector3 targetHandPosition;
+    public Vector3 targetAdsHandPosition;
+
+    [Header("Hand Joint Drive override values")]
+    [SerializeField] private float jointDriveSpring;
+    [SerializeField] private float jointDriveDamper;
+    public JointDrive handJointDriveOverride;
+
+    [HideInInspector] public Character character;
 
     protected List<Collider> colliders = new List<Collider>();
 
@@ -15,6 +25,9 @@ public class Equipable : MonoBehaviour {
 
     protected virtual void Awake() {
         FindColliders(transform);
+        handJointDriveOverride.positionSpring = jointDriveSpring;
+        handJointDriveOverride.positionDamper = jointDriveDamper;
+        handJointDriveOverride.maximumForce = float.MaxValue;
     }
 
     protected virtual void Update() {
@@ -37,6 +50,8 @@ public class Equipable : MonoBehaviour {
     }
 
     public virtual void Equip(Character character) {
+        gameObject.SetActive(true);
+
         this.character = character;
         equipedEvent?.Invoke();
 
@@ -67,6 +82,8 @@ public class Equipable : MonoBehaviour {
 
         character = null;
         unequipedEvent?.Invoke();
+
+        gameObject.SetActive(false);
     }
 
 }

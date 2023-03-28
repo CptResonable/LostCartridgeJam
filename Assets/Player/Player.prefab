@@ -2337,16 +2337,26 @@ MonoBehaviour:
       stateID: 0
     activeStateEnum: 0
   weaponController:
-    pistol: {fileID: 7755853891988902356}
-    rifle: {fileID: 3737601585298911470}
-    equipedGun: {fileID: 0}
+    equipedItem: {fileID: 0}
     tHandTarget: {fileID: 2925393505618189473}
     tOffHandPosition: {fileID: 2925393505419985796}
     handJoint: {fileID: 1285744482911927165}
+    equipment:
+    - {fileID: 7755853891988902356}
+    - {fileID: 3737601585298911470}
+    - {fileID: 0}
+    - {fileID: 0}
     state: 0
-    weaponSwapProgress: 0
-    weaponSwapAnimationThing: 0
+    itemSwapProgress: 0
+    itemSwapAnimationThing: 0
     isADS: 0
+  equipmentManager:
+    equipment:
+    - {fileID: 7755853891988902356}
+    - {fileID: 3737601585298911470}
+    - {fileID: 0}
+    - {fileID: 0}
+    equipedItem: {fileID: 0}
   animatorController:
     animator: {fileID: 2925393506036200914}
   arms:

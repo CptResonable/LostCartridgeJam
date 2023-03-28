@@ -2,7 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Gun : Equipable {
+public class Gun : Equipment {
+    [Header("--- GUN ---")]
+
     [SerializeField] private float timeBetweenShots;
     [SerializeField] private Transform tMuzzle;
     [SerializeField] private Transform tMag;
@@ -33,11 +35,6 @@ public class Gun : Equipable {
 
     public bool consumeAmmo;
     public int ammoReserve;
-
-    public Transform tRightHandOffset;
-    public Transform tOffHandTarget;
-    public Vector3 targetHandPosition;
-    public Vector3 targetAdsHandPosition;
 
     private float cooldown = 0;
     private float timeSinceLastShot = 0;
@@ -71,11 +68,23 @@ public class Gun : Equipable {
 
     public override void Equip(Character character) {
         base.Equip(character);
+        //character.updateEvent += Character_updateEvent;
     }
 
     public override void Unequip() {
+        ReloadCanceled();
         base.Unequip();
+        //character.updateEvent -= Character_updateEvent;
     }
+
+    //private void Character_updateEvent() {
+
+    //    // Automatic fire
+    //    if (isAuto) {
+    //        if (character.characterInput.action_attack.isDown)
+    //            TryFire(false);
+    //    }
+    //}
 
     protected override void LateUpdate() {
         base.LateUpdate();

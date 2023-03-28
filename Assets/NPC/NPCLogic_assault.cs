@@ -42,8 +42,9 @@ public class NPCLogic_assault : NPCLogic {
         if (Input.GetKeyDown(KeyCode.J))
             input.action_equipSlot2.Click();
 
-        if (character.weaponController.equipedGun.bulletsInMagCount <= 0 && !character.weaponController.equipedGun.bulletInChaimber && character.weaponController.equipedGun.magIn)
-            input.action_reload.Click();
+        //if (character.weaponController.equipedGun.bulletsInMagCount <= 0 && !character.weaponController.equipedGun.bulletInChaimber && character.weaponController.equipedGun.magIn)
+        //    input.action_reload.Click();
+
         //dashAttackCooldown -= Time.deltaTime;
         //if (dashAttackCooldown < 0 && toTargetVector.magnitude < 2)
         //    Dash();

@@ -4,21 +4,23 @@ using UnityEngine;
 
 [System.Serializable]
 public class WeaponController {
-    [SerializeField] public Gun pistol;
-    [SerializeField] public Gun rifle;
-    public Gun equipedGun;
+    //[SerializeField] public Gun pistol;
+    //[SerializeField] public Gun rifle;
+    public Equipment equipedItem;
 
     [SerializeField] private Transform tHandTarget;
     [SerializeField] private Transform tOffHandPosition;
     [SerializeField] private ConfigurableJoint handJoint;
 
+    public Equipment[] equipment = new Equipment[4];
+
     public enum State { nothingEquiped, weaponEquiped}
     public State state;
 
     //public TWrapper Interpolator = new TWrapper(0, 1, 0);
-    public float weaponSwapProgress = 0;
-    public float weaponSwapAnimationThing = 0;
-    private Coroutine weaponSwapCorutine;
+    public float itemSwapProgress = 0;
+    public float itemSwapAnimationThing = 0;
+    private Coroutine itemSwapCorutine;
     private UpperBody.UpperBodyRotationModifier upperBodyRotationModifier_weaponYaw = new UpperBody.UpperBodyRotationModifier(Vector3.zero, new Vector3(0, 30, 0));
 
     private Character character;
@@ -27,7 +29,6 @@ public class WeaponController {
 
     public event Delegates.EmptyDelegate adsEnteredEvent;
     public event Delegates.EmptyDelegate adsExitedEvent;
-    public event Delegates.FloatDelegate reloadStartedEvent;
     public event Delegates.EmptyDelegate weaponEquipedEvent;
     public event Delegates.EmptyDelegate weaponUnEquipedEvent;
 
@@ -46,28 +47,27 @@ public class WeaponController {
         character.characterInput.action_equipSlot2.keyDownEvent += Action_equipSlot2_keyDownEvent;
         character.characterInput.action_unEquip.keyDownEvent += Action_unEquip_keyDownEvent;
 
-        if (equipedGun != null) {
-            equipedGun.reloadStartedEvent += EquipedGun_reloadStartedEvent;
-        }
-
         //if (character.isPlayer)
         //    EquipGun(pistol);
 
         character.upperBody.AddModifier(upperBodyRotationModifier_weaponYaw);
     }
 
+    private void EquipItem(Equipment newItem) {
+        if (newItem.GetType() == typeof(Gun))
+            EquipGun((Gun)newItem);
+
+        handJoint.slerpDrive = newItem.handJointDriveOverride;
+    }
+
     private void EquipGun(Gun gun) {
-        if (equipedGun != null) {
-            equipedGun.ReloadCanceled();
-            equipedGun.reloadStartedEvent -= EquipedGun_reloadStartedEvent;
-            equipedGun.Unequip();
-            equipedGun.gameObject.SetActive(false);
+        if (equipedItem != null) {
+            equipedItem.Unequip();
         }
 
-        equipedGun = gun;
-        equipedGun.gameObject.SetActive(true);
-        equipedGun.reloadStartedEvent += EquipedGun_reloadStartedEvent;
-        equipedGun.Equip(character);
+        equipedItem = gun;
+        equipedItem.gameObject.SetActive(true);
+        equipedItem.Equip(character);
 
         tHandTarget.localPosition = gun.targetHandPosition;
         tHandTarget.localPosition = Vector3.zero;
@@ -79,71 +79,62 @@ public class WeaponController {
     }
 
     private void Action_attack_keyDownEvent() {
-        if (state == State.weaponEquiped)
-            equipedGun.TryFire(true);
-    }
-
-    private void EquipedGun_reloadStartedEvent(float reloadTime) {
-        reloadStartedEvent?.Invoke(reloadTime);
+        //if (state == State.weaponEquiped)
+        //    equipedGun.TryFire(true);
     }
 
     private void Action_reload_keyDownEvent() {
 
-        if (!equipedGun.isReloading)
-            equipedGun.Reload();
+        //if (!equipedGun.isReloading)
+        //    equipedGun.Reload();
     }
 
     private void Action_equipSlot1_keyDownEvent() {
-        if (equipedGun != pistol) {
-            if (weaponSwapCorutine != null)
-                character.StopCoroutine(weaponSwapCorutine);
-
-            character.StartCoroutine(WeaponSwapCorutine(pistol));
-
-            //EquipGun(pistol);
-            JointDrive jd = handJoint.slerpDrive;
-            jd.positionSpring = 100;
-            jd.positionDamper = 2f;
-            handJoint.slerpDrive = jd;
-        }
+        TryEquipItem(0);
     }
 
     private void Action_equipSlot2_keyDownEvent() {
-        if (equipedGun != rifle) {
-            if (weaponSwapCorutine != null)
-                character.StopCoroutine(weaponSwapCorutine);
-
-            character.StartCoroutine(WeaponSwapCorutine(rifle));
-
-            //EquipGun(rifle);
-            JointDrive jd = handJoint.slerpDrive;
-            jd.positionSpring = 180;
-            jd.positionDamper = 3.5f;
-            handJoint.slerpDrive = jd;
-        }
+        TryEquipItem(1);
     }
 
     private void Action_unEquip_keyDownEvent() {
         if (state == State.nothingEquiped)
             return;
 
-        equipedGun.ReloadCanceled();
-        equipedGun.reloadStartedEvent -= EquipedGun_reloadStartedEvent;
-        equipedGun.Unequip();
-        equipedGun.gameObject.SetActive(false);
-        equipedGun = null;
+        character.StartCoroutine(UnEquipCorutine());
 
-        state = State.nothingEquiped;
+        //equipedItem.Unequip();
+        //equipedItem.gameObject.SetActive(false);
+        //equipedItem = null;
 
-        weaponUnEquipedEvent?.Invoke();
+        //state = State.nothingEquiped;
+
+        //weaponUnEquipedEvent?.Invoke();
+    }
+
+    private void TryEquipItem(int equipmentIndex) {
+        if (equipment[equipmentIndex] == null) {
+            return;
+        }
+
+        Equipment newEquipedItem = equipment[equipmentIndex];
+
+        // Return if trying to equip already equiped item
+        if (newEquipedItem == equipedItem)
+            return;
+
+        if (itemSwapCorutine != null)
+            character.StopCoroutine(itemSwapCorutine);
+
+        character.StartCoroutine(WeaponSwapCorutine(newEquipedItem));
     }
 
     private void Character_updateEvent() {
 
         // Set off hand position and rotation
-        if (equipedGun != null) {
-            tOffHandPosition.position = equipedGun.tOffHandTarget.position;
-            tOffHandPosition.rotation = equipedGun.tOffHandTarget.rotation;
+        if (equipedItem != null) {
+            tOffHandPosition.position = equipedItem.tOffHandTarget.position;
+            tOffHandPosition.rotation = equipedItem.tOffHandTarget.rotation;
         }
 
         // Rotate torso 2
@@ -152,55 +143,80 @@ public class WeaponController {
         else
             upperBodyRotationModifier_weaponYaw.bonusEuler_torso2 = Vector3.Lerp(upperBodyRotationModifier_weaponYaw.bonusEuler_torso2, new Vector3(0, 0, 0), Time.deltaTime * 4);
 
-        // Automatic fire
-        if (equipedGun != null) {
-            if (!equipedGun.isAuto)
-                return;
-        }
-        if (state == State.weaponEquiped)
-            if (character.characterInput.action_attack.isDown)
-                equipedGun.TryFire(false);
+        //// Automatic fire
+        //if (equipedGun != null) {
+        //    if (!equipedGun.isAuto)
+        //        return;
+        //}
+        //if (state == State.weaponEquiped)
+        //    if (character.characterInput.action_attack.isDown)
+        //        equipedGun.TryFire(false);
     }
 
-    private IEnumerator WeaponSwapCorutine(Gun newWeapon) {
-        if (weaponSwapProgress > 0.5f) {
-            weaponSwapProgress = 1 - weaponSwapProgress;
+    private IEnumerator WeaponSwapCorutine(Equipment newItem) {
+        if (itemSwapProgress > 0.5f) {
+            itemSwapProgress = 1 - itemSwapProgress;
         }
 
-        bool weaponSwaped = false;
+        bool itemSwaped = false;
 
-        while (weaponSwapProgress < 1) {
+        while (itemSwapProgress < 1) {
 
-            if (!weaponSwaped && weaponSwapProgress > 0.5f) {
-                weaponSwaped = true;
-                EquipGun(newWeapon);
+            if (!itemSwaped && itemSwapProgress > 0.5f) {
+                itemSwaped = true;
+                EquipItem(newItem);
             }
 
-            weaponSwapAnimationThing = Mathf.Sin(weaponSwapProgress * Mathf.PI);
+            itemSwapAnimationThing = Mathf.Sin(itemSwapProgress * Mathf.PI);
 
-            weaponSwapProgress += Time.deltaTime * 2;
+            itemSwapProgress += Time.deltaTime * 2;
             yield return new WaitForEndOfFrame();
         }
 
-        weaponSwapProgress = 1;
-        weaponSwapAnimationThing = Mathf.Sin(weaponSwapProgress * Mathf.PI);
+        itemSwapProgress = 1;
+        itemSwapAnimationThing = Mathf.Sin(itemSwapProgress * Mathf.PI);
     }
 
-    private IEnumerator UnEquipCorutine() {
-        while (weaponSwapProgress < 1) {
-            weaponSwapAnimationThing = Mathf.Sin(1 - weaponSwapProgress);
+    //private IEnumerator WeaponSwapCorutine(Gun newWeapon) {
+    //    if (weaponSwapProgress > 0.5f) {
+    //        weaponSwapProgress = 1 - weaponSwapProgress;
+    //    }
 
-            weaponSwapProgress += Time.deltaTime * 2;
+    //    bool weaponSwaped = false;
+
+    //    while (weaponSwapProgress < 1) {
+
+    //        if (!weaponSwaped && weaponSwapProgress > 0.5f) {
+    //            weaponSwaped = true;
+    //            EquipGun(newWeapon);
+    //        }
+
+    //        weaponSwapAnimationThing = Mathf.Sin(weaponSwapProgress * Mathf.PI);
+
+    //        weaponSwapProgress += Time.deltaTime * 2;
+    //        yield return new WaitForEndOfFrame();
+    //    }
+
+    //    weaponSwapProgress = 1;
+    //    weaponSwapAnimationThing = Mathf.Sin(weaponSwapProgress * Mathf.PI);
+    //}
+
+    private IEnumerator UnEquipCorutine() {
+        if (itemSwapProgress > 0.5f) {
+            itemSwapProgress = 1 - itemSwapProgress;
+        }
+
+        while (itemSwapProgress < 1) {
+            itemSwapAnimationThing = itemSwapProgress;
+
+            itemSwapProgress += Time.deltaTime * 1;
             yield return new WaitForEndOfFrame();
         }
 
-        weaponSwapProgress = 1;
-        weaponSwapAnimationThing = Mathf.Sin(1);
-
-        equipedGun.ReloadCanceled();
-        equipedGun.reloadStartedEvent -= EquipedGun_reloadStartedEvent;
-        equipedGun.Unequip();
-        equipedGun.gameObject.SetActive(false);
+        itemSwapProgress = 1;
+        itemSwapAnimationThing = 1;
+        equipedItem.Unequip();
+        equipedItem = null;
 
         state = State.nothingEquiped;
 

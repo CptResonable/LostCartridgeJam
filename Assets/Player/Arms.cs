@@ -52,7 +52,7 @@ public class Arms {
     }
 
     private void Character_lateUpdateEvent() {
-        animationWeight = Mathf.Lerp(animationWeightInterpolator.t, 1, character.weaponController.weaponSwapAnimationThing);
+        animationWeight = Mathf.Lerp(animationWeightInterpolator.t, 1, character.weaponController.itemSwapAnimationThing);
     }
 
     private void EvalulateTargetAnimationWeight() {
