@@ -30,7 +30,7 @@ public class RightHand : Hand {
     protected override void Character_fixedUpdateEvent() {
         base.Character_fixedUpdateEvent();
 
-        if (character.weaponController.state == WeaponController.State.weaponEquiped)
+        if (character.equipmentManager.state == EquipmentManager.State.weaponEquiped)
             WeaponTargetUpdate();
 
         // Interpolate between weapon hand target and animation position/rotation
@@ -67,13 +67,13 @@ public class RightHand : Hand {
     }
 
     private void WeaponTargetUpdate() {
-        tRightHandAnimator.Rotate(character.weaponController.equipedItem.tRightHandOffset.localRotation.eulerAngles, Space.Self);
-        tRightHandAnimator.localPosition = character.weaponController.equipedItem.tRightHandOffset.localPosition;
+        tRightHandAnimator.Rotate(character.equipmentManager.equipedItem.tRightHandOffset.localRotation.eulerAngles, Space.Self);
+        tRightHandAnimator.localPosition = character.equipmentManager.equipedItem.tRightHandOffset.localPosition;
 
         handRotationOffset = new Vector3(handRotationOffset.x, handRotationOffset.y, Mathf.Lerp(handRotationOffset.z, -character.characterInput.moveInput.x * 25 + character.rb.angularVelocity.y * -2, Time.fixedDeltaTime * 8));
 
-        if (character.weaponController.equipedItem != null)
-            tWeaponTarget.localPosition = Vector3.Lerp(character.weaponController.equipedItem.targetHandPosition, character.weaponController.equipedItem.targetAdsHandPosition, arms.hipAdsInterpolator.t);
+        if (character.equipmentManager.equipedItem != null)
+            tWeaponTarget.localPosition = Vector3.Lerp(character.equipmentManager.equipedItem.targetHandPosition, character.equipmentManager.equipedItem.targetAdsHandPosition, arms.hipAdsInterpolator.t);
 
         tWeaponTarget.rotation = character.fpCamera.tCamera.rotation;
         tWeaponTarget.Rotate(handRotationOffset);

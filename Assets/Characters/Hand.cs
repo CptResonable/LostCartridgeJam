@@ -18,6 +18,7 @@ public class Hand : MonoBehaviour {
 
     protected Character character;
     protected Arms arms;
+    protected ConfigurableJoint joint;
     [SerializeField] protected KinematicMeasures kmTarget;
     public Rigidbody rb;
 
@@ -36,9 +37,15 @@ public class Hand : MonoBehaviour {
 
         //kmTarget = tPhysicalTarget.GetComponent<KinematicMeasures>();
         rb = GetComponent<Rigidbody>();
+        joint = GetComponent<ConfigurableJoint>();
 
+        character.equipmentManager.itemEquipedEvent += EquipmentManager_itemEquipedEvent;
         character.locomotion.wallrunController.verticalRunStopped += WallrunController_verticalRunStopped;
         character.fixedUpdateEvent += Character_fixedUpdateEvent;
+    }
+
+    private void EquipmentManager_itemEquipedEvent(Equipment item) {
+        joint.slerpDrive = item.handJointDriveOverride;
     }
 
     protected virtual void Character_fixedUpdateEvent() {

@@ -15,6 +15,11 @@ public class LeftHand : Hand {
     public override void Update() {
         base.Update();
 
+        if (character.equipmentManager.equipedItem != null) {
+            tWeaponTarget.position = character.equipmentManager.equipedItem.tOffHandTarget.position;
+            tWeaponTarget.rotation = character.equipmentManager.equipedItem.tOffHandTarget.rotation;
+        }
+
         // Interpolate between physical hand and weapon grip, reason is i don't want grip hand to wobble
         tIkTarget.position = Vector3.Lerp(tWeaponTarget.position, transform.position, arms.animationWeight);
         tIkTarget.rotation = Quaternion.Slerp(tWeaponTarget.rotation, transform.rotation, arms.animationWeight);

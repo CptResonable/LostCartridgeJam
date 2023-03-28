@@ -35,8 +35,10 @@ public class Arms {
 
         character.weaponController.adsEnteredEvent += WeaponController_adsEnteredEvent;
         character.weaponController.adsExitedEvent += WeaponController_adsExitedEvent;
-        character.weaponController.weaponEquipedEvent += WeaponController_weaponEquipedEvent;
-        character.weaponController.weaponUnEquipedEvent += WeaponController_weaponUnEquipedEvent;
+        //character.weaponController.weaponEquipedEvent += WeaponController_weaponEquipedEvent;
+        //character.weaponController.weaponUnEquipedEvent += WeaponController_weaponUnEquipedEvent;
+        character.equipmentManager.itemEquipedEvent += EquipmentManager_itemEquipedEvent;
+        character.equipmentManager.itemUnequipedEvent += EquipmentManager_itemUnequipedEvent;
 
         character.locomotion.sprintStartedEvent += Locomotion_sprintStartedEvent;
         character.locomotion.sprintEndedEvent += Locomotion_sprintEndedEvent;
@@ -52,14 +54,14 @@ public class Arms {
     }
 
     private void Character_lateUpdateEvent() {
-        animationWeight = Mathf.Lerp(animationWeightInterpolator.t, 1, character.weaponController.itemSwapAnimationThing);
+        animationWeight = Mathf.Lerp(1, animationWeightInterpolator.t, character.equipmentManager.unequipEquipInterpolator.t);
     }
 
     private void EvalulateTargetAnimationWeight() {
         if (hipAdsInterpolationCorutine != null)
             character.StopCoroutine(hipAdsInterpolationCorutine);
 
-        if (character.locomotion.state_grounded.isSprinting || character.locomotion.wallrunController.isWallRunning ||character.weaponController.state == WeaponController.State.nothingEquiped) {
+        if (character.locomotion.state_grounded.isSprinting || character.locomotion.wallrunController.isWallRunning || character.equipmentManager.state == EquipmentManager.State.nothingEquiped) {
             animationWeightCorutine = character.StartCoroutine(InterpolationUtils.i.SmoothStep(animationWeightInterpolator.t, 1, 4, animationWeightInterpolator));
         }
         else {
@@ -81,14 +83,25 @@ public class Arms {
         hipAdsInterpolationCorutine = character.StartCoroutine(InterpolationUtils.i.SmoothStep(hipAdsInterpolator.t, 0, 4, hipAdsInterpolator));
     }
 
-    private void WeaponController_weaponEquipedEvent() {
+    //private void WeaponController_weaponEquipedEvent() {
+    //    hipAdsInterpolationCorutine = character.StartCoroutine(InterpolationUtils.i.SmoothStep(hipAdsInterpolator.t, 0, 4, hipAdsInterpolator));
+    //    EvalulateTargetAnimationWeight();
+    //}
+
+    //private void WeaponController_weaponUnEquipedEvent() {
+    //    EvalulateTargetAnimationWeight();
+    //}
+
+    private void EquipmentManager_itemUnequipedEvent() {
         hipAdsInterpolationCorutine = character.StartCoroutine(InterpolationUtils.i.SmoothStep(hipAdsInterpolator.t, 0, 4, hipAdsInterpolator));
         EvalulateTargetAnimationWeight();
     }
 
-    private void WeaponController_weaponUnEquipedEvent() {
+    private void EquipmentManager_itemEquipedEvent(Equipment item) {
+        hipAdsInterpolationCorutine = character.StartCoroutine(InterpolationUtils.i.SmoothStep(hipAdsInterpolator.t, 0, 4, hipAdsInterpolator));
         EvalulateTargetAnimationWeight();
     }
+
 
     private void Locomotion_sprintStartedEvent() {
         EvalulateTargetAnimationWeight();

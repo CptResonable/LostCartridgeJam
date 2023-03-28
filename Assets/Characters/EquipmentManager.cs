@@ -4,25 +4,28 @@ using UnityEngine;
 
 [System.Serializable]
 public class EquipmentManager {
+
     public Equipment[] equipment = new Equipment[4];
     public Equipment equipedItem;
 
-    private TWrapper unequipEquipInterpolator = new TWrapper(0, 1, 0); // 0 when hnads are down 1 when up holding item, iterpolate when eqiping unequiping items
+    public TWrapper unequipEquipInterpolator = new TWrapper(0, 1, 0); // 0 when hnads are down 1 when up holding item, iterpolate when eqiping unequiping items
     private Coroutine unequipEquipCorutine;
     private Equipment queuedItemToEquip;
+
+    public enum State { nothingEquiped, weaponEquiped }
+    public State state;
+
+    public delegate void EquipmentDelegate(Equipment item);
+    public event EquipmentDelegate itemEquipedEvent;
+    public event Delegates.EmptyDelegate itemUnequipedEvent;
 
     private Character character;
     public void Init(Character character) {
         this.character = character;
 
-        character.updateEvent += Character_updateEvent;
-
         character.characterInput.action_equipSlot1.keyDownEvent += Action_equipSlot1_keyDownEvent;
         character.characterInput.action_equipSlot2.keyDownEvent += Action_equipSlot2_keyDownEvent;
         character.characterInput.action_unEquip.keyDownEvent += Action_unEquip_keyDownEvent;
-    }
-
-    private void Character_updateEvent() {
     }
 
     private void Action_equipSlot1_keyDownEvent() {
@@ -55,9 +58,6 @@ public class EquipmentManager {
 
         queuedItemToEquip = equipment[equipmentIndex];
 
-
-        Debug.Log("hmm: " + unequipEquipInterpolator.t);
-
         // Hands already lowered, equip item
         if (unequipEquipInterpolator.t == 0) {
 
@@ -88,10 +88,6 @@ public class EquipmentManager {
         }
         else if (unequipEquipInterpolator.t == 0) { // Hands down
 
-
-            Debug.Log("finish");
-
-
             // Uneqip current item
             if (equipedItem != null)
                 UnequipItem();
@@ -108,15 +104,21 @@ public class EquipmentManager {
         }
     }
 
-    private void UnequipItem() {
-        equipedItem.Unequip();
-        equipedItem = null;
-    }
-
     private void EquipQueuedItem() {
         equipedItem = queuedItemToEquip;
         queuedItemToEquip = null;
 
         equipedItem.Equip(character);
+
+        state = State.weaponEquiped;
+        itemEquipedEvent?.Invoke(equipedItem);
+    }
+
+    private void UnequipItem() {
+        equipedItem.Unequip();
+        equipedItem = null;
+
+        state = State.nothingEquiped;
+        itemUnequipedEvent?.Invoke();
     }
 }

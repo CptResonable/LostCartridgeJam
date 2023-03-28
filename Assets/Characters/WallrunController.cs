@@ -47,14 +47,11 @@ public class WallrunController : MonoBehaviour {
         smoothCharacterHorizontalVelocity = Vector3.ProjectOnPlane(smoothCharacterVelocity, Vector3.up);
 
         LookForEdge();
-
     }
 
     private void FixedUpdate() {
         wallDetected = false;
     }
-
-
 
     private void OnTriggerStay(Collider other) {
         if (isWallRunning) {
