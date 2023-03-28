@@ -115,7 +115,7 @@ public class FPCamera {
         roll = Mathf.Lerp(roll, targetRoll, Time.deltaTime * 12);
 
         if (camera != null) {
-            camera.fieldOfView = Mathf.Lerp(Settings.FOV_HIP, Settings.FOV_ADS, character.arms.hipAdsInterpolator.t);
+            camera.fieldOfView = Mathf.Lerp(Settings.FOV_HIP, Settings.FOV_ADS, character.stanceController.hipAdsInterpolator.t);
         }
 
         //Vector3 lastForwardVector = Vector3.ProjectOnPlane(tCamera.transform.forward, Vector3.up);

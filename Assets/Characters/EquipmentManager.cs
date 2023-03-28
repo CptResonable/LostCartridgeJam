@@ -12,7 +12,7 @@ public class EquipmentManager {
     private Coroutine unequipEquipCorutine;
     private Equipment queuedItemToEquip;
 
-    public enum State { nothingEquiped, weaponEquiped }
+    public enum State { nothingEquiped, gunEquiped }
     public State state;
 
     public delegate void EquipmentDelegate(Equipment item);
@@ -110,7 +110,7 @@ public class EquipmentManager {
 
         equipedItem.Equip(character);
 
-        state = State.weaponEquiped;
+        state = State.gunEquiped;
         itemEquipedEvent?.Invoke(equipedItem);
     }
 

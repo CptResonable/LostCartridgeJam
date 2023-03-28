@@ -68,23 +68,36 @@ public class Gun : Equipment {
 
     public override void Equip(Character character) {
         base.Equip(character);
-        //character.updateEvent += Character_updateEvent;
+        character.updateEvent += Character_updateEvent;
+        character.characterInput.action_attack.keyDownEvent += Action_attack_keyDownEvent;
+        character.characterInput.action_reload.keyDownEvent += Action_reload_keyDownEvent;
+    }
+
+    private void Action_reload_keyDownEvent() {
+        Reload();
+    }
+
+    private void Action_attack_keyDownEvent() {
+        TryFire(true);
     }
 
     public override void Unequip() {
         ReloadCanceled();
+        character.updateEvent -= Character_updateEvent;
+        character.characterInput.action_attack.keyDownEvent -= Action_attack_keyDownEvent;
+        character.characterInput.action_reload.keyDownEvent -= Action_reload_keyDownEvent;
+
         base.Unequip();
-        //character.updateEvent -= Character_updateEvent;
     }
 
-    //private void Character_updateEvent() {
+    private void Character_updateEvent() {
 
-    //    // Automatic fire
-    //    if (isAuto) {
-    //        if (character.characterInput.action_attack.isDown)
-    //            TryFire(false);
-    //    }
-    //}
+        // Automatic fire
+        if (isAuto) {
+            if (character.characterInput.action_attack.isDown)
+                TryFire(false);
+        }
+    }
 
     protected override void LateUpdate() {
         base.LateUpdate();
