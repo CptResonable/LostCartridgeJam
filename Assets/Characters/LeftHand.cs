@@ -25,7 +25,7 @@ public class LeftHand : Hand {
         tIkTarget.rotation = Quaternion.Slerp(tWeaponTarget.rotation, transform.rotation, arms.animationWeight);
 
         // Interpolate between hand target and mag belt while reloading
-        if (character.equipmentManager.state == EquipmentManager.State.gunEquiped) {
+        if (character.equipmentManager.state == CharacterEquipmentManager.State.gunEquiped) {
             Gun gun = (Gun)character.equipmentManager.equipedItem;
             tIkTarget.position = Vector3.Lerp(tIkTarget.position, tMagGrabAnimationPoint.position, gun.gunAnimationController.leftHandMagGrabT);
             tIkTarget.rotation = Quaternion.Lerp(tIkTarget.rotation, tMagGrabAnimationPoint.rotation, gun.gunAnimationController.leftHandMagGrabT);

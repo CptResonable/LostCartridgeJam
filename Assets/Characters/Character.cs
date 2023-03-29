@@ -10,7 +10,7 @@ public class Character : MonoBehaviour {
     public Locomotion locomotion;
     //public WeaponController weaponController;
     public StanceController stanceController;
-    public EquipmentManager equipmentManager;
+    public CharacterEquipmentManager equipmentManager;
     public AnimatorController animatorController;
     public Arms arms;
     public Health health;

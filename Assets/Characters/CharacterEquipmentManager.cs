@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class EquipmentManager {
+public class CharacterEquipmentManager {
 
     public Equipment[] equipment = new Equipment[4];
     public Equipment equipedItem;

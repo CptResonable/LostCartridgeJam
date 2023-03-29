@@ -55,7 +55,9 @@ public class Hand : MonoBehaviour {
         if (grabingLedge)
             ledgeGrabInterpolator = 1;
         else
-            ledgeGrabInterpolator = Mathf.Lerp(ledgeGrabInterpolator, 0, Time.deltaTime * 8);     
+            ledgeGrabInterpolator = Mathf.Lerp(ledgeGrabInterpolator, 0, Time.deltaTime * 8);
+
+        //GizmoManager.i.DrawSphere(Time.deltaTime, Color.red, transform.TransformPoint(rb.centerOfMass), 0.05f);
     }
 
     //public virtual void ManualFixedUpdate() { }

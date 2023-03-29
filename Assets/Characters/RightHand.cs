@@ -30,7 +30,7 @@ public class RightHand : Hand {
     protected override void Character_fixedUpdateEvent() {
         base.Character_fixedUpdateEvent();
 
-        if (character.equipmentManager.state == EquipmentManager.State.gunEquiped)
+        if (character.equipmentManager.state == CharacterEquipmentManager.State.gunEquiped)
             WeaponTargetUpdate();
 
         // Interpolate between weapon hand target and animation position/rotation
