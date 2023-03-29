@@ -48,6 +48,9 @@ public class Locomotion {
     public delegate void LandedDelegate(float airTime);
     public event LandedDelegate landedEvent;
 
+    public delegate void StateChangedDelegate(LocomotionState newState);
+    public event StateChangedDelegate stateChangedEvent;
+
     public void Initialize(Character character) {
         this.character = character;
         rb = character.GetComponent<Rigidbody>();
@@ -136,6 +139,7 @@ public class Locomotion {
         state_inAir.EnterState();
         activeState = state_inAir;
         activeStateEnum = LocomotionState.StateIDEnum.InAir;
+        stateChangedEvent?.Invoke(activeState);
 
         Debug.Log("New state: AIR");
     }
@@ -150,6 +154,7 @@ public class Locomotion {
         state_grounded.EnterState();
         activeState = state_grounded;
         activeStateEnum = LocomotionState.StateIDEnum.Grounded;
+        stateChangedEvent?.Invoke(activeState);
 
         Debug.Log("New state: GROUND");
     }
@@ -159,6 +164,7 @@ public class Locomotion {
         state_wallClimbing.EnterState();
         activeState = state_wallClimbing;
         activeStateEnum = LocomotionState.StateIDEnum.WallClimbing;
+        stateChangedEvent?.Invoke(activeState);
 
         Debug.Log("New state: Wall climb");
     }
@@ -168,6 +174,7 @@ public class Locomotion {
         state_wallRunning.EnterState();
         activeState = state_wallRunning;
         activeStateEnum = LocomotionState.StateIDEnum.WallRunning;
+        stateChangedEvent?.Invoke(activeState);
 
         Debug.Log("New state: Wall running");
     }
@@ -176,6 +183,8 @@ public class Locomotion {
     public class LocomotionState {
         public enum StateIDEnum { Grounded, InAir, WallClimbing, WallRunning }
         [HideInInspector] public StateIDEnum stateID;
+
+        public bool canADS; // True if character can ADS in this state
 
         protected Locomotion locomotion;
 
@@ -210,6 +219,7 @@ public class Locomotion {
         public override void Init(Locomotion locomotion) {
             base.Init(locomotion);
             stateID = StateIDEnum.Grounded;
+            canADS = true;
 
             upperBodyRotationModifier_crouch = new UpperBody.UpperBodyRotationModifier(Vector3.zero, Vector3.zero);
             Debug.Log(locomotion.character.upperBody);
@@ -556,6 +566,7 @@ public class Locomotion {
         public override void Init(Locomotion locomotion) {
             base.Init(locomotion);
             stateID = StateIDEnum.InAir;
+            canADS = true;
         }
 
         public override void EnterState() {
@@ -636,6 +647,7 @@ public class Locomotion {
         public override void Init(Locomotion locomotion) {
             base.Init(locomotion);
             stateID = StateIDEnum.WallClimbing;
+            canADS = false;
         }
 
         public override void EnterState() {
@@ -714,6 +726,7 @@ public class Locomotion {
         public override void Init(Locomotion locomotion) {
             base.Init(locomotion);
             stateID = StateIDEnum.WallRunning;
+            canADS = false;
         }
 
         public override void EnterState() {

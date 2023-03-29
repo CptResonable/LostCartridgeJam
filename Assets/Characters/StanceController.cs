@@ -22,6 +22,7 @@ public class StanceController {
         character.equipmentManager.itemEquipedEvent += EquipmentManager_itemEquipedEvent;
         character.equipmentManager.itemUnequipedEvent += EquipmentManager_itemUnequipedEvent;
 
+        character.locomotion.stateChangedEvent += Locomotion_stateChangedEvent;
         character.locomotion.sprintStartedEvent += Locomotion_sprintStartedEvent;
 
         character.characterInput.action_ads.keyDownEvent += Action_ads_keyDownEvent;
@@ -39,6 +40,13 @@ public class StanceController {
             ExitAds();
     }
 
+    private void Locomotion_stateChangedEvent(Locomotion.LocomotionState newState) {
+        if (isADS) {
+            if (!newState.canADS)
+                ExitAds();
+        }
+    }
+
     private void Locomotion_sprintStartedEvent() {
         if (isADS)
             ExitAds();
@@ -48,12 +56,18 @@ public class StanceController {
         if (!isADS)
             EnterAds();
     }
+
     private void Action_ads_keyUpEvent() {
         if (isADS)
             ExitAds();
     }
 
     private void EnterAds() {
+
+        // Make sure ADS is possible
+        if (!character.locomotion.activeState.canADS || character.locomotion.state_grounded.isSprinting)
+            return;
+
         isADS = true;
 
         if (hipAdsInterpolationCorutine != null)
