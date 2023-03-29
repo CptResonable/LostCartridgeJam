@@ -10,12 +10,17 @@ public class StanceController {
     public TWrapper hipAdsInterpolator = new TWrapper(0, 1, 0);
     private Coroutine hipAdsInterpolationCorutine;
 
+    // Modifies upper body rotation when item is equiped
+    public UpperBody.UpperBodyRotationModifier upperBodyRotationModifier_weaponYaw = new UpperBody.UpperBodyRotationModifier(Vector3.zero, new Vector3(0, 30, 0));
+
     public Delegates.EmptyDelegate enterAdsEvent;
     public Delegates.EmptyDelegate exitAdsEvent;
 
     private Character character;
     public void Init(Character character) {
         this.character = character;
+
+        character.upperBody.AddModifier(upperBodyRotationModifier_weaponYaw);
 
         character.updateEvent += Character_updateEvent;
 
@@ -30,12 +35,18 @@ public class StanceController {
     }
 
     private void Character_updateEvent() {
+
+        // Rotate torso 2
+        if (character.equipmentManager.state == EquipmentManager.State.gunEquiped && character.locomotion.activeStateEnum == Locomotion.LocomotionState.StateIDEnum.Grounded && !character.locomotion.state_grounded.isSprinting && !character.locomotion.state_grounded.isSliding)
+            upperBodyRotationModifier_weaponYaw.bonusEuler_torso2 = Vector3.Lerp(upperBodyRotationModifier_weaponYaw.bonusEuler_torso2, new Vector3(0, 30, 0), Time.deltaTime * 4);
+        else
+            upperBodyRotationModifier_weaponYaw.bonusEuler_torso2 = Vector3.Lerp(upperBodyRotationModifier_weaponYaw.bonusEuler_torso2, new Vector3(0, 0, 0), Time.deltaTime * 4);
     }
 
     private void EquipmentManager_itemEquipedEvent(Equipment item) {
     }
 
-    private void EquipmentManager_itemUnequipedEvent() {
+    private void EquipmentManager_itemUnequipedEvent(Equipment item) {
         if (isADS)
             ExitAds();
     }

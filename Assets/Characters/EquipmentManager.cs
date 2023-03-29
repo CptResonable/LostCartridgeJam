@@ -17,7 +17,7 @@ public class EquipmentManager {
 
     public delegate void EquipmentDelegate(Equipment item);
     public event EquipmentDelegate itemEquipedEvent;
-    public event Delegates.EmptyDelegate itemUnequipedEvent;
+    public event EquipmentDelegate itemUnequipedEvent;
 
     private Character character;
     public void Init(Character character) {
@@ -115,10 +115,12 @@ public class EquipmentManager {
     }
 
     private void UnequipItem() {
+        Equipment unequipedItem = equipedItem;
+
         equipedItem.Unequip();
         equipedItem = null;
 
         state = State.nothingEquiped;
-        itemUnequipedEvent?.Invoke();
+        itemUnequipedEvent?.Invoke(unequipedItem);
     }
 }

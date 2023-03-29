@@ -33,16 +33,14 @@ public class FPCamera {
         character.lateUpdateEvent += Character_lateUpdateEvent;
         character.fixedUpdateEvent += character_fixedUpdateEvent;
 
-        //if (character.weaponController.rifle != null)
-        //    character.weaponController.rifle.gunFiredEvent += EquipedGun_gunFiredEvent;
-
-        //if (character.weaponController.pistol != null)
-        //    character.weaponController.pistol.gunFiredEvent += EquipedGun_gunFiredEvent;
+        character.equipmentManager.itemEquipedEvent += EquipmentManager_itemEquipedEvent;
+        character.equipmentManager.itemUnequipedEvent += EquipmentManager_itemUnequipedEvent;
 
         character.locomotion.wallrunController.verticalRunStarted += WallrunController_verticalRunStarted;
         character.locomotion.wallrunController.verticalRunStopped += WallrunController_verticalRunStopped;
         character.locomotion.wallrunController.horizontalRunStarted += WallrunController_horizontalRunStarted;
         character.locomotion.wallrunController.horizontalRunStopped += WallrunController_horizontalRunStopped;
+
         character.locomotion.slideStartedEvent += Locomotion_slideStartedEvent;
         character.locomotion.slideEndedEvent += Locomotion_slideEndedEvent;
         character.locomotion.jumpStartedEvent += Locomotion_jumpStartedEvent;
@@ -221,8 +219,21 @@ public class FPCamera {
     //    headbobAmount = Mathf.Lerp(headbobAmount, character.rb.velocity.magnitude / 4, Time.deltaTime * 4);
     //    animator.SetFloat("Velocity", headbobAmount);
     //}
+    private void EquipmentManager_itemEquipedEvent(Equipment item) {
+        if (item.GetType() == typeof(Gun)) {
+            Gun gun = (Gun)item;
+            gun.gunFiredEvent += Gun_gunFiredEvent;
+        }
+    }
 
-    private void EquipedGun_gunFiredEvent(Vector3 rotationalRecoil, Vector3 translationalRecoil) {
+    private void EquipmentManager_itemUnequipedEvent(Equipment item) {
+        if (item.GetType() == typeof(Gun)) {
+            Gun gun = (Gun)item;
+            gun.gunFiredEvent -= Gun_gunFiredEvent;
+        }
+    }
+
+    private void Gun_gunFiredEvent(Vector3 rotationalRecoil, Vector3 translationalRecoil) {
         character.StartCoroutine(ApplyRotationOverTime(-rotationalRecoil.x, rotationalRecoil.y, 0.12f, recoilApplicationCurve));
         //shaker.Shake(2, 0.12f);
     }

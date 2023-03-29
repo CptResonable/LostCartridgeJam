@@ -83,7 +83,7 @@ public class Arms {
     //    hipAdsInterpolationCorutine = character.StartCoroutine(InterpolationUtils.i.SmoothStep(hipAdsInterpolator.t, 0, 4, hipAdsInterpolator));
     //}
 
-    private void EquipmentManager_itemUnequipedEvent() {
+    private void EquipmentManager_itemUnequipedEvent(Equipment item) {
         //hipAdsInterpolationCorutine = character.StartCoroutine(InterpolationUtils.i.SmoothStep(hipAdsInterpolator.t, 0, 4, hipAdsInterpolator));
         EvalulateTargetAnimationWeight();
     }
