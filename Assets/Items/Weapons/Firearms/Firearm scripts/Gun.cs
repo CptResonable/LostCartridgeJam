@@ -53,8 +53,6 @@ public class Gun : Equipment {
     public event Delegates.FloatDelegate reloadStartedEvent;
     public event Delegates.EmptyDelegate reloadFinishedEvent;
     public event Delegates.EmptyDelegate bulletChaimeredEvent;
-    public event Delegates.EmptyDelegate equipedEvent;
-    public event Delegates.EmptyDelegate unequipedEvent;
 
     protected override void Awake() {
         base.Awake();

@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 968b4334cf4eff947a0dc5393312f547, type: 3}
+  m_Name: Loadout_assault
+  m_EditorClassIdentifier: 
+  equipments:
+  - {fileID: 6137723419212577545, guid: 527f4e4f17666ca469dfffeac44cfa13, type: 3}
+  - {fileID: 6137723419212577545, guid: 4ba8ce35c85fc4545aec492fab4d95b9, type: 3}

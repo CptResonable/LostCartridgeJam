@@ -4,11 +4,13 @@ using UnityEngine;
 
 [System.Serializable]
 public class CharacterEquipmentManager {
+    [SerializeField] private Loadout startingLoadout;
 
-    public Equipment[] equipment = new Equipment[4];
+    public Equipment[] equipments = new Equipment[4];
     public Equipment equipedItem;
 
     public TWrapper unequipEquipInterpolator = new TWrapper(0, 1, 0); // 0 when hnads are down 1 when up holding item, iterpolate when eqiping unequiping items
+
     private Coroutine unequipEquipCorutine;
     private Equipment queuedItemToEquip;
 
@@ -22,6 +24,8 @@ public class CharacterEquipmentManager {
     private Character character;
     public void Init(Character character) {
         this.character = character;
+
+        EquipmentManager.i.SpawnLoadout(character, startingLoadout);
 
         character.characterInput.action_equipSlot1.keyDownEvent += Action_equipSlot1_keyDownEvent;
         character.characterInput.action_equipSlot2.keyDownEvent += Action_equipSlot2_keyDownEvent;
@@ -49,14 +53,33 @@ public class CharacterEquipmentManager {
         unequipEquipCorutine = character.StartCoroutine(InterpolationUtils.i.SmoothStep(unequipEquipInterpolator.t, 0, 2, unequipEquipInterpolator, OnEquipUnequipMovementFinished));
     }
 
+    public void AddItem(Equipment item) {
+        for (int i = 0; i < equipments.Length; i++) {
+            if (equipments[i] == null) {
+                equipments[i] = item;
+
+                item.transform.parent = character.arms.hand_R.transform;
+                item.gameObject.SetActive(false);
+
+                Rigidbody rbItem;
+                if (item.TryGetComponent<Rigidbody>(out rbItem)) {
+                    GameObject.Destroy(rbItem);
+                }
+                return;
+            }
+        }
+
+        Debug.Log("Can't add item, inventory full");
+    }
+
     private void TryEquipItem(int equipmentIndex) {
 
         // Check if item on index exists
-        if (equipment[equipmentIndex] == null) {
+        if (equipments[equipmentIndex] == null) {
             return;
         }
 
-        queuedItemToEquip = equipment[equipmentIndex];
+        queuedItemToEquip = equipments[equipmentIndex];
 
         // Hands already lowered, equip item
         if (unequipEquipInterpolator.t == 0) {

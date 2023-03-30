@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Equipment : MonoBehaviour {
+    public uint ID = 0; // Instance id, is 0 if not set
+
     public enum EquipmentState { Equiped, InInventory, OnGround }
     public EquipmentState equipmentState;
 
@@ -10,6 +12,8 @@ public class Equipment : MonoBehaviour {
     public Transform tOffHandTarget;
     public Vector3 targetHandPosition;
     public Vector3 targetAdsHandPosition;
+
+    [SerializeField] private bool drop;
 
     [Header("Hand Joint Drive override values")]
     [SerializeField] private float jointDriveSpring;
@@ -31,6 +35,8 @@ public class Equipment : MonoBehaviour {
     }
 
     protected virtual void Update() {
+        if (drop)
+            Drop();
     }
 
     protected virtual void LateUpdate() {
@@ -86,4 +92,9 @@ public class Equipment : MonoBehaviour {
         gameObject.SetActive(false);
     }
 
+    public virtual void Drop() {
+        drop = false;
+        transform.parent = null;
+        gameObject.AddComponent<Rigidbody>();
+    }
 }
