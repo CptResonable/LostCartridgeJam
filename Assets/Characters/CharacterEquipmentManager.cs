@@ -86,10 +86,7 @@ public class CharacterEquipmentManager {
                 item.transform.localPosition = Vector3.zero;
                 item.transform.localRotation = Quaternion.identity;
 
-                Rigidbody rbItem;
-                if (item.TryGetComponent<Rigidbody>(out rbItem)) {
-                    GameObject.Destroy(rbItem);
-                }
+                item.PickUp(character);
                 return;
             }
         }

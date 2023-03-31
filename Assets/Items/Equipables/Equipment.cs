@@ -51,6 +51,7 @@ public class Equipment : MonoBehaviour {
         }
     }
 
+    // Equip into hands
     public virtual void Equip(Character character) {
         this.character = character;
 
@@ -90,8 +91,26 @@ public class Equipment : MonoBehaviour {
         gameObject.SetActive(false);
     }
 
+    // Add to character inventory
+    public virtual void PickUp(Character character) {
+        Rigidbody rb;
+        if (TryGetComponent<Rigidbody>(out rb)) {
+            GameObject.Destroy(rb);
+        }
+
+        for (int i = 0; i < colliders.Count; i++) {
+            colliders[i].material = PhysicsMaterials.i.noFriction;
+        }
+    }
+
     public virtual void Drop() {
+        for (int i = 0; i < colliders.Count; i++) {
+            colliders[i].material = PhysicsMaterials.i.lowFriction;
+        }
+
         gameObject.AddComponent<Rigidbody>();
         equipmentState = EquipmentState.OnGround;
+
+        gameObject.SetActive(true);
     }
 }
