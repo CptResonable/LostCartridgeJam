@@ -18,4 +18,5 @@ public class LayerMasks : ScriptableObject {
     public LayerMask environment;
     public LayerMask wall;
     public LayerMask characters;
+    public LayerMask equipment;
 }

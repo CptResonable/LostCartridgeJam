@@ -21,3 +21,6 @@ MonoBehaviour:
   characters:
     serializedVersion: 2
     m_Bits: 0
+  equipment:
+    serializedVersion: 2
+    m_Bits: 8192

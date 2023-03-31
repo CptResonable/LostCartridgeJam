@@ -27,9 +27,24 @@ public class CharacterEquipmentManager {
 
         EquipmentManager.i.SpawnLoadout(character, startingLoadout);
 
+        character.lateUpdateEvent += Character_lateUpdateEvent;
+
         character.characterInput.action_equipSlot1.keyDownEvent += Action_equipSlot1_keyDownEvent;
         character.characterInput.action_equipSlot2.keyDownEvent += Action_equipSlot2_keyDownEvent;
         character.characterInput.action_unEquip.keyDownEvent += Action_unEquip_keyDownEvent;
+        character.characterInput.action_dropItem.keyDownEvent += Action_dropItem_keyDownEvent;
+
+        character.health.diedEvent += Health_diedEvent;
+    }
+
+    private void Character_lateUpdateEvent() {
+
+        RaycastHit hit;
+        if (Physics.Raycast(character.fpCamera.tCameraTarget.position, character.fpCamera.tCameraTarget.forward, out hit, 4, LayerMasks.i.equipment)) {
+
+            if (character.characterInput.action_interact.isDown)
+                EquipmentManager.i.PickUpItem(character, hit.transform.GetComponent<Equipment>());
+        }
     }
 
     private void Action_equipSlot1_keyDownEvent() {
@@ -53,6 +68,14 @@ public class CharacterEquipmentManager {
         unequipEquipCorutine = character.StartCoroutine(InterpolationUtils.i.SmoothStep(unequipEquipInterpolator.t, 0, 2, unequipEquipInterpolator, OnEquipUnequipMovementFinished));
     }
 
+    private void Action_dropItem_keyDownEvent() {
+        DropItem();
+    }
+
+    private void Health_diedEvent() {
+        DropItem();
+    }
+
     public void AddItem(Equipment item) {
         for (int i = 0; i < equipments.Length; i++) {
             if (equipments[i] == null) {
@@ -60,6 +83,8 @@ public class CharacterEquipmentManager {
 
                 item.transform.parent = character.arms.hand_R.transform;
                 item.gameObject.SetActive(false);
+                item.transform.localPosition = Vector3.zero;
+                item.transform.localRotation = Quaternion.identity;
 
                 Rigidbody rbItem;
                 if (item.TryGetComponent<Rigidbody>(out rbItem)) {
@@ -70,6 +95,21 @@ public class CharacterEquipmentManager {
         }
 
         Debug.Log("Can't add item, inventory full");
+    }
+
+    private void DropItem() {
+        if (equipedItem == null)
+            return;
+
+        Equipment itemToDrop = equipedItem;
+        UnequipItem();
+
+        itemToDrop.transform.parent = EquipmentManager.i.transform;
+        itemToDrop.Drop();
+
+        // Remove item from equipments array
+        int index = System.Array.IndexOf(equipments, itemToDrop);
+        equipments[index] = null;
     }
 
     private void TryEquipItem(int equipmentIndex) {

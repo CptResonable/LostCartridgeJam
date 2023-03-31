@@ -18,6 +18,8 @@ public class CharacterInput : MonoBehaviour {
     public KeyAction action_equipSlot1;
     public KeyAction action_equipSlot2;
     public KeyAction action_unEquip;
+    public KeyAction action_dropItem;
+    public KeyAction action_interact;
 
     protected List<KeyAction> actions = new List<KeyAction>();
 
@@ -40,6 +42,8 @@ public class CharacterInput : MonoBehaviour {
         actions.Add(action_equipSlot1);
         actions.Add(action_equipSlot2);
         actions.Add(action_unEquip);
+        actions.Add(action_dropItem);
+        actions.Add(action_interact);
     }
 }
 

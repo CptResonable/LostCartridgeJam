@@ -89,6 +89,8 @@ public class Gun : Equipment {
     }
 
     private void Character_updateEvent() {
+        if (character == null)
+            return;
 
         // Automatic fire
         if (isAuto) {

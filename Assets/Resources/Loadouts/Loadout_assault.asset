@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 968b4334cf4eff947a0dc5393312f547, type: 3}
   m_Name: Loadout_assault
   m_EditorClassIdentifier: 
-  equipments:
-  - {fileID: 6137723419212577545, guid: 527f4e4f17666ca469dfffeac44cfa13, type: 3}
-  - {fileID: 6137723419212577545, guid: 4ba8ce35c85fc4545aec492fab4d95b9, type: 3}
+  items:
+  - {fileID: 3772797300618754255, guid: 527f4e4f17666ca469dfffeac44cfa13, type: 3}
+  - {fileID: 3772797300618754255, guid: 4ba8ce35c85fc4545aec492fab4d95b9, type: 3}

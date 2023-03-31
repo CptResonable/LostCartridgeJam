@@ -13,8 +13,6 @@ public class Equipment : MonoBehaviour {
     public Vector3 targetHandPosition;
     public Vector3 targetAdsHandPosition;
 
-    [SerializeField] private bool drop;
-
     [Header("Hand Joint Drive override values")]
     [SerializeField] private float jointDriveSpring;
     [SerializeField] private float jointDriveDamper;
@@ -35,8 +33,6 @@ public class Equipment : MonoBehaviour {
     }
 
     protected virtual void Update() {
-        if (drop)
-            Drop();
     }
 
     protected virtual void LateUpdate() {
@@ -56,9 +52,10 @@ public class Equipment : MonoBehaviour {
     }
 
     public virtual void Equip(Character character) {
-        gameObject.SetActive(true);
-
         this.character = character;
+
+        gameObject.SetActive(true);
+        equipmentState = EquipmentState.Equiped;
         equipedEvent?.Invoke();
 
         // Disable collission between equpable object and character
@@ -87,14 +84,14 @@ public class Equipment : MonoBehaviour {
         }
 
         character = null;
+        equipmentState = EquipmentState.InInventory;
         unequipedEvent?.Invoke();
 
         gameObject.SetActive(false);
     }
 
     public virtual void Drop() {
-        drop = false;
-        transform.parent = null;
         gameObject.AddComponent<Rigidbody>();
+        equipmentState = EquipmentState.OnGround;
     }
 }
