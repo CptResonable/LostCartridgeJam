@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1469a78280c3e6d4ebdd3152543b21ff, type: 3}
   m_Name: PhysicsMaterials
   m_EditorClassIdentifier: 
-  noFriction: {fileID: 0}
-  lowFriction: {fileID: 0}
+  noFriction: {fileID: 13400000, guid: cc46677681074564fa49bd1c1d6c48ba, type: 2}
+  lowFriction: {fileID: 13400000, guid: ee858db0660e44b47aea2b52ce80299f, type: 2}

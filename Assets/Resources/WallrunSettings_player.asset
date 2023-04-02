@@ -120,8 +120,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  verticalRunDuration: 1
-  maxVerticalVelocity: 7
+  verticalRunDuration: 0.9
+  maxVerticalVelocity: 5.5
   velocityNeededForWallClimb: 2
   maxAngleForWallClimb: 30
   horizontalForwardRunCurve:
