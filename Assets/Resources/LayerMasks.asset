@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   environment:
     serializedVersion: 2
-    m_Bits: 4097
+    m_Bits: 36865
   wall:
     serializedVersion: 2
-    m_Bits: 4096
+    m_Bits: 36864
   characters:
     serializedVersion: 2
     m_Bits: 0
