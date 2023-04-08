@@ -51,6 +51,25 @@ public class Equipment : MonoBehaviour {
         }
     }
 
+    public void EnableCollision() {
+        for (int i = 0; i < colliders.Count; i++) {
+            colliders[i].isTrigger = false;
+            //colliders[i].gameObject.SetActive(true);
+        }
+    }
+
+    public void DisableCollision() {
+        Rigidbody rb = transform.parent.GetComponent<Rigidbody>();
+        Vector3 inertiaTensor = rb.inertiaTensor;
+
+        for (int i = 0; i < colliders.Count; i++) {
+            colliders[i].isTrigger = true;
+            //colliders[i].gameObject.SetActive(false);
+        }
+
+        rb.inertiaTensor = inertiaTensor;
+    }
+
     // Equip into hands
     public virtual void Equip(Character character) {
         this.character = character;

@@ -57,6 +57,8 @@ public class RightHand : Hand {
             LookForGrip();
 
         PhysicalHandUpdate();
+
+        ObsructionCheck();
     }
 
     private void AnimatorController_animatorUpdatedEvent() {
@@ -92,6 +94,7 @@ public class RightHand : Hand {
         velocity = Vector3.Lerp(velocity, targetVelocity, Time.fixedDeltaTime * velocityChangeCoef);
         rb.velocity = velocity;
     }
+
     private void WallAvoidance() {
         if (character.locomotion.wallrunController.isWallRunning) {
             RaycastHit wallHit = character.locomotion.wallrunController.wallHit;
@@ -100,6 +103,18 @@ public class RightHand : Hand {
             if (Physics.Raycast(tPhysicalTarget.position + wallHit.normal, -wallHit.normal, out hit, 1.2f, LayerMasks.i.environment)) {
                 tPhysicalTarget.position = hit.point;
             }
+        }
+    }
+
+    private void ObsructionCheck() {
+        if (character.equipmentManager.state == CharacterEquipmentManager.State.nothingEquiped)
+            return;
+
+        if (character.locomotion.state_grounded.isSprinting || Physics.Linecast(transform.position, character.body.rArmR_1.position, LayerMasks.i.environment) || Physics.Linecast(character.body.rArmR_1.position, transform.position, LayerMasks.i.environment)) {
+            character.equipmentManager.equipedItem.DisableCollision();
+        }
+        else {
+            character.equipmentManager.equipedItem.EnableCollision();
         }
     }
 }
