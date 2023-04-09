@@ -44,7 +44,8 @@ public static class VectorUtils {
         return Vector3.Project((point - lineStartPoint), lineStartPoint - lineEndPoint) + lineStartPoint;
     }
 
-    //public static Enums.Direction VectorToDirection() {
-
-    //}
+    public static Vector2 RandomUnitVector() {
+        float random = Random.Range(0f, 360f);
+        return new Vector2(Mathf.Cos(random), Mathf.Sin(random));
+    }
 }
