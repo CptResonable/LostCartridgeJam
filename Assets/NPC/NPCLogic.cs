@@ -11,6 +11,8 @@ public class NPCLogic : MonoBehaviour {
     [SerializeField] protected NavMeshAgent navMeshAgent;
     [SerializeField] protected LayerMask environmentLayerMask;
 
+    protected event Delegates.EmptyDelegate updateInputEvent;
+
     protected virtual void Awake() {
         target = GameManager.i.player;
         character = GetComponent<Character>();
@@ -18,5 +20,6 @@ public class NPCLogic : MonoBehaviour {
     }
 
     public virtual void UpdateInput(CharacterInput input) {
+        updateInputEvent?.Invoke();
     }
 }
