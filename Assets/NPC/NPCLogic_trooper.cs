@@ -7,68 +7,57 @@ using UnityEngine.AI;
 public class NPCLogic_trooper : NPCLogic {
 
     private Vector3 targetPoint;
-    private Vector3 toTargetVector;
     private Vector3 moveDir;
 
+    private bool tarrgetInSight;
+    private Vector3 lastTargetSpottedPosition;
+    private Vector3 toTargetVector;
+
     public LogicState_randomPatrol state_randomPatrol;
-    [HideInInspector] public LogicState_randomPatrol activeState;
+    public LogicState_fighting state_fighting;
+    [HideInInspector] public LogicState activeState;
+
+    public delegate void StateChangedDelegate(LogicState newState);
+    public event StateChangedDelegate stateChangedEvent;
 
     protected override void Awake() {
         base.Awake();
 
         state_randomPatrol.Init(this);
+        state_fighting.Init(this);
         activeState = state_randomPatrol;
         activeState.EnterState();
     }
 
     public override void UpdateInput(CharacterInput input) {
+
+        if (target != null)
+            toTargetVector = VectorUtils.FromToVector(transform.position, target.transform.position);
+
         base.UpdateInput(input);
         this.input = input;
 
-        return;
-
-        Rotation(input);
-        Translation(input);
-
-        //if (character.weaponController.equipedGun.bulletsInMagCount <= 0 && !character.weaponController.equipedGun.bulletInChaimber && character.weaponController.equipedGun.magIn)
-        //    input.action_reload.Click();
-
-        if (Input.GetKeyDown(KeyCode.T))
-            FindNewTargetPosition();
-
-        //dashAttackCooldown -= Time.deltaTime;
-        //if (dashAttackCooldown < 0 && toTargetVector.magnitude < 2)
-        //    Dash();
-        navMeshAgent.transform.position = transform.position;
+        LookForTarget();
     }
 
-    private void Rotation(CharacterInput input) {
-        Vector3 lookFlatDirection = Vector3.ProjectOnPlane(character.fpCamera.tCameraTarget.forward, Vector3.up);
-        float dAngle = Vector3.SignedAngle(lookFlatDirection, VectorUtils.FromToVector(input.transform.position, target.transform.position), Vector3.up);
-        input.mouseMovement.xDelta = (Mathf.Sign(dAngle) * Mathf.Sqrt(Mathf.Abs(dAngle)) * 0.2f) / Settings.MOUSE_SENSITIVITY;
+    private bool LookForTarget() {
+        if (!Physics.Linecast(character.body.tHead.position, GameManager.i.player.body.tHead.position, LayerMasks.i.environment)) {
+            Vector3 headToTargetHead = VectorUtils.FromToVector(character.body.tHead.position, GameManager.i.player.body.tHead.position);
 
-        float dAnglePitch = Vector3.SignedAngle(character.body.tHead.forward, toTargetVector, character.transform.right);
-        //Debug.DrawRay(input.transform.position, toTargetVector, Color.red);
-        //Debug.DrawRay(input.transform.position, -character.fpCamera.pitch, Color.blue);
-        dAnglePitch = Vector3.Angle(character.body.tHead.forward, toTargetVector);
-        input.mouseMovement.yDelta = character.fpCamera.pitch / Settings.MOUSE_SENSITIVITY;
+            if (Vector3.Angle(character.fpCamera.tCameraTarget.forward, headToTargetHead) < 60) {
+                TargetInSight(GameManager.i.player);
+                return true;
+            }
+        }
+
+        return false;
     }
 
-    private void Translation(CharacterInput input) {
-        navMeshAgent.SetDestination(targetPoint);
-
-        Vector3 moveDir = transform.InverseTransformVector(navMeshAgent.desiredVelocity.normalized);
-        //moveDir = navMeshAgent.desiredVelocity.normalized;
-
-        toTargetVector = VectorUtils.FromToVector(input.transform.position, targetPoint);
-
-        if (target.transform.position.y > transform.position.y + 0.1f && Vector3.Distance(transform.position, target.transform.position) < 2)
-            input.action_jump.Click();
-
-        if (toTargetVector.magnitude > 1)
-            input.moveInput = moveDir;
-        else
-            input.moveInput = Vector3.zero;
+    private void TargetInSight(Character character) {
+        Debug.Log("ISEEYOU");
+        target = character;
+        lastTargetSpottedPosition = character.transform.position;
+        GizmoManager.i.DrawSphere(Time.deltaTime, Color.blue, character.body.tHead.position + Vector3.up * 0.3f, 0.5f);
     }
 
     private void FindNewTargetPosition() {
@@ -104,11 +93,20 @@ public class NPCLogic_trooper : NPCLogic {
         }
     }
 
+    private void EnterState_fighting() {
+        activeState.ExitState();
+        state_fighting.EnterState();
+        activeState = state_fighting;
+        stateChangedEvent?.Invoke(activeState);
+
+        Debug.Log("New state: FIGHTING");
+    }
+
     [System.Serializable]
     public class LogicState {
         protected NPCLogic_trooper logic;
 
-        public enum StateIDEnum { RandomPatrol }
+        public enum StateIDEnum { RandomPatrol, Fighting }
         [HideInInspector] public StateIDEnum stateID;
 
         public virtual void Init(NPCLogic_trooper logic) {
@@ -126,6 +124,7 @@ public class NPCLogic_trooper : NPCLogic {
     public class LogicState_randomPatrol : LogicState {
 
         private bool targetReached = false;
+
         public override void Init(NPCLogic_trooper logic) {
             base.Init(logic);
             stateID = StateIDEnum.RandomPatrol;
@@ -162,6 +161,10 @@ public class NPCLogic_trooper : NPCLogic {
 
             Rotation();
 
+            if (logic.LookForTarget()) {
+                logic.EnterState_fighting();
+            }
+
             logic.navMeshAgent.transform.position = logic.transform.position;
         }
 
@@ -182,5 +185,98 @@ public class NPCLogic_trooper : NPCLogic {
             logic.FindNewTargetPosition(logic.transform.position, Random.Range(2f, 20f));
             targetReached = false;
         }
+    }
+
+    [System.Serializable]
+    public class LogicState_fighting : LogicState {
+
+        private bool targetReached = false;
+        private bool isBursting;
+        private bool burstOnCooldown;
+
+        public override void Init(NPCLogic_trooper logic) {
+            base.Init(logic);
+            stateID = StateIDEnum.Fighting;
+        }
+
+        public override void EnterState() {
+            base.EnterState();
+            logic.input.action_equipSlot2.Click();
+            logic.updateInputEvent += Logic_updateInputEvent;
+        }
+
+        public override void ExitState() {
+            base.ExitState();
+            logic.updateInputEvent -= Logic_updateInputEvent;
+        }
+
+        private void Logic_updateInputEvent() {
+            logic.tarrgetInSight = logic.LookForTarget();
+
+            LookAtTarget();
+
+            if (logic.tarrgetInSight && !isBursting && !burstOnCooldown)
+                logic.StartCoroutine(BurstCorutine());
+
+            //if (targetReached)
+            //    return;
+
+            //logic.navMeshAgent.SetDestination(logic.targetPoint);
+
+            //logic.moveDir = logic.transform.InverseTransformVector(logic.navMeshAgent.desiredVelocity.normalized);
+            //Vector3 toTargetVector = VectorUtils.FromToVector(logic.input.transform.position, logic.targetPoint);
+
+            //logic.input.moveInput = logic.moveDir;
+            //if (toTargetVector.magnitude > 1) {
+            //    logic.input.moveInput = logic.moveDir;
+            //}
+            //else {
+            //    logic.input.moveInput = Vector3.zero;
+            //    TargetReached();
+            //}
+
+            //Rotation();
+
+            //logic.navMeshAgent.transform.position = logic.transform.position;
+        }
+
+        private IEnumerator BurstCorutine() {
+            yield return new WaitForSeconds(Random.Range(0.3f, 0.8f));
+            isBursting = true;
+            float burstDuration = Random.Range(0.2f, 1.5f);
+            logic.input.action_attack.isDown = true;
+            yield return new WaitForSeconds(burstDuration);
+            logic.input.action_attack.isDown = false;
+            isBursting = false;
+            float burstCooldown = Random.Range(0.3f, 1.2f) * burstDuration;
+            yield return new WaitForSeconds(burstCooldown);
+            burstOnCooldown = false;
+        }
+
+        private void LookAtTarget() {
+            Vector3 lookFlatDirection = Vector3.ProjectOnPlane(logic.character.fpCamera.tCameraTarget.forward, Vector3.up);
+            float dAngle = Vector3.SignedAngle(lookFlatDirection, logic.toTargetVector, Vector3.up);
+            logic.input.mouseMovement.xDelta = (Mathf.Sign(dAngle) * Mathf.Sqrt(Mathf.Abs(dAngle)) * 0.2f) / Settings.MOUSE_SENSITIVITY;
+
+            logic.input.mouseMovement.yDelta = logic.character.fpCamera.pitch / Settings.MOUSE_SENSITIVITY;
+        }
+
+        //private void Rotation() {
+        //    Vector3 lookFlatDirection = Vector3.ProjectOnPlane(logic.character.fpCamera.tCameraTarget.forward, Vector3.up);
+        //    float dAngle = Vector3.SignedAngle(lookFlatDirection, logic.navMeshAgent.desiredVelocity.normalized, Vector3.up);
+        //    logic.input.mouseMovement.xDelta = (Mathf.Sign(dAngle) * Mathf.Sqrt(Mathf.Abs(dAngle)) * 0.2f) / Settings.MOUSE_SENSITIVITY;
+
+        //    logic.input.mouseMovement.yDelta = logic.character.fpCamera.pitch / Settings.MOUSE_SENSITIVITY;
+        //}
+
+        //private void TargetReached() {
+        //    targetReached = true;
+        //    Utils.DelayedFunctionCall(FindNewTargetPosition, 3);
+        //}
+
+        //private void FindNewTargetPosition() {
+        //    logic.FindNewTargetPosition(logic.transform.position, Random.Range(2f, 20f));
+        //    targetReached = false;
+        //}
     }
 }
