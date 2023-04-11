@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: matToonGunMetal_03
+  m_Shader: {fileID: 4800000, guid: bee44b4a58655ee4cbff107302a3e131, type: 3}
+  m_Parent: {fileID: 2100000, guid: 72a8834bf50c1df47999d4947b532dde, type: 2}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - DR_CEL_EXTRA_ON
+  - DR_SPECULAR_ON
+  - _CELPRIMARYMODE_STEPS
+  - _TEXTUREBLENDINGMODE_MULTIPLY
+  - _UNITYSHADOWMODE_MULTIPLY
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap:
+    RenderType: Opaque
+  disabledShaderPasses:
+  - SRPDEFAULTUNLIT
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs: []
+    m_Ints: []
+    m_Floats:
+    - _CelExtraEnabled: 1
+    - _FlatSpecularSize: 0
+    - _FlatnessExtra: 0.84
+    - _SelfShadingSizeExtra: 0
+    - _ShadowEdgeSizeExtra: 0
+    - _SpecularEnabled: 1
+    m_Colors:
+    - _BaseColor: {r: 0.26415092, g: 0.26415092, b: 0.26415092, a: 1}
+    - _ColorDimExtra: {r: 0.18569775, g: 0.25436133, b: 0.3679245, a: 0.85}
+    - _ColorDimSteps: {r: 0, g: 0, b: 0, a: 1}
+    - _FlatSpecularColor: {r: 0.16037738, g: 0.16037738, b: 0.16037738, a: 1}
+  m_BuildTextureStacks: []

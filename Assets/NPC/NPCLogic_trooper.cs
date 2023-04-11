@@ -53,6 +53,13 @@ public class NPCLogic_trooper : NPCLogic {
         return false;
     }
 
+    public bool CheckLOS(Vector3 fromPoint, Vector3 toPoint) {
+        if (Physics.Linecast(fromPoint, toPoint, LayerMasks.i.environment))
+            return false;
+        else
+            return true;
+    }
+
     private void TargetInSight(Character character) {
         Debug.Log("ISEEYOU");
         target = character;
@@ -84,8 +91,6 @@ public class NPCLogic_trooper : NPCLogic {
         for (int tries = 0; tries < maxTries; tries++) {
             Vector2 randDir = VectorUtils.RandomUnitVector();
 
-            //NavMeshPath path = new NavMeshPath();
-            //path.
             if (NavMesh.SamplePosition(origin + new Vector3(randDir.x, 0, randDir.y) * radius, out navMeshHit, 1, NavMesh.AllAreas)) {
                 targetPoint = navMeshHit.position;
                 break;
@@ -194,6 +199,8 @@ public class NPCLogic_trooper : NPCLogic {
         private bool isBursting;
         private bool burstOnCooldown;
 
+        private Gun gun;
+
         public override void Init(NPCLogic_trooper logic) {
             base.Init(logic);
             stateID = StateIDEnum.Fighting;
@@ -202,6 +209,8 @@ public class NPCLogic_trooper : NPCLogic {
         public override void EnterState() {
             base.EnterState();
             logic.input.action_equipSlot2.Click();
+            gun = (Gun)logic.character.equipmentManager.equipedItem;
+            Utils.DelayedFunctionCall(FindNewTargetPosition, 1);
             logic.updateInputEvent += Logic_updateInputEvent;
         }
 
@@ -215,30 +224,71 @@ public class NPCLogic_trooper : NPCLogic {
 
             LookAtTarget();
 
-            if (logic.tarrgetInSight && !isBursting && !burstOnCooldown)
-                logic.StartCoroutine(BurstCorutine());
+            if (!isBursting && !gun.bulletInChaimber && gun.bulletsInMagCount == 0 && !gun.isReloading)
+                logic.input.action_reload.Click();
+
+
+            //if (logic.tarrgetInSight && !isBursting && !burstOnCooldown)
+            //    logic.StartCoroutine(BurstCorutine());
 
             //if (targetReached)
             //    return;
 
-            //logic.navMeshAgent.SetDestination(logic.targetPoint);
+            logic.navMeshAgent.SetDestination(logic.targetPoint);
 
-            //logic.moveDir = logic.transform.InverseTransformVector(logic.navMeshAgent.desiredVelocity.normalized);
-            //Vector3 toTargetVector = VectorUtils.FromToVector(logic.input.transform.position, logic.targetPoint);
+            logic.moveDir = logic.transform.InverseTransformVector(logic.navMeshAgent.desiredVelocity.normalized);
+            Vector3 toTargetVector = VectorUtils.FromToVector(logic.input.transform.position, logic.targetPoint);
 
-            //logic.input.moveInput = logic.moveDir;
-            //if (toTargetVector.magnitude > 1) {
-            //    logic.input.moveInput = logic.moveDir;
-            //}
-            //else {
-            //    logic.input.moveInput = Vector3.zero;
-            //    TargetReached();
-            //}
+            logic.input.moveInput = logic.moveDir;
+            if (toTargetVector.magnitude > 1) {
+                logic.input.moveInput = logic.moveDir;
+            }
+            else {
+                logic.input.moveInput = Vector3.zero;
+
+                if (!targetReached)
+                    TargetReached();
+            }
 
             //Rotation();
 
-            //logic.navMeshAgent.transform.position = logic.transform.position;
+            logic.navMeshAgent.transform.position = logic.transform.position;
         }
+
+        private void TargetReached() {
+            targetReached = true;
+            Utils.DelayedFunctionCall(FindNewTargetPosition, 3);
+        }
+
+        private void FindNewTargetPosition() {
+
+            if (!TryFindNewTargetPosition(logic.target.transform.position, Random.Range(2f, 10f)))
+                Utils.DelayedFunctionCall(FindNewTargetPosition, 2); // Failed to find good position, try again in 2 sec
+        }
+
+        private bool TryFindNewTargetPosition(Vector3 origin, float radius) {
+            int maxTries = 10;
+            NavMeshHit navMeshHit;
+
+            for (int tries = 0; tries < maxTries; tries++) {
+                Vector2 randDir = VectorUtils.RandomUnitVector();
+
+                if (NavMesh.SamplePosition(origin + new Vector3(randDir.x, 0, randDir.y) * radius, out navMeshHit, 1, NavMesh.AllAreas)) {
+
+                    // Make sure new position has LOS to target
+                    if (logic.CheckLOS(navMeshHit.position + Vector3.up * 1.75f, logic.target.body.tHead.position)) {
+
+                        logic.targetPoint = navMeshHit.position;
+                        Debug.Log("New position found!");
+                        targetReached = false;
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
 
         private IEnumerator BurstCorutine() {
             yield return new WaitForSeconds(Random.Range(0.3f, 0.8f));
