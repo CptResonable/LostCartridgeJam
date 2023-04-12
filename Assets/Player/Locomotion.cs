@@ -34,6 +34,8 @@ public class Locomotion {
 
     private Vector3 meshHandToPhysicalHandError;
 
+    [HideInInspector] public float aiSpeedMod = 1; // 
+
     public event Delegates.EmptyDelegate sprintStartedEvent;
     public event Delegates.EmptyDelegate sprintEndedEvent;
 
@@ -63,6 +65,8 @@ public class Locomotion {
         state_wallRunning.Init(this);
         activeState = state_grounded;
         activeState.EnterState();
+
+        aiSpeedMod = 1;
     }
 
     private void Character_updateEvent() {
@@ -339,7 +343,7 @@ public class Locomotion {
             }
 
             // Project vector onto ground
-            moveVector = Vector3.ProjectOnPlane(moveVector, locomotion.downHit.normal);
+            moveVector = Vector3.ProjectOnPlane(moveVector, locomotion.downHit.normal) * locomotion.aiSpeedMod;
 
             Vector3 projectedUp = Vector3.Project(Vector3.up * locomotion.rb.velocity.y, locomotion.downHit.normal);
 

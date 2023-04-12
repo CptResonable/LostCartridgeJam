@@ -227,9 +227,8 @@ public class NPCLogic_trooper : NPCLogic {
             if (!isBursting && !gun.bulletInChaimber && gun.bulletsInMagCount == 0 && !gun.isReloading)
                 logic.input.action_reload.Click();
 
-
-            //if (logic.tarrgetInSight && !isBursting && !burstOnCooldown)
-            //    logic.StartCoroutine(BurstCorutine());
+            if (logic.tarrgetInSight && !isBursting && !burstOnCooldown)
+                logic.StartCoroutine(BurstCorutine());
 
             //if (targetReached)
             //    return;
@@ -291,6 +290,11 @@ public class NPCLogic_trooper : NPCLogic {
 
 
         private IEnumerator BurstCorutine() {
+            Debug.Log("burstStart");
+
+            logic.character.locomotion.aiSpeedMod = 0.5f;
+            burstOnCooldown = true;
+
             yield return new WaitForSeconds(Random.Range(0.3f, 0.8f));
             isBursting = true;
             float burstDuration = Random.Range(0.2f, 1.5f);
@@ -299,6 +303,9 @@ public class NPCLogic_trooper : NPCLogic {
             logic.input.action_attack.isDown = false;
             isBursting = false;
             float burstCooldown = Random.Range(0.3f, 1.2f) * burstDuration;
+
+            logic.character.locomotion.aiSpeedMod = 1f;
+
             yield return new WaitForSeconds(burstCooldown);
             burstOnCooldown = false;
         }
