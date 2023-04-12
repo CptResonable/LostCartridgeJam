@@ -2255,7 +2255,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 8ae707304d0a0ce4e896017922ae1094, type: 2}
+  - {fileID: 2100000, guid: 36eb3859d7612e34c95a1998f810c5e9, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5514,6 +5514,12 @@ MonoBehaviour:
   environmentLayerMask:
     serializedVersion: 2
     m_Bits: 0
+  state_randomPatrol:
+    stateID: 0
+  state_fighting:
+    stateID: 0
+  activeState:
+    stateID: 0
 --- !u!114 &2735624213555400893
 MonoBehaviour:
   m_ObjectHideFlags: 0

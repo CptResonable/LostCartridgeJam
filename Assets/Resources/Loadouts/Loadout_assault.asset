@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Loadout_assault
   m_EditorClassIdentifier: 
   items:
-  - {fileID: 3772797300618754255, guid: 527f4e4f17666ca469dfffeac44cfa13, type: 3}
+  - {fileID: 3772797300618754255, guid: 277133bd6407be94d83f4634cfcad32b, type: 3}
   - {fileID: 3772797300618754255, guid: cc30d1d9be44ade41a4c41f753ce4439, type: 3}

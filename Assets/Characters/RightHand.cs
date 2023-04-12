@@ -8,7 +8,7 @@ public class RightHand : Hand {
     private Animator rightHandAnimator;
 
     private Vector3 handRotationOffset;
-
+    [SerializeField] public Vector3 inertiaTensor;
 
     public override void Init(Character character) {
         base.Init(character);
@@ -24,6 +24,8 @@ public class RightHand : Hand {
         // Set ik target to physical hand
         tIkTarget.position = transform.position;
         tIkTarget.rotation = transform.rotation;
+
+        inertiaTensor = rb.inertiaTensor;
     }
 
 

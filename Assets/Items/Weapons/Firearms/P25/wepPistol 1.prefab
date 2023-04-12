@@ -1113,7 +1113,7 @@ MonoBehaviour:
   tOffHandTarget: {fileID: 1055402783947464875}
   targetHandPosition: {x: 0.135, y: -0.225, z: 0.2}
   targetAdsHandPosition: {x: 0, y: -0.146, z: 0.3}
-  jointDriveSpring: 100
+  jointDriveSpring: 130
   jointDriveDamper: 2
   character: {fileID: 0}
   timeBetweenShots: 0.1

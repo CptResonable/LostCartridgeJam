@@ -97,6 +97,11 @@ public class Gun : Equipment {
             if (character.characterInput.action_attack.isDown)
                 TryFire(false);
         }
+
+        transform.parent.GetComponent<Rigidbody>().inertiaTensor = new Vector3(0.0168549232f, 0.00615772139f, 0.0125291189f);
+        transform.parent.GetComponent<Rigidbody>().inertiaTensor = Vector3.Lerp(new Vector3(0.0873092264f, 0.012772995f, 0.0763731599f), new Vector3(0.0168549232f, 0.00615772139f, 0.0125291189f), 0.5f);
+
+
     }
 
     protected override void LateUpdate() {

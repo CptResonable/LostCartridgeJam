@@ -38,12 +38,12 @@ Material:
     m_Floats:
     - _CelExtraEnabled: 1
     - _CelPrimaryMode: 1
-    - _FlatSpecularEdgeSmoothness: 1
-    - _FlatSpecularSize: 0.023
-    - _Flatness: 0.461
+    - _FlatSpecularEdgeSmoothness: 0.2
+    - _FlatSpecularSize: 0
+    - _Flatness: 0.51
     - _FlatnessExtra: 0.5
     - _SelfShadingSize: 0.673
-    - _SelfShadingSizeExtra: 0.362
+    - _SelfShadingSizeExtra: 0.45
     - _ShadowEdgeSizeExtra: 0
     - _SpecularEnabled: 1
     m_Colors:
@@ -51,5 +51,5 @@ Material:
     - _ColorDim: {r: 0.1509434, g: 0.1509434, b: 0.1509434, a: 0.85}
     - _ColorDimExtra: {r: 0.10056958, g: 0.13166709, b: 0.18867922, a: 0.85}
     - _ColorDimSteps: {r: 0, g: 0, b: 0, a: 1}
-    - _FlatSpecularColor: {r: 0.3018868, g: 0.3018868, b: 0.3018868, a: 1}
+    - _FlatSpecularColor: {r: 0.31132078, g: 0.23089248, b: 0.1806248, a: 1}
   m_BuildTextureStacks: []
