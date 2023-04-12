@@ -1163,6 +1163,7 @@ MonoBehaviour:
   grabPoint: {x: 0, y: 0, z: 0}
   grabRotation: {x: 0, y: 0, z: 0, w: 0}
   tRightHandAnimator: {fileID: 1061916866076582649}
+  inertiaTensor: {x: 0, y: 0, z: 0}
 --- !u!1 &2925393504685623569
 GameObject:
   m_ObjectHideFlags: 0
@@ -1738,7 +1739,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6538922793939608213}
   m_Layer: 6
-  m_Name: CameraTarget
+  m_Name: CameraTarget_hip
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1752,7 +1753,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5397070528236997315}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.0014079575, y: 0.1534262, z: -0.049473394}
+  m_LocalPosition: {x: 0, y: 0.2, z: -0.049}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1890,6 +1891,37 @@ Transform:
   m_Father: {fileID: 7386630257032044851}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &7248257533921887991
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4754172326468030141}
+  m_Layer: 6
+  m_Name: CameraTarget_ads
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4754172326468030141
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7248257533921887991}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.066, y: 0.2, z: -0.049}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 376628930625923292}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7386630257032044860
 GameObject:
   m_ObjectHideFlags: 0
@@ -2013,7 +2045,8 @@ MonoBehaviour:
   isPlayer: 1
   characterInput: {fileID: 0}
   fpCamera:
-    tCameraTarget: {fileID: 6538922793939608213}
+    tCameraTarget_hip: {fileID: 6538922793939608213}
+    tCameraTarget_ads: {fileID: 4754172326468030141}
     tCamera: {fileID: 7458831216974441010}
     camera: {fileID: 662654167}
     animator: {fileID: 662654168}
@@ -2118,6 +2151,7 @@ MonoBehaviour:
       stateID: 0
       canADS: 0
     activeStateEnum: 0
+    aiSpeedMod: 1
   stanceController:
     isADS: 0
   equipmentManager:
@@ -3646,6 +3680,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 6538922793939608213}
+    - targetCorrespondingSourceObject: {fileID: 3288502804575051021, guid: f869c8affc168f24cbeec4ce02c99087,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4754172326468030141}
   m_SourcePrefab: {fileID: 100100000, guid: f869c8affc168f24cbeec4ce02c99087, type: 3}
 --- !u!4 &376628930625923292 stripped
 Transform:

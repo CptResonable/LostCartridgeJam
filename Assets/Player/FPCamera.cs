@@ -4,7 +4,8 @@ using UnityEngine;
 
 [System.Serializable]
 public class FPCamera {
-    public Transform tCameraTarget;
+    public Transform tCameraTarget_hip;
+    public Transform tCameraTarget_ads;
     public Transform tCamera;
     public Camera camera;
     public Animator animator;

@@ -2302,6 +2302,37 @@ SkinnedMeshRenderer:
     m_Center: {x: 0.08918184, y: -0.078001946, z: -0.072638035}
     m_Extent: {x: 0.42620796, y: 0.8750988, z: 0.41206217}
   m_DirtyAABB: 0
+--- !u!1 &3375720326199248995
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2295395686691458267}
+  m_Layer: 6
+  m_Name: CameraTarget_ads
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2295395686691458267
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3375720326199248995}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.066, y: 0.2, z: -0.049}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2155524589747416123}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3479855144517935302
 GameObject:
   m_ObjectHideFlags: 0
@@ -3384,6 +3415,7 @@ MonoBehaviour:
   grabPoint: {x: 0, y: 0, z: 0}
   grabRotation: {x: 0, y: 0, z: 0, w: 0}
   tRightHandAnimator: {fileID: 1616607507972220446}
+  inertiaTensor: {x: 0, y: 0, z: 0}
 --- !u!1 &5004150810957625092
 GameObject:
   m_ObjectHideFlags: 0
@@ -3824,7 +3856,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4786503518643938930}
   m_Layer: 6
-  m_Name: CameraTarget
+  m_Name: CameraTarget_hip
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3838,7 +3870,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5923859933004008996}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.0014079575, y: 0.1534262, z: -0.049473394}
+  m_LocalPosition: {x: 0, y: 0.2, z: -0.049}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3909,6 +3941,7 @@ Transform:
   m_Children:
   - {fileID: 2809062681503561957}
   - {fileID: 4786503518643938930}
+  - {fileID: 2295395686691458267}
   m_Father: {fileID: 5827237066506240804}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5212,7 +5245,8 @@ MonoBehaviour:
   isPlayer: 0
   characterInput: {fileID: 7018515795662859507}
   fpCamera:
-    tCameraTarget: {fileID: 4786503518643938930}
+    tCameraTarget_hip: {fileID: 4786503518643938930}
+    tCameraTarget_ads: {fileID: 2295395686691458267}
     tCamera: {fileID: 9174095554237394645}
     camera: {fileID: 1789046387102124080}
     animator: {fileID: 1789046387102124095}
@@ -5317,6 +5351,7 @@ MonoBehaviour:
       stateID: 0
       canADS: 0
     activeStateEnum: 0
+    aiSpeedMod: 1
   stanceController:
     isADS: 0
   equipmentManager:

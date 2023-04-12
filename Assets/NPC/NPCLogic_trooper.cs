@@ -44,7 +44,7 @@ public class NPCLogic_trooper : NPCLogic {
         if (!Physics.Linecast(character.body.tHead.position, GameManager.i.player.body.tHead.position, LayerMasks.i.environment)) {
             Vector3 headToTargetHead = VectorUtils.FromToVector(character.body.tHead.position, GameManager.i.player.body.tHead.position);
 
-            if (Vector3.Angle(character.fpCamera.tCameraTarget.forward, headToTargetHead) < 60) {
+            if (Vector3.Angle(character.fpCamera.tCamera.forward, headToTargetHead) < 60) {
                 TargetInSight(GameManager.i.player);
                 return true;
             }
@@ -174,7 +174,7 @@ public class NPCLogic_trooper : NPCLogic {
         }
 
         private void Rotation() {
-            Vector3 lookFlatDirection = Vector3.ProjectOnPlane(logic.character.fpCamera.tCameraTarget.forward, Vector3.up);
+            Vector3 lookFlatDirection = Vector3.ProjectOnPlane(logic.character.fpCamera.tCamera.forward, Vector3.up);
             float dAngle = Vector3.SignedAngle(lookFlatDirection, logic.navMeshAgent.desiredVelocity.normalized, Vector3.up);
             logic.input.mouseMovement.xDelta = (Mathf.Sign(dAngle) * Mathf.Sqrt(Mathf.Abs(dAngle)) * 0.2f) / Settings.MOUSE_SENSITIVITY;
 
@@ -311,7 +311,7 @@ public class NPCLogic_trooper : NPCLogic {
         }
 
         private void LookAtTarget() {
-            Vector3 lookFlatDirection = Vector3.ProjectOnPlane(logic.character.fpCamera.tCameraTarget.forward, Vector3.up);
+            Vector3 lookFlatDirection = Vector3.ProjectOnPlane(logic.character.fpCamera.tCamera.forward, Vector3.up);
             float dAngle = Vector3.SignedAngle(lookFlatDirection, logic.toTargetVector, Vector3.up);
             logic.input.mouseMovement.xDelta = (Mathf.Sign(dAngle) * Mathf.Sqrt(Mathf.Abs(dAngle)) * 0.2f) / Settings.MOUSE_SENSITIVITY;
 
