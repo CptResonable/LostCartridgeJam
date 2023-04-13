@@ -199,6 +199,10 @@ public class NPCLogic_trooper : NPCLogic {
         private bool isBursting;
         private bool burstOnCooldown;
 
+        private float aimSwaySpeed = 2;
+        private float aimSwayAmount_horizontal = 0.5f;
+        private float aimSwayAmount_vertical = 0.3f;
+
         private Gun gun;
 
         public override void Init(NPCLogic_trooper logic) {
@@ -341,8 +345,9 @@ public class NPCLogic_trooper : NPCLogic {
             float dAngle = Vector3.SignedAngle(lookFlatDirection, logic.toTargetVector, Vector3.up);
 
             float dX = (Mathf.Sign(dAngle) * Mathf.Sqrt(Mathf.Abs(dAngle)) * 0.2f);
-            dX += (Mathf.PerlinNoise(Time.time, Time.time + 243) - 0.5f) * 1.5f;
-            smoothDX = Mathf.Lerp(smoothDX, dX, Time.deltaTime * 3);
+            //dX += (Mathf.PerlinNoise(Time.time * aimSwaySpeed, Time.time * aimSwaySpeed + 243) - 0.5f) * aimSwayAmount_horizontal; // Sway
+            dX += Perlin.CustomFbm(Time.time + 324, 0.75f, aimSwayAmount_horizontal, 3, 2, 0.75f);
+            smoothDX = Mathf.Lerp(smoothDX, dX, Time.deltaTime * 6);
 
             logic.input.mouseMovement.xDelta = smoothDX / Settings.MOUSE_SENSITIVITY;
 
@@ -360,9 +365,11 @@ public class NPCLogic_trooper : NPCLogic {
                 dY = gunPitch * 0.05f;
             }
 
-            dY += (Mathf.PerlinNoise(Time.time- 324, Time.time + 1243) - 0.5f) * 0.5f;
+            //dY += (Mathf.PerlinNoise(Time.time * aimSwaySpeed - 324, Time.time * aimSwaySpeed + 1243) - 0.5f) * aimSwayAmount_vertical; // Sway
+            //dY += Perlin.CustomFbm(Time.time - 324, 0.75f, aimSwayAmount_vertical, 3, 2, 0);
+            dY += Perlin.CustomFbm(Time.time + 674, 0.75f, aimSwayAmount_vertical, 3, 2, 0.75f);
             dY -= 0.01f;
-            smoothDY = Mathf.Lerp(smoothDY, dY, Time.deltaTime * 3);
+            smoothDY = Mathf.Lerp(smoothDY, dY, Time.deltaTime * 6);
 
             logic.input.mouseMovement.yDelta = smoothDY / Settings.MOUSE_SENSITIVITY;
         }
