@@ -310,12 +310,61 @@ public class NPCLogic_trooper : NPCLogic {
             burstOnCooldown = false;
         }
 
+        private float smoothDX, smoothDY;
+
+        //private void LookAtTarget() {
+        //    Vector3 lookFlatDirection = Vector3.ProjectOnPlane(logic.character.fpCamera.tCamera.forward, Vector3.up);
+        //    float dAngle = Vector3.SignedAngle(lookFlatDirection, logic.toTargetVector, Vector3.up);
+
+        //    float dX = (Mathf.Sign(dAngle) * Mathf.Sqrt(Mathf.Abs(dAngle)) * 0.2f);
+
+        //    smoothDX = Mathf.Lerp(smoothDX, dX, Time.deltaTime * 3);
+
+        //    logic.input.mouseMovement.xDelta = smoothDX / Settings.MOUSE_SENSITIVITY;
+
+        //    float dY;
+        //    if (dAngle > 80) {
+        //        dY = logic.character.fpCamera.pitch;
+        //    }
+        //    else {
+        //        float toTargetPitch = 90 - Vector3.Angle(logic.toTargetVector.normalized, Vector3.up);
+        //        dY = logic.character.fpCamera.pitch + toTargetPitch;
+        //    }
+
+        //    smoothDY = Mathf.Lerp(smoothDY, dY, Time.deltaTime * 3);
+
+        //    logic.input.mouseMovement.yDelta = smoothDY / Settings.MOUSE_SENSITIVITY;
+        //}
+
         private void LookAtTarget() {
             Vector3 lookFlatDirection = Vector3.ProjectOnPlane(logic.character.fpCamera.tCamera.forward, Vector3.up);
             float dAngle = Vector3.SignedAngle(lookFlatDirection, logic.toTargetVector, Vector3.up);
-            logic.input.mouseMovement.xDelta = (Mathf.Sign(dAngle) * Mathf.Sqrt(Mathf.Abs(dAngle)) * 0.2f) / Settings.MOUSE_SENSITIVITY;
 
-            logic.input.mouseMovement.yDelta = logic.character.fpCamera.pitch / Settings.MOUSE_SENSITIVITY;
+            float dX = (Mathf.Sign(dAngle) * Mathf.Sqrt(Mathf.Abs(dAngle)) * 0.2f);
+            dX += (Mathf.PerlinNoise(Time.time, Time.time + 243) - 0.5f) * 1.5f;
+            smoothDX = Mathf.Lerp(smoothDX, dX, Time.deltaTime * 3);
+
+            logic.input.mouseMovement.xDelta = smoothDX / Settings.MOUSE_SENSITIVITY;
+
+            float dY;
+            if (dAngle > 80) {
+                dY = logic.character.fpCamera.pitch;
+            }
+            else {
+                float toTargetPitch = 90 - Vector3.Angle(logic.toTargetVector.normalized, Vector3.up);
+                toTargetPitch = 90 - Vector3.Angle(logic.toTargetVector.normalized, Vector3.up);
+                Vector3 gunProjVec = Vector3.ProjectOnPlane(gun.transform.up, Vector3.Cross(logic.toTargetVector.normalized, Vector3.up));
+                float gunPitch = Vector3.SignedAngle(gunProjVec, logic.toTargetVector.normalized, Vector3.Cross(logic.toTargetVector.normalized, Vector3.up));
+                //float gunPitch = 90 - Vector3.Angle(-gun.transform.up, Vector3.up);
+                Debug.Log("GP: " + gunPitch);
+                dY = gunPitch * 0.05f;
+            }
+
+            dY += (Mathf.PerlinNoise(Time.time- 324, Time.time + 1243) - 0.5f) * 0.5f;
+            dY -= 0.01f;
+            smoothDY = Mathf.Lerp(smoothDY, dY, Time.deltaTime * 3);
+
+            logic.input.mouseMovement.yDelta = smoothDY / Settings.MOUSE_SENSITIVITY;
         }
 
         //private void Rotation() {
