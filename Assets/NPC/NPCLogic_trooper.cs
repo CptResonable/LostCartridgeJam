@@ -2,19 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using TMPro;
 
 
 public class NPCLogic_trooper : NPCLogic {
+    [SerializeField] private TMP_Text stateDebugText;
 
     private Vector3 targetPoint;
     private Vector3 moveDir;
 
-    private bool tarrgetInSight;
+    private bool targetInSight; // Is target in line of sight?
+    private bool toTargetVectorBlocked; // Is the vector between this char and target blocked?
+    private float toTargetVectorBlockedDuration; // For how long has vector been blocked?
     private Vector3 lastTargetSpottedPosition;
     private Vector3 toTargetVector;
 
     public LogicState_randomPatrol state_randomPatrol;
     public LogicState_fighting state_fighting;
+    public LogicState_searching state_searching;
     [HideInInspector] public LogicState activeState;
 
     public delegate void StateChangedDelegate(LogicState newState);
@@ -25,14 +30,29 @@ public class NPCLogic_trooper : NPCLogic {
 
         state_randomPatrol.Init(this);
         state_fighting.Init(this);
+        state_searching.Init(this);
         activeState = state_randomPatrol;
         activeState.EnterState();
     }
 
     public override void UpdateInput(CharacterInput input) {
 
-        if (target != null)
+        if (target != null) {
             toTargetVector = VectorUtils.FromToVector(transform.position, target.transform.position);
+            toTargetVectorBlocked = !CheckLOS(character.body.tHead.position, target.body.tHead.position);
+
+            if (toTargetVectorBlocked) {
+                toTargetVectorBlockedDuration += Time.deltaTime;
+            }
+            else {
+                lastTargetSpottedPosition = target.transform.position;
+                toTargetVectorBlockedDuration = 0;
+            }
+        }
+        else {
+            toTargetVectorBlocked = false;
+            toTargetVectorBlockedDuration = 0;
+        }
 
         base.UpdateInput(input);
         this.input = input;
@@ -53,6 +73,7 @@ public class NPCLogic_trooper : NPCLogic {
         return false;
     }
 
+    /// <summary> Returns true if path is clear, false if blocked </summary>
     public bool CheckLOS(Vector3 fromPoint, Vector3 toPoint) {
         if (Physics.Linecast(fromPoint, toPoint, LayerMasks.i.environment))
             return false;
@@ -104,14 +125,38 @@ public class NPCLogic_trooper : NPCLogic {
         activeState = state_fighting;
         stateChangedEvent?.Invoke(activeState);
 
+        stateDebugText.text = "F";
+
         Debug.Log("New state: FIGHTING");
+    }
+
+    private void EnterState_seraching() {
+        activeState.ExitState();
+        state_searching.EnterState();
+        activeState = state_searching;
+        stateChangedEvent?.Invoke(activeState);
+
+        stateDebugText.text = "S";
+
+        Debug.Log("New state: SEARCHING");
+    }
+
+    private void EnterState_patrol() {
+        activeState.ExitState();
+        state_randomPatrol.EnterState();
+        activeState = state_randomPatrol;
+        stateChangedEvent?.Invoke(activeState);
+
+        stateDebugText.text = "P";
+
+        Debug.Log("New state: PATROL");
     }
 
     [System.Serializable]
     public class LogicState {
         protected NPCLogic_trooper logic;
 
-        public enum StateIDEnum { RandomPatrol, Fighting }
+        public enum StateIDEnum { RandomPatrol, Fighting, Searching }
         [HideInInspector] public StateIDEnum stateID;
 
         public virtual void Init(NPCLogic_trooper logic) {
@@ -119,9 +164,14 @@ public class NPCLogic_trooper : NPCLogic {
         }
 
         public virtual void EnterState() {
+            logic.character.health.bulletHitEvent += Health_bulletHitEvent;
         }
 
         public virtual void ExitState() {
+            logic.character.health.bulletHitEvent -= Health_bulletHitEvent;
+        }
+
+        protected virtual void Health_bulletHitEvent(float damage, Vector3 hitPoint, Vector3 bulletPathVector) {
         }
     }
 
@@ -137,8 +187,8 @@ public class NPCLogic_trooper : NPCLogic {
 
         public override void EnterState() {
             base.EnterState();
-            logic.updateInputEvent += Logic_updateInputEvent;
             FindNewTargetPosition();
+            logic.updateInputEvent += Logic_updateInputEvent;
         }
 
         public override void ExitState() {
@@ -173,6 +223,13 @@ public class NPCLogic_trooper : NPCLogic {
             logic.navMeshAgent.transform.position = logic.transform.position;
         }
 
+        protected override void Health_bulletHitEvent(float damage, Vector3 hitPoint, Vector3 bulletPathVector) {
+            base.Health_bulletHitEvent(damage, hitPoint, bulletPathVector);
+
+            logic.lastTargetSpottedPosition = logic.transform.position - bulletPathVector * 3f;
+            Utils.DelayedFunctionCall(logic.EnterState_seraching, 0.5f);
+        }
+
         private void Rotation() {
             Vector3 lookFlatDirection = Vector3.ProjectOnPlane(logic.character.fpCamera.tCamera.forward, Vector3.up);
             float dAngle = Vector3.SignedAngle(lookFlatDirection, logic.navMeshAgent.desiredVelocity.normalized, Vector3.up);
@@ -187,7 +244,89 @@ public class NPCLogic_trooper : NPCLogic {
         }
 
         private void FindNewTargetPosition() {
-            logic.FindNewTargetPosition(logic.transform.position, Random.Range(2f, 20f));
+            logic.FindNewTargetPosition(logic.transform.position, Random.Range(1f, 4));
+            targetReached = false;
+        }
+    }
+
+    [System.Serializable]
+    public class LogicState_searching : LogicState {
+
+        private bool targetReached = false;
+        private Vector3 lastSearchVector;
+
+        private int spotsChecked = 0;
+
+        public override void Init(NPCLogic_trooper logic) {
+            base.Init(logic);
+            stateID = StateIDEnum.Searching;
+        }
+
+        public override void EnterState() {
+            base.EnterState();
+            logic.FindNewTargetPosition(logic.lastTargetSpottedPosition, 1);
+            lastSearchVector = Vector3.ProjectOnPlane(VectorUtils.FromToVector(logic.transform.position, logic.targetPoint), Vector3.up);
+            logic.updateInputEvent += Logic_updateInputEvent;
+        }
+
+        public override void ExitState() {
+            base.ExitState();
+            logic.updateInputEvent -= Logic_updateInputEvent;
+        }
+
+        private void Logic_updateInputEvent() {
+
+            if (logic.LookForTarget()) {
+                logic.EnterState_fighting();
+            }
+            else if (logic.toTargetVectorBlockedDuration > 30) {
+                logic.EnterState_patrol();
+            }
+
+            if (targetReached)
+                return;
+
+            logic.navMeshAgent.SetDestination(logic.targetPoint);
+
+            logic.moveDir = logic.transform.InverseTransformVector(logic.navMeshAgent.desiredVelocity.normalized);
+            Vector3 toTargetVector = VectorUtils.FromToVector(logic.input.transform.position, logic.targetPoint);
+
+            logic.input.moveInput = logic.moveDir;
+            if (toTargetVector.magnitude > 1) {
+                logic.input.moveInput = logic.moveDir;
+            }
+            else {
+                logic.input.moveInput = Vector3.zero;
+                TargetReached();
+            }
+
+            Rotation();
+
+            logic.navMeshAgent.transform.position = logic.transform.position;
+        }
+
+        private void Rotation() {
+            Vector3 lookFlatDirection = Vector3.ProjectOnPlane(logic.character.fpCamera.tCamera.forward, Vector3.up);
+            float dAngle = Vector3.SignedAngle(lookFlatDirection, logic.navMeshAgent.desiredVelocity.normalized, Vector3.up);
+            logic.input.mouseMovement.xDelta = (Mathf.Sign(dAngle) * Mathf.Sqrt(Mathf.Abs(dAngle)) * 0.2f) / Settings.MOUSE_SENSITIVITY;
+
+            logic.input.mouseMovement.yDelta = logic.character.fpCamera.pitch / Settings.MOUSE_SENSITIVITY;
+        }
+
+        private void TargetReached() {
+            targetReached = true;
+            spotsChecked++;
+            Utils.DelayedFunctionCall(FindNewTargetPosition, 1);
+        }
+
+        private void FindNewTargetPosition() {
+            if (spotsChecked >= 3) {
+                logic.EnterState_patrol();
+                return;
+            }
+
+            logic.FindNewTargetPosition(logic.transform.position + lastSearchVector * 5, Random.Range(2f, 10f));
+            lastSearchVector = Vector3.ProjectOnPlane(VectorUtils.FromToVector(logic.transform.position, logic.targetPoint), Vector3.up);
             targetReached = false;
         }
     }
@@ -224,18 +363,15 @@ public class NPCLogic_trooper : NPCLogic {
         }
 
         private void Logic_updateInputEvent() {
-            logic.tarrgetInSight = logic.LookForTarget();
+            logic.targetInSight = logic.LookForTarget();
 
             LookAtTarget();
 
             if (!isBursting && !gun.bulletInChaimber && gun.bulletsInMagCount == 0 && !gun.isReloading)
                 logic.input.action_reload.Click();
 
-            if (logic.tarrgetInSight && !isBursting && !burstOnCooldown)
+            if (logic.targetInSight && !isBursting && !burstOnCooldown)
                 logic.StartCoroutine(BurstCorutine());
-
-            //if (targetReached)
-            //    return;
 
             logic.navMeshAgent.SetDestination(logic.targetPoint);
 
@@ -251,6 +387,11 @@ public class NPCLogic_trooper : NPCLogic {
 
                 if (!targetReached)
                     TargetReached();
+            }
+
+
+            if (logic.toTargetVectorBlockedDuration > 6) {
+                logic.EnterState_seraching();
             }
 
             //Rotation();
@@ -343,22 +484,5 @@ public class NPCLogic_trooper : NPCLogic {
             logic.input.mouseMovement.yDelta = smoothDY / Settings.MOUSE_SENSITIVITY;
         }
 
-        //private void Rotation() {
-        //    Vector3 lookFlatDirection = Vector3.ProjectOnPlane(logic.character.fpCamera.tCameraTarget.forward, Vector3.up);
-        //    float dAngle = Vector3.SignedAngle(lookFlatDirection, logic.navMeshAgent.desiredVelocity.normalized, Vector3.up);
-        //    logic.input.mouseMovement.xDelta = (Mathf.Sign(dAngle) * Mathf.Sqrt(Mathf.Abs(dAngle)) * 0.2f) / Settings.MOUSE_SENSITIVITY;
-
-        //    logic.input.mouseMovement.yDelta = logic.character.fpCamera.pitch / Settings.MOUSE_SENSITIVITY;
-        //}
-
-        //private void TargetReached() {
-        //    targetReached = true;
-        //    Utils.DelayedFunctionCall(FindNewTargetPosition, 3);
-        //}
-
-        //private void FindNewTargetPosition() {
-        //    logic.FindNewTargetPosition(logic.transform.position, Random.Range(2f, 20f));
-        //    targetReached = false;
-        //}
     }
 }
