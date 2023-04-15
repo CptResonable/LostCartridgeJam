@@ -82,7 +82,6 @@ public class NPCLogic_trooper : NPCLogic {
     }
 
     private void TargetInSight(Character character) {
-        Debug.Log("ISEEYOU");
         target = character;
         lastTargetSpottedPosition = character.transform.position;
         GizmoManager.i.DrawSphere(Time.deltaTime, Color.blue, character.body.tHead.position + Vector3.up * 0.3f, 0.5f);

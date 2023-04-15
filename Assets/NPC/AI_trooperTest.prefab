@@ -5805,6 +5805,8 @@ MonoBehaviour:
     stateID: 0
   state_fighting:
     stateID: 0
+  state_searching:
+    stateID: 0
   activeState:
     stateID: 0
 --- !u!114 &2735624213555400893
@@ -5843,7 +5845,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9102176309841782235}
-  m_LocalRotation: {x: -0, y: 0.8038142, z: -0, w: 0.5948805}
+  m_LocalRotation: {x: 0, y: 0.8038153, z: 0, w: 0.59487903}
   m_LocalPosition: {x: 6.712, y: 0, z: -1.548}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -5856,7 +5858,7 @@ Transform:
   - {fileID: 7167870195439738104}
   - {fileID: 3742278577008277776}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 106.992, z: 0}
 --- !u!1001 &8606199671849438279
 PrefabInstance:

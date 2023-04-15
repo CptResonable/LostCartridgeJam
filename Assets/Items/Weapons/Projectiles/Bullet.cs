@@ -42,7 +42,6 @@ public class Bullet : MonoBehaviour {
 
         RaycastHit hit;
         if (Physics.Linecast(lastPosition, transform.position, out hit, layerMask)) {
-            Debug.Log(hit.collider.transform.name);
             EffectMaterialKeeper materialKeeper;
             if (hit.transform.TryGetComponent<EffectMaterialKeeper>(out materialKeeper)) {
 

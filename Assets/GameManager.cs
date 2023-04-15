@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 using TMPro;
 
 public class GameManager : MonoBehaviour {
+    public GameMode gameMode;
+
     [SerializeField] public EnemySpawnManager enemySpawnManager;
 
     [SerializeField] private GameObject goStartPanel;
@@ -59,6 +61,8 @@ public class GameManager : MonoBehaviour {
         wave = 1;
         //StartCoroutine(StartWaveCorutine());
         //enemySpawnManager.SpawnWave(6, 2, 15);
+
+        gameMode.StartGameMode();
     }
 
     private void Start() {
