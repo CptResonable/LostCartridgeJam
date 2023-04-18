@@ -13,15 +13,15 @@ public class GameMode_test1 : GameMode {
 
     public IEnumerator SpawnEnemiesCorutine() {
         int count = 0;
-        while (count < 20) {
-            SpawnEnemyAtRandomSpawnPoint();
+        while (count < 31) {
+            SpawnEnemyAtRandomSpawnPoint(count);
             count++;
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(0.1f);
         }
     }
 
 
-    public void SpawnEnemyAtRandomSpawnPoint() {
+    public void SpawnEnemyAtRandomSpawnPoint(int id) {
         int maxTries = 10;
         for (int tries = 0; tries < maxTries; tries++) {
 
@@ -29,7 +29,8 @@ public class GameMode_test1 : GameMode {
 
             // Make sure new position has LOS to target
             if (!CheckLOS(tSpawner.position + Vector3.up * 1.75f, GameManager.i.player.body.tHead.position)) {
-                Instantiate(enemyPrefab, tSpawner.position, Quaternion.identity);
+                GameObject go = Instantiate(enemyPrefab, tSpawner.position, Quaternion.identity);
+                go.name = "Enemy AI #" + id;
                 return;
             }
         }

@@ -61,14 +61,15 @@ public class GameManager : MonoBehaviour {
         wave = 1;
         //StartCoroutine(StartWaveCorutine());
         //enemySpawnManager.SpawnWave(6, 2, 15);
-
-        gameMode.StartGameMode();
     }
 
     private void Start() {
     }
 
     private void Update() {
+        if (Input.GetKeyUp(KeyCode.F6))
+            gameMode.StartGameMode();
+
         if (Input.GetKeyUp(KeyCode.Escape)) {
             switch (gameState) {
                 case GameState.Menu:

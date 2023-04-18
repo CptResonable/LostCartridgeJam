@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GizmoManager : MonoBehaviour {
+    public static bool gizmosEnabled = false;
     private static GizmoManager _i;
     public static GizmoManager i {
         get {
@@ -17,6 +18,9 @@ public class GizmoManager : MonoBehaviour {
     private List<Gizmo> gizmos = new List<Gizmo>();
 
     private void OnDrawGizmos() {
+        if (!gizmosEnabled)
+            return;
+
         for (int i = 0; i < gizmos.Count; i++) {
 
             // Remove from list if time to destroy
@@ -31,11 +35,17 @@ public class GizmoManager : MonoBehaviour {
     }
 
     public void DrawSphere(float duration, Color color, Vector3 position, float radius) {
+
+        if (!gizmosEnabled)
+            return;
         Sphere newSphere = new Sphere(duration, color, position, radius);
         gizmos.Add(newSphere);
     }
 
     public void DrawLine(float duration, Color color, Vector3 startPoint, Vector3 endPoint) {
+        if (!gizmosEnabled)
+            return;
+
         Line newLine = new Line(duration, color, startPoint, endPoint);
         gizmos.Add(newLine);
     }

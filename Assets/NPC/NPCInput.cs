@@ -22,7 +22,8 @@ public class NPCInput : CharacterInput {
     private void NPC_updateEvent() {
         moveInput = Vector3.zero;
 
-        npcLogic.UpdateInput(this);
+        if (npcLogic != null)
+            npcLogic.UpdateInput(this);
         //if (Input.GetKey(KeyCode.W))
         //    moveInput.z += 1;
         //if (Input.GetKey(KeyCode.S))

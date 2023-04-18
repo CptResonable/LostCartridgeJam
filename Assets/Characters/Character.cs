@@ -25,6 +25,9 @@ public class Character : MonoBehaviour {
     public GameObject goDeadModel;
     public CapsuleCollider capColider;
 
+    [SerializeField] private GameObject goSkinnedMeshObject_REMOVETHISIJUSTHAVETHISFORTESTIG;
+    [SerializeField] private RootMotion.FinalIK.LimbIK[] armAndLegIks_REMOVETHISIJUSTHAVETHISFORTESTIG;
+
     public event Delegates.EmptyDelegate updateEvent;
     public event Delegates.EmptyDelegate fixedUpdateEvent;
     public event Delegates.EmptyDelegate lateUpdateEvent;
@@ -54,6 +57,22 @@ public class Character : MonoBehaviour {
     }
 
     protected void Update() {
+
+        if (Input.GetKeyDown(KeyCode.F9) && !isPlayer)
+            foreach (RootMotion.FinalIK.LimbIK ik in armAndLegIks_REMOVETHISIJUSTHAVETHISFORTESTIG)
+                Destroy(ik);
+
+        if (Input.GetKeyDown(KeyCode.F8) && !isPlayer) {
+            //foreach (RootMotion.FinalIK.LimbIK ik in armAndLegIks_REMOVETHISIJUSTHAVETHISFORTESTIG)
+            //    Destroy(ik);
+            Destroy(arms.hand_R);
+            Destroy(arms.hand_L);
+            Destroy(locomotion.wallrunController);
+            Destroy(transform.parent.Find("Cameras").gameObject);
+            //Destroy(goSkinnedMeshObject_REMOVETHISIJUSTHAVETHISFORTESTIG);
+            Destroy(this);
+        }
+
         if (!health.isAlive)
             return;
 

@@ -2413,7 +2413,7 @@ SkinnedMeshRenderer:
   m_SortingOrder: 0
   serializedVersion: 2
   m_Quality: 0
-  m_UpdateWhenOffscreen: 0
+  m_UpdateWhenOffscreen: 1
   m_SkinnedMotionVectors: 1
   m_Mesh: {fileID: -462981019419857548, guid: f869c8affc168f24cbeec4ce02c99087, type: 3}
   m_Bones:
@@ -5680,6 +5680,12 @@ MonoBehaviour:
   goAliveModel: {fileID: 4362725803417193575}
   goDeadModel: {fileID: 4362725801918910606}
   capColider: {fileID: 0}
+  goSkinnedMeshObject_REMOVETHISIJUSTHAVETHISFORTESTIG: {fileID: 3331105926090894412}
+  armAndLegIks_REMOVETHISIJUSTHAVETHISFORTESTIG:
+  - {fileID: 0}
+  - {fileID: 3479855144019030322}
+  - {fileID: 3332739068041327971}
+  - {fileID: 8433669722820215856}
 --- !u!114 &4533861699103611278
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5858,7 +5864,7 @@ Transform:
   - {fileID: 7167870195439738104}
   - {fileID: 3742278577008277776}
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 106.992, z: 0}
 --- !u!1001 &8606199671849438279
 PrefabInstance:

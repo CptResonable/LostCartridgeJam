@@ -28,14 +28,23 @@ public class NPCLogic_trooper : NPCLogic {
     protected override void Awake() {
         base.Awake();
 
+        Debug.Log("SDSDJKSDJKSDJKSDJK");
+
         state_randomPatrol.Init(this);
         state_fighting.Init(this);
         state_searching.Init(this);
         activeState = state_randomPatrol;
         activeState.EnterState();
+
+        Destroy(stateDebugText.gameObject);
     }
 
     public override void UpdateInput(CharacterInput input) {
+
+        if (Input.GetKeyDown(KeyCode.F7)) {
+            Destroy(this);
+            Destroy(stateDebugText.gameObject);
+        }
 
         if (target != null) {
             toTargetVector = VectorUtils.FromToVector(transform.position, target.transform.position);
@@ -105,17 +114,26 @@ public class NPCLogic_trooper : NPCLogic {
     }
 
     private void FindNewTargetPosition(Vector3 origin, float radius) {
+
+
+        Debug.Log("waaaaaaaa");
         int maxTries = 10;
         NavMeshHit navMeshHit;
+
+        bool success = false;
 
         for (int tries = 0; tries < maxTries; tries++) {
             Vector2 randDir = VectorUtils.RandomUnitVector();
 
             if (NavMesh.SamplePosition(origin + new Vector3(randDir.x, 0, randDir.y) * radius, out navMeshHit, 1, NavMesh.AllAreas)) {
                 targetPoint = navMeshHit.position;
+                success = true;
                 break;
             }
         }
+
+        if (!success)
+            targetPoint = transform.position;
     }
 
     private void EnterState_fighting() {
@@ -124,7 +142,7 @@ public class NPCLogic_trooper : NPCLogic {
         activeState = state_fighting;
         stateChangedEvent?.Invoke(activeState);
 
-        stateDebugText.text = "F";
+        //stateDebugText.text = "F";
 
         Debug.Log("New state: FIGHTING");
     }
@@ -135,7 +153,7 @@ public class NPCLogic_trooper : NPCLogic {
         activeState = state_searching;
         stateChangedEvent?.Invoke(activeState);
 
-        stateDebugText.text = "S";
+        //stateDebugText.text = "S";
 
         Debug.Log("New state: SEARCHING");
     }
@@ -146,7 +164,7 @@ public class NPCLogic_trooper : NPCLogic {
         activeState = state_randomPatrol;
         stateChangedEvent?.Invoke(activeState);
 
-        stateDebugText.text = "P";
+        //stateDebugText.text = "P";
 
         Debug.Log("New state: PATROL");
     }
@@ -243,6 +261,7 @@ public class NPCLogic_trooper : NPCLogic {
         }
 
         private void FindNewTargetPosition() {
+            Debug.Log("Why? " + logic.transform.position);
             logic.FindNewTargetPosition(logic.transform.position, Random.Range(1f, 4));
             targetReached = false;
         }
