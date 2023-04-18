@@ -8,7 +8,7 @@ using TMPro;
 public class NPCLogic_trooper : NPCLogic {
     [SerializeField] private TMP_Text stateDebugText;
 
-    private Vector3 targetPoint;
+    private Vector3 targetPosition;
     private Vector3 moveDir;
 
     private bool targetInSight; // Is target in line of sight?
@@ -27,8 +27,6 @@ public class NPCLogic_trooper : NPCLogic {
 
     protected override void Awake() {
         base.Awake();
-
-        Debug.Log("SDSDJKSDJKSDJKSDJK");
 
         state_randomPatrol.Init(this);
         state_fighting.Init(this);
@@ -96,6 +94,11 @@ public class NPCLogic_trooper : NPCLogic {
         GizmoManager.i.DrawSphere(Time.deltaTime, Color.blue, character.body.tHead.position + Vector3.up * 0.3f, 0.5f);
     }
 
+    private void UpdateTargetPosition(Vector3 targetPosition) {
+        this.targetPosition = targetPosition;
+        navMeshAgent.SetDestination(targetPosition);
+    }
+
     private void FindNewTargetPosition() {
         int maxTries = 10;
         NavMeshHit navMeshHit;
@@ -107,7 +110,7 @@ public class NPCLogic_trooper : NPCLogic {
             //NavMeshPath path = new NavMeshPath();
             //path.
             if (NavMesh.SamplePosition(transform.position + new Vector3(randDir.x, 0, randDir.y) * randRange, out navMeshHit, 1, NavMesh.AllAreas)) {
-                targetPoint = navMeshHit.position;
+                UpdateTargetPosition(navMeshHit.position);
                 break;
             }
         }
@@ -115,8 +118,6 @@ public class NPCLogic_trooper : NPCLogic {
 
     private void FindNewTargetPosition(Vector3 origin, float radius) {
 
-
-        Debug.Log("waaaaaaaa");
         int maxTries = 10;
         NavMeshHit navMeshHit;
 
@@ -126,14 +127,14 @@ public class NPCLogic_trooper : NPCLogic {
             Vector2 randDir = VectorUtils.RandomUnitVector();
 
             if (NavMesh.SamplePosition(origin + new Vector3(randDir.x, 0, randDir.y) * radius, out navMeshHit, 1, NavMesh.AllAreas)) {
-                targetPoint = navMeshHit.position;
+                UpdateTargetPosition(navMeshHit.position);
                 success = true;
                 break;
             }
         }
 
         if (!success)
-            targetPoint = transform.position;
+            UpdateTargetPosition(transform.position);
     }
 
     private void EnterState_fighting() {
@@ -143,8 +144,6 @@ public class NPCLogic_trooper : NPCLogic {
         stateChangedEvent?.Invoke(activeState);
 
         //stateDebugText.text = "F";
-
-        Debug.Log("New state: FIGHTING");
     }
 
     private void EnterState_seraching() {
@@ -154,8 +153,6 @@ public class NPCLogic_trooper : NPCLogic {
         stateChangedEvent?.Invoke(activeState);
 
         //stateDebugText.text = "S";
-
-        Debug.Log("New state: SEARCHING");
     }
 
     private void EnterState_patrol() {
@@ -165,8 +162,6 @@ public class NPCLogic_trooper : NPCLogic {
         stateChangedEvent?.Invoke(activeState);
 
         //stateDebugText.text = "P";
-
-        Debug.Log("New state: PATROL");
     }
 
     [System.Serializable]
@@ -215,12 +210,10 @@ public class NPCLogic_trooper : NPCLogic {
 
         private void Logic_updateInputEvent() {
             if (targetReached)
-                return;
-
-            logic.navMeshAgent.SetDestination(logic.targetPoint);
+                return;           
 
             logic.moveDir = logic.transform.InverseTransformVector(logic.navMeshAgent.desiredVelocity.normalized);
-            Vector3 toTargetVector = VectorUtils.FromToVector(logic.input.transform.position, logic.targetPoint);
+            Vector3 toTargetVector = VectorUtils.FromToVector(logic.input.transform.position, logic.targetPosition);
 
             logic.input.moveInput = logic.moveDir;
             if (toTargetVector.magnitude > 1) {
@@ -283,7 +276,7 @@ public class NPCLogic_trooper : NPCLogic {
         public override void EnterState() {
             base.EnterState();
             logic.FindNewTargetPosition(logic.lastTargetSpottedPosition, 1);
-            lastSearchVector = Vector3.ProjectOnPlane(VectorUtils.FromToVector(logic.transform.position, logic.targetPoint), Vector3.up);
+            lastSearchVector = Vector3.ProjectOnPlane(VectorUtils.FromToVector(logic.transform.position, logic.targetPosition), Vector3.up);
             logic.updateInputEvent += Logic_updateInputEvent;
         }
 
@@ -304,10 +297,8 @@ public class NPCLogic_trooper : NPCLogic {
             if (targetReached)
                 return;
 
-            logic.navMeshAgent.SetDestination(logic.targetPoint);
-
             logic.moveDir = logic.transform.InverseTransformVector(logic.navMeshAgent.desiredVelocity.normalized);
-            Vector3 toTargetVector = VectorUtils.FromToVector(logic.input.transform.position, logic.targetPoint);
+            Vector3 toTargetVector = VectorUtils.FromToVector(logic.input.transform.position, logic.targetPosition);
 
             logic.input.moveInput = logic.moveDir;
             if (toTargetVector.magnitude > 1) {
@@ -344,7 +335,7 @@ public class NPCLogic_trooper : NPCLogic {
             }
 
             logic.FindNewTargetPosition(logic.transform.position + lastSearchVector * 5, Random.Range(2f, 10f));
-            lastSearchVector = Vector3.ProjectOnPlane(VectorUtils.FromToVector(logic.transform.position, logic.targetPoint), Vector3.up);
+            lastSearchVector = Vector3.ProjectOnPlane(VectorUtils.FromToVector(logic.transform.position, logic.targetPosition), Vector3.up);
             targetReached = false;
         }
     }
@@ -391,10 +382,8 @@ public class NPCLogic_trooper : NPCLogic {
             if (logic.targetInSight && !isBursting && !burstOnCooldown)
                 logic.StartCoroutine(BurstCorutine());
 
-            logic.navMeshAgent.SetDestination(logic.targetPoint);
-
             logic.moveDir = logic.transform.InverseTransformVector(logic.navMeshAgent.desiredVelocity.normalized);
-            Vector3 toTargetVector = VectorUtils.FromToVector(logic.input.transform.position, logic.targetPoint);
+            Vector3 toTargetVector = VectorUtils.FromToVector(logic.input.transform.position, logic.targetPosition);
 
             logic.input.moveInput = logic.moveDir;
             if (toTargetVector.magnitude > 1) {
@@ -440,7 +429,7 @@ public class NPCLogic_trooper : NPCLogic {
                     // Make sure new position has LOS to target
                     if (logic.CheckLOS(navMeshHit.position + Vector3.up * 1.75f, logic.target.body.tHead.position)) {
 
-                        logic.targetPoint = navMeshHit.position;
+                        logic.UpdateTargetPosition(navMeshHit.position);
                         Debug.Log("New position found!");
                         targetReached = false;
                         return true;

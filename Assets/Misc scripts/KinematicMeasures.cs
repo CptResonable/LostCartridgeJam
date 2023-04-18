@@ -7,11 +7,11 @@ public class KinematicMeasures : MonoBehaviour {
     public Vector3 angularVelocity;
 
     private Vector3 lastPosition;
-    private Quaternion lastRotation;
+    //private Quaternion lastRotation;
 
     private void Awake() {
         lastPosition = transform.position;
-        lastRotation = transform.rotation;
+        //lastRotation = transform.rotation;
     }
 
     public void DoUpdate() {
@@ -21,10 +21,10 @@ public class KinematicMeasures : MonoBehaviour {
         velocity = deltaPosition / Time.fixedDeltaTime;
         lastPosition = transform.position;
 
-        // Angular velocity 
-        var deltaRot = transform.rotation * Quaternion.Inverse(lastRotation);
-        var eulerRot = new Vector3(Mathf.DeltaAngle(0, deltaRot.eulerAngles.x), Mathf.DeltaAngle(0, deltaRot.eulerAngles.y), Mathf.DeltaAngle(0, deltaRot.eulerAngles.z));
-        angularVelocity = eulerRot / Time.fixedDeltaTime * Mathf.Deg2Rad;
-        lastRotation = transform.rotation;
+        //// Angular velocity 
+        //var deltaRot = transform.rotation * Quaternion.Inverse(lastRotation);
+        //var eulerRot = new Vector3(Mathf.DeltaAngle(0, deltaRot.eulerAngles.x), Mathf.DeltaAngle(0, deltaRot.eulerAngles.y), Mathf.DeltaAngle(0, deltaRot.eulerAngles.z));
+        //angularVelocity = eulerRot / Time.fixedDeltaTime * Mathf.Deg2Rad;
+        //lastRotation = transform.rotation;
     }
 }

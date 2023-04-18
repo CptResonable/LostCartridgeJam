@@ -27,6 +27,7 @@ public class Character : MonoBehaviour {
 
     [SerializeField] private GameObject goSkinnedMeshObject_REMOVETHISIJUSTHAVETHISFORTESTIG;
     [SerializeField] private RootMotion.FinalIK.LimbIK[] armAndLegIks_REMOVETHISIJUSTHAVETHISFORTESTIG;
+    [SerializeField] private EasyIK[] easyIkRigs;
 
     public event Delegates.EmptyDelegate updateEvent;
     public event Delegates.EmptyDelegate fixedUpdateEvent;
@@ -54,6 +55,13 @@ public class Character : MonoBehaviour {
         damageReactionController.Init(this);
 
         health.diedEvent += Health_diedEvent;
+
+        animatorController.animatorUpdatedEvent += AnimatorController_animatorUpdatedEvent;
+    }
+
+    private void AnimatorController_animatorUpdatedEvent() {
+        //foreach (EasyIK ik in easyIkRigs)
+        //    ik.Solve();
     }
 
     protected void Update() {

@@ -33,6 +33,7 @@ public class Locomotion {
     private Vector3 acceleration;
 
     private Vector3 meshHandToPhysicalHandError;
+    private PidController handStuckPidController;
 
     [HideInInspector] public float aiSpeedMod = 1; // 
 
@@ -67,6 +68,7 @@ public class Locomotion {
         activeState.EnterState();
 
         aiSpeedMod = 1;
+        handStuckPidController = new PidController(handStuckPidValues.x, handStuckPidValues.y, handStuckPidValues.z);
     }
 
     private void Character_updateEvent() {
@@ -114,16 +116,13 @@ public class Locomotion {
 
         Vector3 lastError = meshHandToPhysicalHandError;
         meshHandToPhysicalHandError = VectorUtils.FromToVector(character.body.tHandR.position, character.arms.hand_R.transform.position);
-
-        PidController pidController = new PidController(handStuckPidValues.x, handStuckPidValues.y, handStuckPidValues.z);
-
         Vector3 delta = VectorUtils.FromToVector(lastError, meshHandToPhysicalHandError);
 
         if (meshHandToPhysicalHandError.magnitude > 0.1) {
 
-            float x = pidController.ComputeOutput(meshHandToPhysicalHandError.x, delta.x, Time.fixedDeltaTime);
-            float y = pidController.ComputeOutput(meshHandToPhysicalHandError.y, delta.y, Time.fixedDeltaTime);
-            float z = pidController.ComputeOutput(meshHandToPhysicalHandError.z, delta.z, Time.fixedDeltaTime);
+            float x = handStuckPidController.ComputeOutput(meshHandToPhysicalHandError.x, delta.x, Time.fixedDeltaTime);
+            float y = handStuckPidController.ComputeOutput(meshHandToPhysicalHandError.y, delta.y, Time.fixedDeltaTime);
+            float z = handStuckPidController.ComputeOutput(meshHandToPhysicalHandError.z, delta.z, Time.fixedDeltaTime);
 
             rb.AddForce(x, y, z, ForceMode.Acceleration);
         }

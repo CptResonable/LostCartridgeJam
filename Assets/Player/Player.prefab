@@ -2229,6 +2229,10 @@ MonoBehaviour:
   goAliveModel: {fileID: 2618979750785878144}
   goDeadModel: {fileID: 2618979752427033705}
   capColider: {fileID: 0}
+  goSkinnedMeshObject_REMOVETHISIJUSTHAVETHISFORTESTIG: {fileID: 0}
+  armAndLegIks_REMOVETHISIJUSTHAVETHISFORTESTIG: []
+  easyIkRigs:
+  - {fileID: 1497062849791706319}
 --- !u!114 &7386630257519315612
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3730,6 +3734,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damageMultiplier: 1
+--- !u!1 &781954304314620297 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2468846359798025304, guid: f869c8affc168f24cbeec4ce02c99087,
+    type: 3}
+  m_PrefabInstance: {fileID: 2925393506036200913}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1497062849791706319
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 781954304314620297}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 961fe1b8c2d2b16428e080645c68faf5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  numberOfJoints: 3
+  ikTarget: {fileID: 899840614152652973}
+  iterations: 10
+  tolerance: 0.05
+  poleTarget: {fileID: 1487189675}
+  debugJoints: 1
+  localRotationAxis: 0
+  gizmoSize: 0.05
+  poleDirection: 0
+  poleRotationAxis: 0
 --- !u!4 &1006456471884663581 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2697290249256681164, guid: f869c8affc168f24cbeec4ce02c99087,
@@ -3877,7 +3909,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2618979750785878144}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4db3c450680fd4c809d5ad90a2f24e5f, type: 3}
   m_Name: 

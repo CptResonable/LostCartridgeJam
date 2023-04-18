@@ -5,17 +5,26 @@ using VacuumBreather;
 
 public class PhysicallyCopyRotation : MonoBehaviour {
     [SerializeField] private Transform target;
-    [SerializeField] private Vector3 PidValues;
+    [SerializeField] private Vector3 PidValues; // should be named _pidValues
     [SerializeField] private Mode mode;
+
+    public Vector3 pidValues {
+        get { return PidValues; }
+        set { PidValues = value;
+            pidController = new PidQuaternionController(PidValues.x, PidValues.y, PidValues.z);
+        }
+    }
 
     public float strengthMod = 1;
     private float lastError = 0; // Used to calculate delta error, only used in y and xz mode
 
     private enum Mode { full, yAxis, xzAxis}
 
+    private PidQuaternionController pidController;
     private Rigidbody rb;
 
     private void Awake() {
+        pidValues = PidValues;
         rb = GetComponent<Rigidbody>();
     }
 
@@ -30,7 +39,6 @@ public class PhysicallyCopyRotation : MonoBehaviour {
     }
 
     private void Full() {
-        PidQuaternionController pidController = new PidQuaternionController(PidValues.x, PidValues.y, PidValues.z);
         Vector3 output = pidController.ComputeRequiredAngularAcceleration(transform.rotation, target.rotation, rb.angularVelocity, Time.deltaTime);
         rb.AddTorque(output * strengthMod, ForceMode.Acceleration);
         //rb.AddTorque(output * 0.2f, ForceMode.Force);
