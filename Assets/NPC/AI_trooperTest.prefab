@@ -321,7 +321,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8084844519467343582}
-  - component: {fileID: 9014665706094405725}
   - component: {fileID: 6221044662264588806}
   m_Layer: 6
   m_Name: Arm_1_R
@@ -346,29 +345,6 @@ Transform:
   m_Father: {fileID: 5827237066506240804}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &9014665706094405725
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 838056328778547926}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 961fe1b8c2d2b16428e080645c68faf5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  numberOfJoints: 3
-  ikTarget: {fileID: 5159600449510185782}
-  iterations: 10
-  tolerance: 0.05
-  poleTarget: {fileID: 1789046387518003114}
-  debugJoints: 0
-  localRotationAxis: 0
-  gizmoSize: 0.05
-  poleDirection: 0
-  poleRotationAxis: 0
-  reset: 0
 --- !u!114 &6221044662264588806
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -424,7 +400,6 @@ GameObject:
   - component: {fileID: 2298653144450901088}
   - component: {fileID: 3479855145828552066}
   - component: {fileID: 3479855145828552064}
-  - component: {fileID: 5194055802936243814}
   - component: {fileID: 5658957898750653478}
   m_Layer: 14
   m_Name: Leg_1_L
@@ -476,29 +451,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damageMultiplier: 1
---- !u!114 &5194055802936243814
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 969265630361967130}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 961fe1b8c2d2b16428e080645c68faf5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  numberOfJoints: 3
-  ikTarget: {fileID: 2606927629372305418}
-  iterations: 10
-  tolerance: 0.05
-  poleTarget: {fileID: 4694687224467819884}
-  debugJoints: 0
-  localRotationAxis: 0
-  gizmoSize: 0.05
-  poleDirection: 0
-  poleRotationAxis: 0
-  reset: 0
 --- !u!114 &5658957898750653478
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -631,7 +583,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7678637209361818570}
-  - component: {fileID: 8802354087563584808}
   - component: {fileID: 3616969475941011895}
   m_Layer: 6
   m_Name: Arm_1_L
@@ -656,29 +607,6 @@ Transform:
   m_Father: {fileID: 5827237066506240804}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8802354087563584808
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1299842088176123246}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 961fe1b8c2d2b16428e080645c68faf5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  numberOfJoints: 3
-  ikTarget: {fileID: 1490436873474903114}
-  iterations: 10
-  tolerance: 0.05
-  poleTarget: {fileID: 1789046386368508492}
-  debugJoints: 0
-  localRotationAxis: 0
-  gizmoSize: 0.05
-  poleDirection: 0
-  poleRotationAxis: 0
-  reset: 0
 --- !u!114 &3616969475941011895
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -924,7 +852,6 @@ GameObject:
   - component: {fileID: 5401962685554706453}
   - component: {fileID: 3479855146002601040}
   - component: {fileID: 3479855146002601054}
-  - component: {fileID: 354632013544381623}
   - component: {fileID: 6603611099456647412}
   m_Layer: 14
   m_Name: Leg_1_R
@@ -976,29 +903,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damageMultiplier: 1
---- !u!114 &354632013544381623
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1365193610244519674}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 961fe1b8c2d2b16428e080645c68faf5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  numberOfJoints: 3
-  ikTarget: {fileID: 198475016226503832}
-  iterations: 10
-  tolerance: 0.05
-  poleTarget: {fileID: 9068159387794199583}
-  debugJoints: 0
-  localRotationAxis: 0
-  gizmoSize: 0.05
-  poleDirection: 0
-  poleRotationAxis: 0
-  reset: 0
 --- !u!114 &6603611099456647412
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3265,7 +3169,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4362725803417193575}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4db3c450680fd4c809d5ad90a2f24e5f, type: 3}
   m_Name: 
@@ -3322,7 +3226,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4362725803417193575}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4db3c450680fd4c809d5ad90a2f24e5f, type: 3}
   m_Name: 

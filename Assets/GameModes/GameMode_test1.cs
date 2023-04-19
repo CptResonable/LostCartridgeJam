@@ -13,7 +13,7 @@ public class GameMode_test1 : GameMode {
 
     public IEnumerator SpawnEnemiesCorutine() {
         int count = 0;
-        while (count < 81) {
+        while (count < 31) {
             SpawnEnemyAtRandomSpawnPoint(count);
             count++;
             yield return new WaitForSeconds(0.05f);
