@@ -27,7 +27,7 @@ public class Foot {
             tLeg_2 = character.body.tLegR_2;
         }
 
-        character.animatorController.animatorUpdatedEvent += AnimatorController_animatorUpdatedEvent;
+        //character.animatorController.animatorUpdatedEvent += AnimatorController_animatorUpdatedEvent;
     }
 
     private void AnimatorController_animatorUpdatedEvent() {

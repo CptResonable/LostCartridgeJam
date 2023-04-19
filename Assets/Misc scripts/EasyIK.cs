@@ -212,6 +212,8 @@ public class EasyIK : MonoBehaviour
         jointTransforms.Last().rotation = ikTarget.rotation;
     }
 
+#if (UNITY_EDITOR) 
+
     // Visual debugging
     void OnDrawGizmos()
     {   
@@ -308,4 +310,5 @@ public class EasyIK : MonoBehaviour
             Handles.DrawWireDisc(Vector3.down * pointOffset, Vector3.up, _radius);
          }
      }
+#endif
 }

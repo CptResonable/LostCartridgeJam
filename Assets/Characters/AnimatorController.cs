@@ -45,7 +45,8 @@ public class AnimatorController {
         animator.SetFloat("SlideBodyToCameraAngle", bodyToHeadDeltaYaw);
 
         //animator.SetBool("IsHanging", character.locomotion.hand_R.grabingLedge);
-        animator.Update(Time.deltaTime);
+        if (!Input.GetKey(KeyCode.Mouse3))
+            animator.Update(Time.deltaTime);
         //character.body.tPelvis.localPosition *= 4;
         animatorUpdatedEvent?.Invoke();
     }

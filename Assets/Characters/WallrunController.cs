@@ -46,7 +46,8 @@ public class WallrunController : MonoBehaviour {
         smoothCharacterVelocity = Vector3.Lerp(smoothCharacterVelocity, character.rb.velocity, Time.deltaTime * 8);
         smoothCharacterHorizontalVelocity = Vector3.ProjectOnPlane(smoothCharacterVelocity, Vector3.up);
 
-        LookForEdge();
+        if (character.locomotion.activeStateEnum == Locomotion.LocomotionState.StateIDEnum.WallClimbing)
+            LookForEdge();
     }
 
     private void FixedUpdate() {
