@@ -97,7 +97,7 @@ public class UpperBody {
 
         character.body.tHead.rotation = character.fpCamera.tCameraBase.rotation; // Set head rotation to camera rotation
         character.damageReactionController.ManualUpdateTest();
-        headDEulerTest = character.body.tHead.rotation * Quaternion.Inverse(character.fpCamera.tCameraBase.transform.rotation);
+        headDEulerTest = character.body.tHead.rotation * Quaternion.Inverse(Quaternion.Lerp(character.body.tHead.rotation, character.fpCamera.tCameraBase.transform.rotation, 0.25f));
         //headDEulerTest = Quaternion.FromToRotation(character.body.tHead.forward, character.fpCamera.tCameraBase.transform.forward);
         //character.fpCamera.tCameraBase.transform.rotation = character.body.tHead.rotation;
         Debug.Log("WORING ON THIS; THIS NEEDS TIO BE FOODSODOS I MEAN GOOOD");

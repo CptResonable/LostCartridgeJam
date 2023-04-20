@@ -34,6 +34,9 @@ public class DamageReactionController {
         bdrTorso_2 = new BoneDamageReaction(character.body.tTorso_2, character);
         bdrHead = new BoneDamageReaction(character.body.tHead, character);
 
+        //if (character.isPlayer)
+        //    return;
+
         drPelvis.bulletHitEvent += DrPelvis_bulletHitEvent;
         drTorso_1.bulletHitEvent += DrTorso_1_bulletHitEvent;
         drTorso_2.bulletHitEvent += DrTorso_2_bulletHitEvent;

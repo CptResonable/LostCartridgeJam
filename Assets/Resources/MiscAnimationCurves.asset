@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af1f68feadb7db14d82dbc5dcc4a5ef7, type: 3}
+  m_Name: MiscAnimationCurves
+  m_EditorClassIdentifier: 
+  damageReactionCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 103.271164
+      outSlope: 103.271164
+      tangentMode: 0
+      weightedMode: 2
+      inWeight: 0
+      outWeight: 0.054832388
+    - serializedVersion: 3
+      time: 0.1607788
+      value: 1.0032583
+      inSlope: 0.044529434
+      outSlope: 0.044529434
+      tangentMode: 0
+      weightedMode: 2
+      inWeight: 0.21687277
+      outWeight: 0.49805793
+    - serializedVersion: 3
+      time: 0.65645045
+      value: -0.49050575
+      inSlope: 0.0046325014
+      outSlope: 0.0046325014
+      tangentMode: 0
+      weightedMode: 1
+      inWeight: 0.40702075
+      outWeight: 0.12966688
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -0.011393312
+      outSlope: -0.011393312
+      tangentMode: 0
+      weightedMode: 1
+      inWeight: 0.58328307
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
