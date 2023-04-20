@@ -73,7 +73,7 @@ public class WallrunController : MonoBehaviour {
             return;
 
         if (!isWallRunning && !wallClimbOnCooldown) {
-            Vector3 cameraVelocityMiddleVector = Vector3.Slerp(Vector3.ProjectOnPlane(character.fpCamera.tCamera.forward, Vector3.up), smoothCharacterHorizontalVelocity, 0.5f);
+            Vector3 cameraVelocityMiddleVector = Vector3.Slerp(Vector3.ProjectOnPlane(character.fpCamera.tCameraBase.forward, Vector3.up), smoothCharacterHorizontalVelocity, 0.5f);
             velocityWallAngle = Vector3.SignedAngle(-wallHit.normal, cameraVelocityMiddleVector, Vector3.up);
             if (Mathf.Abs(velocityWallAngle) < settings.maxAngleForWallClimb) {
                 Vector3 proj = Vector3.Project(smoothCharacterVelocity, -wallHit.normal);
@@ -131,9 +131,9 @@ public class WallrunController : MonoBehaviour {
             if (!wallDetected)
                 StopWallRun();
 
-            wallCameraAngle = Vector3.SignedAngle(Vector3.ProjectOnPlane(character.fpCamera.tCamera.forward, Vector3.up), Vector3.ProjectOnPlane(-wallHit.normal, Vector3.up), Vector3.up);
+            wallCameraAngle = Vector3.SignedAngle(Vector3.ProjectOnPlane(character.fpCamera.tCameraBase.forward, Vector3.up), Vector3.ProjectOnPlane(-wallHit.normal, Vector3.up), Vector3.up);
 
-            Vector3 camForwardProj = Vector3.ProjectOnPlane(character.fpCamera.tCamera.forward, character.locomotion.wallrunController.wallUpVector).normalized;
+            Vector3 camForwardProj = Vector3.ProjectOnPlane(character.fpCamera.tCameraBase.forward, character.locomotion.wallrunController.wallUpVector).normalized;
             wallForwardCameraAngle = Vector3.SignedAngle(wallForwardVector, camForwardProj, character.locomotion.wallrunController.wallUpVector);
             yield return new WaitForFixedUpdate();
         }
@@ -189,7 +189,7 @@ public class WallrunController : MonoBehaviour {
             t += Time.fixedDeltaTime / duration;
             runVelocity = wallUpVector * settings.verticalRunCurve.Evaluate(t) * settings.maxVerticalVelocity * scale;
             runVelocity += -wallHit.normal * 1f;
-            wallCameraAngle = Vector3.SignedAngle(Vector3.ProjectOnPlane(character.fpCamera.tCamera.forward, Vector3.up), Vector3.ProjectOnPlane(-wallHit.normal, Vector3.up), Vector3.up);
+            wallCameraAngle = Vector3.SignedAngle(Vector3.ProjectOnPlane(character.fpCamera.tCameraBase.forward, Vector3.up), Vector3.ProjectOnPlane(-wallHit.normal, Vector3.up), Vector3.up);
 
             yield return new WaitForFixedUpdate();
         }
@@ -206,7 +206,7 @@ public class WallrunController : MonoBehaviour {
                 t2 += Time.fixedDeltaTime / 0.75f;
                 runVelocity = Vector3.up * settings.mountCurve.Evaluate(t2) * settings.maxVerticalVelocity * 0.5f;
                 runVelocity += -wallHit.normal * 1f;
-                wallCameraAngle = Vector3.SignedAngle(Vector3.ProjectOnPlane(character.fpCamera.tCamera.forward, Vector3.up), Vector3.ProjectOnPlane(-wallHit.normal, Vector3.up), Vector3.up);
+                wallCameraAngle = Vector3.SignedAngle(Vector3.ProjectOnPlane(character.fpCamera.tCameraBase.forward, Vector3.up), Vector3.ProjectOnPlane(-wallHit.normal, Vector3.up), Vector3.up);
                 float f = Mathf.Clamp01(1 - (Mathf.Abs(wallCameraAngle) / 45));
                 runVelocity *= f;
                 yield return new WaitForFixedUpdate();

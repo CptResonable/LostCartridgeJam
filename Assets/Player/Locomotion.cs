@@ -675,7 +675,7 @@ public class Locomotion {
 
         private void SetTargetRotation() {
             //locomotion.tTargetRoation.rotation = Quaternion.LookRotation(Vector3.ProjectOnPlane(-locomotion.wallrunController.wallHit.normal, Vector3.up).normalized, Vector3.up);
-            float deltaYaw = Vector3.SignedAngle(Vector3.ProjectOnPlane(-locomotion.character.locomotion.wallrunController.wallHit.normal, Vector3.up), Vector3.ProjectOnPlane(locomotion.character.fpCamera.tCamera.forward, Vector3.up), Vector3.up);
+            float deltaYaw = Vector3.SignedAngle(Vector3.ProjectOnPlane(-locomotion.character.locomotion.wallrunController.wallHit.normal, Vector3.up), Vector3.ProjectOnPlane(locomotion.character.fpCamera.tCameraBase.forward, Vector3.up), Vector3.up);
             Vector3 targetDir = VectorUtils.RotateVectorAroundVector(Vector3.ProjectOnPlane(-locomotion.wallrunController.wallHit.normal, Vector3.up).normalized, Vector3.up, deltaYaw * 0.33f);
             locomotion.tTargetRoation.rotation = Quaternion.LookRotation(targetDir, Vector3.up);
         }
@@ -689,7 +689,7 @@ public class Locomotion {
             locomotion.wallrunController.StopWallClimb();
 
             //Vector3 lookDir = Vector3.ProjectOnPlane(locomotion.character.fpCamera.tCamera.forward, locomotion.wallrunController.wallUpVector).normalized;
-            Vector3 lookDir = locomotion.character.fpCamera.tCamera.forward;
+            Vector3 lookDir = locomotion.character.fpCamera.tCameraBase.forward;
             float lookUpAngle = Vector3.Angle(locomotion.wallrunController.wallUpVector, lookDir);
             if (lookUpAngle < 30) {
                 Vector3 rotateAxis = Vector3.Cross(locomotion.wallrunController.wallUpVector, lookDir);
@@ -767,7 +767,7 @@ public class Locomotion {
             locomotion.wallrunController.StopWallRun();
 
             //Vector3 lookDir = Vector3.ProjectOnPlane(locomotion.character.fpCamera.tCamera.forward, locomotion.wallrunController.wallUpVector).normalized;
-            Vector3 lookDir = locomotion.character.fpCamera.tCamera.forward;
+            Vector3 lookDir = locomotion.character.fpCamera.tCameraBase.forward;
             float lookUpAngle = Vector3.Angle(locomotion.wallrunController.wallUpVector, lookDir);
             if (lookUpAngle < 30) {
                 Vector3 rotateAxis = Vector3.Cross(locomotion.wallrunController.wallUpVector, lookDir);

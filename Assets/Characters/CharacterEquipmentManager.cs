@@ -40,7 +40,7 @@ public class CharacterEquipmentManager {
     private void Character_lateUpdateEvent() {
 
         RaycastHit hit;
-        if (Physics.Raycast(character.fpCamera.tCamera.position, character.fpCamera.tCamera.forward, out hit, 4, LayerMasks.i.equipment)) {
+        if (Physics.Raycast(character.fpCamera.tCameraBase.position, character.fpCamera.tCameraBase.forward, out hit, 4, LayerMasks.i.equipment)) {
 
             if (character.characterInput.action_interact.isDown)
                 EquipmentManager.i.PickUpItem(character, hit.transform.GetComponent<Equipment>());

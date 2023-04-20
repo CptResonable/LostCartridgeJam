@@ -2047,7 +2047,7 @@ MonoBehaviour:
   fpCamera:
     tCameraTarget_hip: {fileID: 6538922793939608213}
     tCameraTarget_ads: {fileID: 4754172326468030141}
-    tCamera: {fileID: 7458831216974441010}
+    tCameraBase: {fileID: 7458831216974441010}
     camera: {fileID: 662654167}
     animator: {fileID: 662654168}
     yaw: 0
@@ -3762,6 +3762,7 @@ MonoBehaviour:
   gizmoSize: 0.05
   poleDirection: 0
   poleRotationAxis: 0
+  reset: 0
 --- !u!4 &1006456471884663581 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2697290249256681164, guid: f869c8affc168f24cbeec4ce02c99087,

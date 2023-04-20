@@ -5589,7 +5589,7 @@ MonoBehaviour:
   fpCamera:
     tCameraTarget_hip: {fileID: 4786503518643938930}
     tCameraTarget_ads: {fileID: 2295395686691458267}
-    tCamera: {fileID: 9174095554237394645}
+    tCameraBase: {fileID: 9174095554237394645}
     camera: {fileID: 1789046387102124080}
     animator: {fileID: 1789046387102124095}
     yaw: 0
