@@ -39,10 +39,27 @@ public class DamageReactionController {
         drTorso_2.bulletHitEvent += DrTorso_2_bulletHitEvent;
         drHead.bulletHitEvent += DrHead_bulletHitEvent;
 
-        character.lateUpdateEvent += Character_lateUpdateEvent;
+        //character.lateUpdateEvent += Character_lateUpdateEvent;
+        //character.updateEvent += Character_updateEvent;
+    }
+
+    private void Character_updateEvent() {
+        bdrHead.ApplyAndUpdate();
+        bdrTorso_2.ApplyAndUpdate();
+        bdrTorso_1.ApplyAndUpdate();
+        bdrPelvis.ApplyAndUpdate();
+        GizmoManager.i.DrawSphere(Time.deltaTime, Color.blue, character.rb.position + character.rb.centerOfMass, 0.1f);
     }
 
     private void Character_lateUpdateEvent() {
+        bdrHead.ApplyAndUpdate();
+        bdrTorso_2.ApplyAndUpdate();
+        bdrTorso_1.ApplyAndUpdate();
+        bdrPelvis.ApplyAndUpdate();
+        GizmoManager.i.DrawSphere(Time.deltaTime, Color.blue, character.rb.position + character.rb.centerOfMass, 0.1f);
+    }
+
+    public void ManualUpdateTest() {
         bdrHead.ApplyAndUpdate();
         bdrTorso_2.ApplyAndUpdate();
         bdrTorso_1.ApplyAndUpdate();

@@ -95,7 +95,13 @@ public class UpperBody {
         //character.body.tTorso_2.Rotate(character.body.tTorso_2.up, deltaYaw * 0.5f + bonusEulers_torso2.y, Space.World);
 
         character.body.tHead.rotation = character.fpCamera.tCamera.rotation; // Set head rotation to camera rotation
+        character.damageReactionController.ManualUpdateTest();
+        character.fpCamera.tCamera.rotation = character.body.tHead.rotation;
+        Debug.Log("WORING ON THIS; THIS NEEDS TIO BE FOODSODOS I MEAN GOOOD");
+
         character.body.tHead.Rotate(character.body.tHead.forward, Mathf.Lerp(0, -30, character.stanceController.hipAdsInterpolator.t), Space.World);
+
+
 
         character.fpCamera.tCamera.position = Vector3.Lerp(character.fpCamera.tCameraTarget_hip.position, character.fpCamera.tCameraTarget_ads.position, character.stanceController.hipAdsInterpolator.t); // Set camera position
     }
