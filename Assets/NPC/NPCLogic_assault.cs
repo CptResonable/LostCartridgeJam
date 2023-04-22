@@ -81,7 +81,7 @@ public class NPCLogic_assault : NPCLogic {
     //}
 
     private void Rotation(CharacterInput input) {
-        Vector3 lookFlatDirection = Vector3.ProjectOnPlane(character.fpCamera.tCameraBase.forward, Vector3.up);
+        Vector3 lookFlatDirection = Vector3.ProjectOnPlane(character.head.tCameraBase.forward, Vector3.up);
         float dAngle = Vector3.SignedAngle(lookFlatDirection, toTargetVector, Vector3.up);
         input.mouseMovement.xDelta = (Mathf.Sign(dAngle) * Mathf.Sqrt(Mathf.Abs(dAngle)) * 0.2f) / Settings.MOUSE_SENSITIVITY;
 
@@ -89,7 +89,7 @@ public class NPCLogic_assault : NPCLogic {
         //Debug.DrawRay(input.transform.position, toTargetVector, Color.red);
         //Debug.DrawRay(input.transform.position, -character.fpCamera.pitch, Color.blue);
         dAnglePitch = Vector3.Angle(character.body.tHead.forward, toTargetVector);
-        input.mouseMovement.yDelta = character.fpCamera.pitch / Settings.MOUSE_SENSITIVITY;
+        input.mouseMovement.yDelta = character.head.pitch / Settings.MOUSE_SENSITIVITY;
     }
 
     private void Translation(CharacterInput input) {

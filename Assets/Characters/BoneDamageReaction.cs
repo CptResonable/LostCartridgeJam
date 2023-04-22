@@ -7,7 +7,7 @@ public class BoneDamageReaction {
     private Character character;
 
     private float pitch, yaw, roll;
-    private Vector3 rotation;
+    public Vector3 rotation;
 
     private float reactionDuration = 0.5f;
     public float reactionDurationModifier = 1;

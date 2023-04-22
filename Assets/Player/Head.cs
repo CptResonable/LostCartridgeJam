@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class FPCamera {
+public class Head {
     public Transform tCameraTarget_hip;
     public Transform tCameraTarget_ads;
     public Transform tCameraBase;
@@ -12,18 +12,13 @@ public class FPCamera {
 
     public float yaw, pitch, roll;
 
-    // Recoil
-    [SerializeField] private AnimationCurve recoilApplicationCurve;
-
-    // Wall running
-    [SerializeField] private AnimationCurve wallRunVerticalTiltBackCurve;
-    [SerializeField] private AnimationCurve wallAngleToRollCurve;
-
     private Shaker shaker;
 
     private float headbobAmount = 0;
 
     private Character character;
+
+    [HideInInspector] public Quaternion cameraRotationOffset; // Used by FpCameraController to offset view from head.
 
     public void Initialize(Character character) {
         this.character = character;
@@ -108,7 +103,7 @@ public class FPCamera {
         if (character.locomotion.wallrunController.isWallRunning) {
 
             // Y angle between look direction and -wall normal
-            targetRoll += Mathf.Sign(tiltAmount) * wallAngleToRollCurve.Evaluate(Mathf.Abs(character.locomotion.wallrunController.wallCameraAngle)) * 30;
+            targetRoll += Mathf.Sign(tiltAmount) * MiscAnimationCurves.i.wallAngleToRollCurve.Evaluate(Mathf.Abs(character.locomotion.wallrunController.wallCameraAngle)) * 30;
         }
 
         roll = Mathf.Lerp(roll, targetRoll, Time.deltaTime * 12);
@@ -128,6 +123,18 @@ public class FPCamera {
 
         headbobAmount = Mathf.Lerp(headbobAmount, character.rb.velocity.magnitude / 4, Time.deltaTime * 4);
         animator.SetFloat("Velocity", headbobAmount);
+
+    }
+
+    public void PostUpperBodyUpdateAdjustments() {
+        character.body.tHead.rotation = character.head.tCameraBase.rotation; // Set head rotation to camera rotation
+        
+        cameraRotationOffset = character.body.tHead.rotation * Quaternion.Inverse(Quaternion.Lerp(character.body.tHead.rotation, character.head.tCameraBase.transform.rotation, 0.25f));
+        //camera.transform.rotation = Quaternion.Lerp(tCameraBase.rotation, character.body.tHead.rotation, 0.25f);
+        character.body.tHead.Rotate(character.body.tHead.forward, Mathf.Lerp(0, -30, character.stanceController.hipAdsInterpolator.t), Space.World);
+        character.damageReactionController.ManualUpdateTest();
+        character.head.tCameraBase.position = Vector3.Lerp(character.head.tCameraTarget_hip.position, character.head.tCameraTarget_ads.position, character.stanceController.hipAdsInterpolator.t); // Set camera position
+
     }
 
     //public void character_updateEvent() {
@@ -235,7 +242,7 @@ public class FPCamera {
     }
 
     private void Gun_gunFiredEvent(Vector3 rotationalRecoil, Vector3 translationalRecoil) {
-        character.StartCoroutine(ApplyRotationOverTime(-rotationalRecoil.x, rotationalRecoil.y, 0.12f, recoilApplicationCurve));
+        character.StartCoroutine(ApplyRotationOverTime(-rotationalRecoil.x, rotationalRecoil.y, 0.12f, MiscAnimationCurves.i.recoilHeadApplicationCurve));
         //shaker.Shake(2, 0.12f);
     }
 
@@ -244,7 +251,7 @@ public class FPCamera {
     //}
 
     private void WallrunController_verticalRunStarted() {
-        character.StartCoroutine(ApplyRotationOverTime(-25, 0, 0.35f, wallRunVerticalTiltBackCurve));
+        character.StartCoroutine(ApplyRotationOverTime(-25, 0, 0.35f, MiscAnimationCurves.i.wallRunVerticalTiltBackCurve));
         animator.SetBool("IsWallClimbing", true);
     }
 
@@ -257,7 +264,7 @@ public class FPCamera {
         Vector3 camForwardProj = Vector3.ProjectOnPlane(tCameraBase.forward, character.locomotion.wallrunController.wallUpVector).normalized;
         float angle = Vector3.SignedAngle(character.locomotion.wallrunController.wallForwardVector, camForwardProj, character.locomotion.wallrunController.wallUpVector);
         if (Vector3.Dot(camForwardProj, character.locomotion.wallrunController.wallHit.normal) < 0)
-            character.StartCoroutine(ApplyRotationOverTime(0, -angle, 0.35f, wallRunVerticalTiltBackCurve));
+            character.StartCoroutine(ApplyRotationOverTime(0, -angle, 0.35f, MiscAnimationCurves.i.wallRunVerticalTiltBackCurve));
     }
 
     private void WallrunController_horizontalRunStopped() {

@@ -14,5 +14,11 @@ public class MiscAnimationCurves : ScriptableObject {
         }
     }
 
+    [Header("Hit reaction")]
     public AnimationCurve damageReactionCurve;
+
+    [Header("Head/camera")]
+    public AnimationCurve recoilHeadApplicationCurve;
+    public AnimationCurve wallRunVerticalTiltBackCurve;
+    public AnimationCurve wallAngleToRollCurve;
 }

@@ -40,7 +40,7 @@ public class AnimatorController {
         animator.SetFloat("VelocityX", localVelocity.x / 5);
         animator.SetFloat("VelocityY", localVelocity.y / 5);
 
-        float bodyToHeadDeltaYaw = Vector3.SignedAngle(character.transform.forward, Vector3.ProjectOnPlane(character.fpCamera.tCameraBase.forward, character.transform.up), character.transform.up);
+        float bodyToHeadDeltaYaw = Vector3.SignedAngle(character.transform.forward, Vector3.ProjectOnPlane(character.head.tCameraBase.forward, character.transform.up), character.transform.up);
         bodyToHeadDeltaYaw = (Mathf.Clamp(bodyToHeadDeltaYaw, -90, 90) + 90) / 180;
         animator.SetFloat("SlideBodyToCameraAngle", bodyToHeadDeltaYaw);
 

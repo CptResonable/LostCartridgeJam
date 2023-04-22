@@ -5,7 +5,7 @@ using UnityEngine;
 public class Character : MonoBehaviour {
     public bool isPlayer;
     public CharacterInput characterInput;
-    public FPCamera fpCamera;
+    public Head head;
     public UpperBody upperBody;
     public Locomotion locomotion;
     //public WeaponController weaponController;
@@ -43,7 +43,7 @@ public class Character : MonoBehaviour {
         animatorController.Init(this);
         equipmentManager.Init(this);
         stanceController.Init(this);
-        fpCamera.Initialize(this);
+        head.Initialize(this);
         locomotion.Initialize(this);
         //weaponController.Init(this);
 

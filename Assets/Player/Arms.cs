@@ -41,8 +41,8 @@ public class Arms {
     }
 
     private void Player_fixedUpdateEvent() {
-        tArmControllerBase.position = character.fpCamera.tCameraBase.position;
-        tArmControllerBase.rotation = Quaternion.Lerp(tArmControllerBase.rotation, character.fpCamera.tCameraBase.rotation, Time.fixedDeltaTime * 12); // Lerp towards camera forward
+        tArmControllerBase.position = character.head.tCameraBase.position;
+        tArmControllerBase.rotation = Quaternion.Lerp(tArmControllerBase.rotation, character.head.tCameraBase.rotation, Time.fixedDeltaTime * 12); // Lerp towards camera forward
     }
 
     private void Character_lateUpdateEvent() {

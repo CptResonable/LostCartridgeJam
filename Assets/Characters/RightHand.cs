@@ -79,7 +79,7 @@ public class RightHand : Hand {
         if (character.equipmentManager.equipedItem != null)
             tWeaponTarget.localPosition = Vector3.Lerp(character.equipmentManager.equipedItem.targetHandPosition, character.equipmentManager.equipedItem.targetAdsHandPosition, character.stanceController.hipAdsInterpolator.t);
 
-        tWeaponTarget.rotation = character.fpCamera.tCameraBase.rotation;
+        tWeaponTarget.rotation = character.head.tCameraBase.rotation;
         tWeaponTarget.Rotate(handRotationOffset);
         tWeaponTarget.Rotate(new Vector3(-90, 0, 180));
 

@@ -4,15 +4,15 @@ using UnityEngine;
 
 [System.Serializable]
 public class DamageReactionController {
-    private DamageReceiver drPelvis;
-    private DamageReceiver drTorso_1;
-    private DamageReceiver drTorso_2;
-    private DamageReceiver drHead;
+    public DamageReceiver drPelvis;
+    public DamageReceiver drTorso_1;
+    public DamageReceiver drTorso_2;
+    public DamageReceiver drHead;
 
-    private BoneDamageReaction bdrPelvis;
-    private BoneDamageReaction bdrTorso_1;
-    private BoneDamageReaction bdrTorso_2;
-    private BoneDamageReaction bdrHead;
+    public BoneDamageReaction bdrPelvis;
+    public BoneDamageReaction bdrTorso_1;
+    public BoneDamageReaction bdrTorso_2;
+    public BoneDamageReaction bdrHead;
 
     private BoxCollider colTorso_1;
     private BoxCollider colTorso_2;

@@ -300,6 +300,7 @@ GameObject:
   - component: {fileID: 662654168}
   - component: {fileID: 2296875462288324868}
   - component: {fileID: 1266556606}
+  - component: {fileID: 1433787667918712388}
   m_Layer: 6
   m_Name: FirstPersonCamera
   m_TagString: Untagged
@@ -479,6 +480,20 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   scale: 0
+--- !u!114 &1433787667918712388
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 662654163}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6e6bfdd9f9a3704da34aa4d3344c46e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  camera: {fileID: 0}
+  character: {fileID: 2949893265196670149}
 --- !u!1 &908751754
 GameObject:
   m_ObjectHideFlags: 0
@@ -2044,7 +2059,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPlayer: 1
   characterInput: {fileID: 0}
-  fpCamera:
+  head:
     tCameraTarget_hip: {fileID: 6538922793939608213}
     tCameraTarget_ads: {fileID: 4754172326468030141}
     tCameraBase: {fileID: 7458831216974441010}
@@ -2053,78 +2068,7 @@ MonoBehaviour:
     yaw: 0
     pitch: 0
     roll: 0
-    recoilApplicationCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 5.379924
-        outSlope: 5.379924
-        tangentMode: 0
-        weightedMode: 2
-        inWeight: 0
-        outWeight: 0.31507555
-      - serializedVersion: 3
-        time: 1
-        value: 0.7
-        inSlope: -0.009575423
-        outSlope: -0.009575423
-        tangentMode: 0
-        weightedMode: 1
-        inWeight: 0.20144546
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    wallRunVerticalTiltBackCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 3.92332
-        outSlope: 3.92332
-        tangentMode: 0
-        weightedMode: 2
-        inWeight: 0
-        outWeight: 0.27242163
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: -0.009575423
-        outSlope: -0.009575423
-        tangentMode: 0
-        weightedMode: 1
-        inWeight: 0.20144546
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    wallAngleToRollCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0.017207827
-        outSlope: 0.017207827
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0.020238096
-      - serializedVersion: 3
-        time: 180
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
+    cameraRotationOffset: {x: 0, y: 0, z: 0, w: 0}
   locomotion:
     settings: {fileID: 11400000, guid: b0f8834138fc4434c8f3728944fc0326, type: 2}
     wallrunController: {fileID: 1648869761888032421}
@@ -2224,6 +2168,11 @@ MonoBehaviour:
       tFoot: {fileID: 6298639426180497949}
       tIkTarget: {fileID: 1878818858805770367}
       tIkPole: {fileID: 7281030728426230008}
+  damageReactionController:
+    drPelvis: {fileID: 0}
+    drTorso_1: {fileID: 0}
+    drTorso_2: {fileID: 0}
+    drHead: {fileID: 0}
   rb: {fileID: 0}
   tRig: {fileID: 5076245695178447980}
   goAliveModel: {fileID: 2618979750785878144}
