@@ -13,6 +13,7 @@ public class Body {
 
     [HideInInspector] public Transform[] tBones;
     [HideInInspector] public RagdollBone[] ragdollBones;
+    [HideInInspector] public MomentumData[] momentumDatas;
 
     public void Init(Character character) {
         tBones = new Transform[14] {
@@ -49,7 +50,19 @@ public class Body {
             new RagdollBone(tHandR, rHandR),
         };
 
+        momentumDatas = new MomentumData[14];
+        for (int i = 0; i < momentumDatas.Length; i++) {
+            momentumDatas[i] = new MomentumData(tBones[i]);
+        }
+
+        character.fixedUpdateEvent += Character_fixedUpdateEvent;
         character.animatorController.animatorUpdatedEvent += Character_animatorUpdatedEvent;
+    }
+
+    private void Character_fixedUpdateEvent() {
+        for (int i = 0; i < momentumDatas.Length; i++) {
+            momentumDatas[i].RecordPositionAndRotation(tBones[i]);
+        }
     }
 
     private void Character_animatorUpdatedEvent() {
@@ -60,6 +73,12 @@ public class Body {
         ragdollBones[0].tDead.position = ragdollBones[0].tAlive.position;
         for (int i = 0; i < ragdollBones.Length; i++) {
             ragdollBones[i].tDead.rotation = ragdollBones[i].tAlive.rotation;
+
+            Rigidbody rb;
+            if (ragdollBones[i].tDead.TryGetComponent<Rigidbody>(out rb)) {
+                rb.angularVelocity = momentumDatas[i].ComputeAngularVelocity() * 10;
+                rb.velocity = momentumDatas[i].ComputeVelocity();
+            }
         }
     }
 
@@ -94,6 +113,41 @@ public class Body {
         public BodypartData(Vector3 position, Quaternion rotation) {
             this.position = position;
             this.rotation = rotation;
+        }
+    }
+
+    public struct MomentumData {
+        private Vector3 angularVelocity;
+        private Vector3 velocity;
+
+        private Vector3 lastPosition, newPosition;
+        private Quaternion lastRotation, newRotation;
+
+        public MomentumData(Transform tBone) {
+            lastPosition = tBone.position;
+            lastRotation = tBone.rotation;
+            newPosition = tBone.position;
+            newRotation = tBone.rotation;
+
+            angularVelocity = Vector3.zero;
+            velocity = Vector3.zero;
+        }
+
+        public void RecordPositionAndRotation(Transform tBone) {
+            lastPosition = newPosition;
+            lastRotation = newRotation;
+            newPosition = tBone.position;
+            newRotation = tBone.rotation;
+        }
+
+        public Vector3 ComputeVelocity() {
+            return (newPosition - lastPosition) / Time.fixedDeltaTime;
+        }
+
+        public Vector3 ComputeAngularVelocity() {
+            var deltaRot = newRotation * Quaternion.Inverse(lastRotation);
+            var eulerRot = new Vector3(Mathf.DeltaAngle(0, deltaRot.eulerAngles.x), Mathf.DeltaAngle(0, deltaRot.eulerAngles.y), Mathf.DeltaAngle(0, deltaRot.eulerAngles.z));
+            return eulerRot / Time.fixedDeltaTime * Mathf.Deg2Rad;
         }
     }
 }
