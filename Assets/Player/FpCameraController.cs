@@ -28,6 +28,10 @@ public class FpCameraController : MonoBehaviour {
     }
 
     private void Update() {
+        if (camera != null) {
+            camera.fieldOfView = Mathf.Lerp(Settings.FOV_HIP, Settings.FOV_ADS, character.stanceController.hipAdsInterpolator.t);
+        }
+
         headbobAmount = Mathf.Lerp(headbobAmount, character.rb.velocity.magnitude / 4, Time.deltaTime * 4);
         animator.SetFloat("Velocity", headbobAmount);
     }

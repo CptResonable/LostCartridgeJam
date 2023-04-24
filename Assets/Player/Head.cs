@@ -7,7 +7,6 @@ public class Head {
     public Transform tCameraTarget_hip;
     public Transform tCameraTarget_ads;
     public Transform tCameraBase;
-    public Camera camera;
 
     public float yaw, pitch, roll;
 
@@ -17,7 +16,6 @@ public class Head {
         this.character = character;
 
         character.updateEvent += character_updateEvent;
-        character.lateUpdateEvent += Character_lateUpdateEvent;
         character.fixedUpdateEvent += character_fixedUpdateEvent;
 
         character.equipmentManager.itemEquipedEvent += EquipmentManager_itemEquipedEvent;
@@ -28,11 +26,9 @@ public class Head {
         character.locomotion.wallrunController.horizontalRunStarted += WallrunController_horizontalRunStarted;
     }
 
-    private void Character_lateUpdateEvent() {
-        //camera.transform.localPosition -= Vector3.up * 0.5f;
-    }
 
     private void character_fixedUpdateEvent() {
+        character.head.tCameraBase.position = Vector3.Lerp(character.head.tCameraTarget_hip.position, character.head.tCameraTarget_ads.position, character.stanceController.hipAdsInterpolator.t); // Set camera position, needs to be done here aswell for camera and hands to move smoothly
     }
 
     float tiltAmount;
@@ -90,10 +86,6 @@ public class Head {
 
         roll = Mathf.Lerp(roll, targetRoll, Time.deltaTime * 12);
 
-        if (camera != null) {
-            camera.fieldOfView = Mathf.Lerp(Settings.FOV_HIP, Settings.FOV_ADS, character.stanceController.hipAdsInterpolator.t);
-        }
-
         //Vector3 lastForwardVector = Vector3.ProjectOnPlane(tCamera.transform.forward, Vector3.up);
         Vector3 lastForwardVector = new Vector3(tCameraBase.transform.forward.x, 0, tCameraBase.transform.forward.z);
         tCameraBase.rotation = Quaternion.identity;
@@ -104,104 +96,12 @@ public class Head {
         //tCamera.rotation = Quaternion.Euler(pitch, yaw, roll);
     }
 
-    public void PostUpperBodyUpdateAdjustments() {
+    public void PostDamageReactionUpdate() {
         character.body.tHead.rotation = character.head.tCameraBase.rotation; // Set head rotation to camera rotation
-        
-
         character.body.tHead.Rotate(character.body.tHead.forward, Mathf.Lerp(0, -30, character.stanceController.hipAdsInterpolator.t), Space.World);
         character.head.tCameraBase.position = Vector3.Lerp(character.head.tCameraTarget_hip.position, character.head.tCameraTarget_ads.position, character.stanceController.hipAdsInterpolator.t); // Set camera position
     }
 
-    //public void character_updateEvent() {
-    //    pitch -= character.characterInput.mouseMovement.yDelta * Settings.MOUSE_SENSITIVITY;
-    //    pitch = Mathf.Clamp(pitch, -89, 89);
-    //    yaw += character.characterInput.mouseMovement.xDelta * Settings.MOUSE_SENSITIVITY;
-
-
-    //    if (character.locomotion.activeStateEnum == Locomotion.LocomotionState.StateIDEnum.WallRunning) {
-    //        float angle = Vector3.SignedAngle(Vector3.forward, character.locomotion.wallrunController.wallForwardVector, Vector3.up);
-    //        angle += 360;
-    //        float deltaAngle = Mathf.DeltaAngle(angle, yaw);
-
-    //        //if (deltaAngle > 89)
-    //        //    yaw = angle + 89;
-    //        //if (deltaAngle < -89)
-    //        //    yaw = angle - 89;
-    //        if (deltaAngle > 88)
-    //            yaw = angle + 88;
-    //        if (deltaAngle < -88)
-    //            yaw = angle - 88;
-    //    }
-    //    //else if (character.locomotion.activeStateEnum == Locomotion.LocomotionState.StateIDEnum.WallClimbing) {
-    //    //    float angle = Vector3.SignedAngle(Vector3.forward, character.locomotion.wallrunController.wallHit.normal, Vector3.up) + 90;
-    //    //    angle += 360;
-    //    //    float deltaAngle = Mathf.DeltaAngle(angle, yaw);
-
-    //    //    //if (deltaAngle > 89)
-    //    //    //    yaw = angle + 89;
-    //    //    //if (deltaAngle < -89)
-    //    //    //    yaw = angle - 89;
-    //    //    if (deltaAngle > 88)
-    //    //        yaw = angle + 88;
-    //    //    if (deltaAngle < -88)
-    //    //        yaw = angle - 88;
-    //    //}
-
-    //    //if (character.locomotion.activeStateEnum == Locomotion.LocomotionState.StateIDEnum.WallRunning) {
-    //    //    float angle = Vector3.SignedAngle(Vector3.forward, character.locomotion.wallrunController.wallForwardVector, Vector3.up);
-    //    //    if (angle < 0)
-    //    //        angle = 360 + angle;
-
-    //    //    Debug.Log("angel: " + angle);
-
-    //    //    yaw += 360;
-    //    //    angle += 360;
-
-    //    //    //yaw = angle;
-
-    //    //    yaw = Mathf.Clamp(yaw, angle - 90, angle + 90);
-    //    //    yaw -= 360;
-    //    //}
-
-
-    //    if (yaw > 360)
-    //        yaw -= 360;
-    //    if (yaw < 0)
-    //        yaw = 360 + yaw;
-
-    //    Debug.Log("yaw: " + yaw);
-
-
-    //    float targetRoll = 0;
-    //    if (Input.GetKey(KeyCode.Q))
-    //        targetRoll += 30;
-    //    else if (Input.GetKey(KeyCode.E))
-    //        targetRoll -= 30;
-
-    //    if (character.locomotion.wallrunController.isWallRunning) {
-
-    //        // Y angle between look direction and -wall normal
-    //        targetRoll += Mathf.Sign(character.locomotion.wallrunController.wallCameraAngle) * wallAngleToRollCurve.Evaluate(Mathf.Abs(character.locomotion.wallrunController.wallCameraAngle)) * 40;
-    //    }
-
-    //    roll = Mathf.Lerp(roll, targetRoll, Time.deltaTime * 12);
-
-    //    if (camera != null) {
-    //        camera.fieldOfView = Mathf.Lerp(Settings.FOV_HIP, Settings.FOV_ADS, character.arms.hipAdsInterpolator.t);
-    //    }
-
-    //    //Vector3 lastForwardVector = Vector3.ProjectOnPlane(tCamera.transform.forward, Vector3.up);
-    //    Vector3 lastForwardVector = new Vector3(tCamera.transform.forward.x, 0, tCamera.transform.forward.z);
-    //    tCamera.rotation = Quaternion.identity;
-
-    //    tCamera.Rotate(lastForwardVector.normalized, roll * lastForwardVector.magnitude, Space.Self);
-    //    tCamera.Rotate(Vector3.up, yaw, Space.Self);
-    //    tCamera.Rotate(Vector3.right, pitch, Space.Self);
-    //    //tCamera.rotation = Quaternion.Euler(pitch, yaw, roll);
-
-    //    headbobAmount = Mathf.Lerp(headbobAmount, character.rb.velocity.magnitude / 4, Time.deltaTime * 4);
-    //    animator.SetFloat("Velocity", headbobAmount);
-    //}
     private void EquipmentManager_itemEquipedEvent(Equipment item) {
         if (item.GetType() == typeof(Gun)) {
             Gun gun = (Gun)item;

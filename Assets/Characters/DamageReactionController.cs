@@ -47,7 +47,8 @@ public class DamageReactionController {
         bdrTorso_2.ApplyAndUpdate();
         bdrTorso_1.ApplyAndUpdate();
         bdrPelvis.ApplyAndUpdate();
-        GizmoManager.i.DrawSphere(Time.deltaTime, Color.blue, character.rb.position + character.rb.centerOfMass, 0.1f);
+
+        character.head.PostDamageReactionUpdate();
     }
 
     private void DrPelvis_bulletHitEvent(float damage, Vector3 hitPoint, Vector3 bulletPathVector) {

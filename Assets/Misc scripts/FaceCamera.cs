@@ -7,6 +7,6 @@ public class FaceCamera : MonoBehaviour {
         if (GameManager.i.player == null)
             return;
 
-        transform.LookAt(GameManager.i.player.head.camera.transform);
+        transform.LookAt(GameManager.i.player.head.tCameraBase.transform);
     }
 }
