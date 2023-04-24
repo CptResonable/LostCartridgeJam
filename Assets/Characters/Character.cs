@@ -48,11 +48,11 @@ public class Character : MonoBehaviour {
         //weaponController.Init(this);
 
         upperBody.Init(this);
+        damageReactionController.Init(this);
         arms.Init(this);
         health.Init(this);
         body.Init(this);
         legs.Init(this);
-        damageReactionController.Init(this);
 
         health.diedEvent += Health_diedEvent;
 

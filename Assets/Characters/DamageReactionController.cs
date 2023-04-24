@@ -34,35 +34,15 @@ public class DamageReactionController {
         bdrTorso_2 = new BoneDamageReaction(character.body.tTorso_2, character);
         bdrHead = new BoneDamageReaction(character.body.tHead, character);
 
-        //if (character.isPlayer)
-        //    return;
-
         drPelvis.bulletHitEvent += DrPelvis_bulletHitEvent;
         drTorso_1.bulletHitEvent += DrTorso_1_bulletHitEvent;
         drTorso_2.bulletHitEvent += DrTorso_2_bulletHitEvent;
         drHead.bulletHitEvent += DrHead_bulletHitEvent;
 
-        //character.lateUpdateEvent += Character_lateUpdateEvent;
-        //character.updateEvent += Character_updateEvent;
+        character.updateEvent += Character_updateEvent;
     }
 
     private void Character_updateEvent() {
-        bdrHead.ApplyAndUpdate();
-        bdrTorso_2.ApplyAndUpdate();
-        bdrTorso_1.ApplyAndUpdate();
-        bdrPelvis.ApplyAndUpdate();
-        GizmoManager.i.DrawSphere(Time.deltaTime, Color.blue, character.rb.position + character.rb.centerOfMass, 0.1f);
-    }
-
-    private void Character_lateUpdateEvent() {
-        bdrHead.ApplyAndUpdate();
-        bdrTorso_2.ApplyAndUpdate();
-        bdrTorso_1.ApplyAndUpdate();
-        bdrPelvis.ApplyAndUpdate();
-        GizmoManager.i.DrawSphere(Time.deltaTime, Color.blue, character.rb.position + character.rb.centerOfMass, 0.1f);
-    }
-
-    public void ManualUpdateTest() {
         bdrHead.ApplyAndUpdate();
         bdrTorso_2.ApplyAndUpdate();
         bdrTorso_1.ApplyAndUpdate();
@@ -145,70 +125,4 @@ public class DamageReactionController {
         ////character.rb.velocity += bulletPathVector * 3;
         character.rb.AddForceAtPosition(bulletPathVector * 1000, hitPoint);
     }
-
-    //private void DrTorso_2_bulletHitEvent(float damage, Vector3 hitPoint, Vector3 bulletPathVector) {
-    //    Vector3 COM = character.rb.position + character.rb.centerOfMass;
-    //    Vector3 COMtoPoint = VectorUtils.FromToVector(COM, hitPoint);
-    //    Vector3 COMtoPointVertical = Vector3.Project(COMtoPoint, character.transform.up);
-    //    Vector3 COMtoPointHorizontal = COMtoPoint - COMtoPointVertical;
-    //    COMtoPointVertical *= 0.5f;
-    //    COMtoPointHorizontal *= 2;
-    //    COMtoPoint = COMtoPointVertical + COMtoPointHorizontal;
-    //    GizmoManager.i.DrawLine(2, Color.green, hitPoint, hitPoint + COMtoPoint.normalized * 4);
-
-    //    Vector3 v = Vector3.Cross(COMtoPoint.normalized, bulletPathVector);
-    //    GizmoManager.i.DrawLine(2, Color.red, hitPoint, hitPoint + v.normalized * 4);
-    //    bdrTorso_2.AddReaction(v.normalized * 50);
-    //    //Debug.Log("v: " + v.magnitudeb);
-    //}
-
-    //private void DrTorso_2_bulletHitEvent(float damage, Vector3 hitPoint, Vector3 bulletPathVector) {
-    //    Vector3 COM = character.rb.position + character.rb.centerOfMass;
-    //    Vector3 COMtoPoint = VectorUtils.FromToVector(COM, hitPoint);
-    //    GizmoManager.i.DrawLine(2, Color.green, hitPoint, hitPoint + COMtoPoint.normalized * 4);
-
-    //    Vector3 v = Vector3.Cross(COMtoPoint.normalized, bulletPathVector);
-    //    GizmoManager.i.DrawLine(2, Color.red, hitPoint, hitPoint + v.normalized * 4);
-    //    bdrTorso_2.AddReaction(v.normalized * 50);
-    //    //Debug.Log("v: " + v.magnitudeb);
-
-    //    Vector3 hPart = new Vector3(COMtoPoint.x, 0, COMtoPoint.z);
-    //    Vector3 vPart = new Vector3(0, COMtoPoint.y, 0);
-
-    //    Vector3 yawVector = Vector3.Project(bulletPathVector, Vector3.Cross(character.transform.up, hPart));
-
-    //    float yaw = Vector3.Dot(Vector3.Cross(character.transform.up, hPart), yawVector) * yawVector.magnitude * 90;
-    //    //Vector3 bulletPathHorizontal = new Vector3(bulletPathVector.x, 0, bulletPathVector.z);
-
-    //    bdrTorso_2.AddReaction(0, yaw);
-    //}
-    //private void DrTorso_2_bulletHitEvent(float damage, Vector3 hitPoint, Vector3 bulletPathVector) {
-    //    Vector3 COM = character.rb.centerOfMass;
-    //    Vector3 COMtoPoint = VectorUtils.FromToVector(COM, hitPoint);
-
-    //    Vector3 proj = Vector3.ProjectOnPlane(COMtoPoint, bulletPathVector);
-
-    //    Vector3 hPart = new Vector3(COMtoPoint.x, 0, COMtoPoint.z);
-    //    Vector3 vPart = new Vector3(0, COMtoPoint.y, 0);
-
-    //    Vector3 yawVector = Vector3.Project(bulletPathVector, Vector3.Cross(character.transform.up, hPart));
-    //    Debug.Log("huh: " + Vector3.Dot(Vector3.Cross(character.transform.up, hPart), yawVector));
-    //    float yaw = Vector3.Dot(Vector3.Cross(character.transform.up, hPart), yawVector) * yawVector.magnitude * 90;
-    //    //Vector3 bulletPathHorizontal = new Vector3(bulletPathVector.x, 0, bulletPathVector.z);
-
-    //    bdrTorso_2.AddReaction(0, yaw);
-    //}
-    //private void DrTorso_2_bulletHitEvent(float damage, Vector3 hitPoint, Vector3 bulletPathVector) {
-    //    Vector3 COM = character.rb.centerOfMass;
-    //    Vector3 COMtoPoint = VectorUtils.FromToVector(COM, hitPoint);
-    //    Vector3 hPart = new Vector3(COMtoPoint.x, 0, COMtoPoint.z);
-    //    Vector3 vPart = new Vector3(0, COMtoPoint.y, 0);
-
-    //    Vector3 yawVector = Vector3.Project(bulletPathVector, Vector3.Cross(character.transform.up, hPart));
-    //    Debug.Log("huh: " + Vector3.Dot(Vector3.Cross(character.transform.up, hPart), yawVector));
-    //    float yaw = Vector3.Dot(Vector3.Cross(character.transform.up, hPart), yawVector) * yawVector.magnitude * 90;
-    //    //Vector3 bulletPathHorizontal = new Vector3(bulletPathVector.x, 0, bulletPathVector.z);
-
-    //    bdrTorso_2.AddReaction(0, yaw);
-    //}
 }

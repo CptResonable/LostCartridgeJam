@@ -8,22 +8,13 @@ public class Head {
     public Transform tCameraTarget_ads;
     public Transform tCameraBase;
     public Camera camera;
-    public Animator animator;
 
     public float yaw, pitch, roll;
 
-    private Shaker shaker;
-
-    private float headbobAmount = 0;
-
     private Character character;
-
-    [HideInInspector] public Quaternion cameraRotationOffset; // Used by FpCameraController to offset view from head.
 
     public void Initialize(Character character) {
         this.character = character;
-
-        shaker = camera.GetComponent<Shaker>();
 
         character.updateEvent += character_updateEvent;
         character.lateUpdateEvent += Character_lateUpdateEvent;
@@ -35,11 +26,6 @@ public class Head {
         character.locomotion.wallrunController.verticalRunStarted += WallrunController_verticalRunStarted;
         character.locomotion.wallrunController.verticalRunStopped += WallrunController_verticalRunStopped;
         character.locomotion.wallrunController.horizontalRunStarted += WallrunController_horizontalRunStarted;
-        character.locomotion.wallrunController.horizontalRunStopped += WallrunController_horizontalRunStopped;
-
-        character.locomotion.slideStartedEvent += Locomotion_slideStartedEvent;
-        character.locomotion.slideEndedEvent += Locomotion_slideEndedEvent;
-        character.locomotion.jumpStartedEvent += Locomotion_jumpStartedEvent;
     }
 
     private void Character_lateUpdateEvent() {
@@ -69,10 +55,6 @@ public class Head {
             angle += 360;
             float deltaAngle = Mathf.DeltaAngle(angle, yaw);
 
-            //if (deltaAngle > 89)
-            //    yaw = angle + 89;
-            //if (deltaAngle < -89)
-            //    yaw = angle - 89;
             if (deltaAngle > 88)
                 yaw = angle + 88;
             if (deltaAngle < -88)
@@ -120,21 +102,14 @@ public class Head {
         tCameraBase.Rotate(Vector3.up, yaw, Space.Self);
         tCameraBase.Rotate(Vector3.right, pitch, Space.Self);
         //tCamera.rotation = Quaternion.Euler(pitch, yaw, roll);
-
-        headbobAmount = Mathf.Lerp(headbobAmount, character.rb.velocity.magnitude / 4, Time.deltaTime * 4);
-        animator.SetFloat("Velocity", headbobAmount);
-
     }
 
     public void PostUpperBodyUpdateAdjustments() {
         character.body.tHead.rotation = character.head.tCameraBase.rotation; // Set head rotation to camera rotation
         
-        cameraRotationOffset = character.body.tHead.rotation * Quaternion.Inverse(Quaternion.Lerp(character.body.tHead.rotation, character.head.tCameraBase.transform.rotation, 0.25f));
-        //camera.transform.rotation = Quaternion.Lerp(tCameraBase.rotation, character.body.tHead.rotation, 0.25f);
-        character.body.tHead.Rotate(character.body.tHead.forward, Mathf.Lerp(0, -30, character.stanceController.hipAdsInterpolator.t), Space.World);
-        character.damageReactionController.ManualUpdateTest();
-        character.head.tCameraBase.position = Vector3.Lerp(character.head.tCameraTarget_hip.position, character.head.tCameraTarget_ads.position, character.stanceController.hipAdsInterpolator.t); // Set camera position
 
+        character.body.tHead.Rotate(character.body.tHead.forward, Mathf.Lerp(0, -30, character.stanceController.hipAdsInterpolator.t), Space.World);
+        character.head.tCameraBase.position = Vector3.Lerp(character.head.tCameraTarget_hip.position, character.head.tCameraTarget_ads.position, character.stanceController.hipAdsInterpolator.t); // Set camera position
     }
 
     //public void character_updateEvent() {
@@ -252,13 +227,10 @@ public class Head {
 
     private void WallrunController_verticalRunStarted() {
         character.StartCoroutine(ApplyRotationOverTime(-25, 0, 0.35f, MiscAnimationCurves.i.wallRunVerticalTiltBackCurve));
-        animator.SetBool("IsWallClimbing", true);
     }
 
     private void WallrunController_verticalRunStopped() {
-        animator.SetBool("IsWallClimbing", false);
     }
-
 
     private void WallrunController_horizontalRunStarted() {
         Vector3 camForwardProj = Vector3.ProjectOnPlane(tCameraBase.forward, character.locomotion.wallrunController.wallUpVector).normalized;
@@ -266,22 +238,6 @@ public class Head {
         if (Vector3.Dot(camForwardProj, character.locomotion.wallrunController.wallHit.normal) < 0)
             character.StartCoroutine(ApplyRotationOverTime(0, -angle, 0.35f, MiscAnimationCurves.i.wallRunVerticalTiltBackCurve));
     }
-
-    private void WallrunController_horizontalRunStopped() {
-    }
-
-    private void Locomotion_slideStartedEvent() {
-        animator.SetBool("IsSliding", true);
-    }
-
-    private void Locomotion_slideEndedEvent() {
-        animator.SetBool("IsSliding", false);
-    }
-    private void Locomotion_jumpStartedEvent() {
-        animator.SetTrigger("Jump");
-        shaker.Shake(1, 0.18f);
-    }
-
 
     public IEnumerator ApplyRotationOverTime(float totalPitch, float totalYaw, float time, AnimationCurve applicationCurve) {
         float t = 0;
@@ -299,11 +255,5 @@ public class Head {
 
             yield return new WaitForFixedUpdate();
         }
-    }
-
-    public void Recoil(float pitch, float yaw) {
-        this.pitch += pitch;
-        this.yaw += yaw;
-        this.pitch = Mathf.Clamp(pitch, -89, 89);
     }
 }

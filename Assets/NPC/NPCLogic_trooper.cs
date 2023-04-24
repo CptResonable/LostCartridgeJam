@@ -35,13 +35,22 @@ public class NPCLogic_trooper : NPCLogic {
         activeState.EnterState();
 
         Destroy(stateDebugText.gameObject);
+
+        Utils.DelayedFunctionCall(WarpAgent, 2);
     }
 
     public override void UpdateInput(CharacterInput input) {
 
+        navMeshAgent.transform.position = transform.position;
+        //navMeshAgent.updatePosition = true;
+        //navMeshAgent.Warp(transform.position);
+
         if (Input.GetKeyDown(KeyCode.F7)) {
             Destroy(this);
             Destroy(stateDebugText.gameObject);
+        }
+        if (Input.GetKeyDown(KeyCode.R)) {
+            navMeshAgent.Warp(transform.position);
         }
 
         if (target != null) {
@@ -65,6 +74,10 @@ public class NPCLogic_trooper : NPCLogic {
         this.input = input;
 
         LookForTarget();
+    }
+
+    private void WarpAgent() {
+        navMeshAgent.Warp(transform.position);
     }
 
     private bool LookForTarget() {
@@ -96,7 +109,9 @@ public class NPCLogic_trooper : NPCLogic {
 
     private void UpdateTargetPosition(Vector3 targetPosition) {
         this.targetPosition = targetPosition;
-        navMeshAgent.SetDestination(targetPosition);
+
+        if (navMeshAgent.isOnNavMesh)
+            navMeshAgent.SetDestination(targetPosition);
     }
 
     private void FindNewTargetPosition() {
@@ -127,9 +142,20 @@ public class NPCLogic_trooper : NPCLogic {
             Vector2 randDir = VectorUtils.RandomUnitVector();
 
             if (NavMesh.SamplePosition(origin + new Vector3(randDir.x, 0, randDir.y) * radius, out navMeshHit, 1, NavMesh.AllAreas)) {
-                UpdateTargetPosition(navMeshHit.position);
-                success = true;
-                break;
+                NavMeshPath navMeshPath = new NavMeshPath();
+                //create path and check if it can be done
+                // and check if navMeshAgent can reach its target
+                if (navMeshAgent.CalculatePath(navMeshHit.position, navMeshPath) && navMeshPath.status == NavMeshPathStatus.PathComplete) {
+                    UpdateTargetPosition(navMeshHit.position);
+                    success = true;
+                    break;
+                }
+
+                    //if (NavMesh.CalculatePath(transform.position, navMeshHit.position, NavMesh.AllAreas, navMeshAgent.path)) {
+                    //UpdateTargetPosition(navMeshHit.position);
+                    //success = true;
+                    //break;
+                //}
             }
         }
 
@@ -191,6 +217,7 @@ public class NPCLogic_trooper : NPCLogic {
     public class LogicState_randomPatrol : LogicState {
 
         private bool targetReached = false;
+        private float timeTryingToReachTarget;
 
         public override void Init(NPCLogic_trooper logic) {
             base.Init(logic);
@@ -214,6 +241,11 @@ public class NPCLogic_trooper : NPCLogic {
 
             logic.moveDir = logic.transform.InverseTransformVector(logic.navMeshAgent.desiredVelocity.normalized);
             Vector3 toTargetVector = VectorUtils.FromToVector(logic.input.transform.position, logic.targetPosition);
+
+
+            timeTryingToReachTarget += Time.deltaTime;
+            if (timeTryingToReachTarget > 10)
+                TargetReached();
 
             logic.input.moveInput = logic.moveDir;
             if (toTargetVector.magnitude > 1) {
@@ -250,12 +282,13 @@ public class NPCLogic_trooper : NPCLogic {
 
         private void TargetReached() {
             targetReached = true;
+            timeTryingToReachTarget = 0;
             Utils.DelayedFunctionCall(FindNewTargetPosition, 3);
         }
 
         private void FindNewTargetPosition() {
             Debug.Log("Why? " + logic.transform.position);
-            logic.FindNewTargetPosition(logic.transform.position, Random.Range(1f, 4));
+            logic.FindNewTargetPosition(logic.transform.position, Random.Range(3f, 20));
             targetReached = false;
         }
     }
