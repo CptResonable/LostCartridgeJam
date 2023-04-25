@@ -493,6 +493,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   camera: {fileID: 0}
+  animator: {fileID: 0}
   character: {fileID: 2949893265196670149}
 --- !u!1 &908751754
 GameObject:
@@ -1989,6 +1990,7 @@ GameObject:
   - component: {fileID: 7386630257519315612}
   - component: {fileID: 5628233934188922880}
   - component: {fileID: 5628233934188922876}
+  - component: {fileID: 5884590268972060587}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -2063,12 +2065,9 @@ MonoBehaviour:
     tCameraTarget_hip: {fileID: 6538922793939608213}
     tCameraTarget_ads: {fileID: 4754172326468030141}
     tCameraBase: {fileID: 7458831216974441010}
-    camera: {fileID: 662654167}
-    animator: {fileID: 662654168}
     yaw: 0
     pitch: 0
     roll: 0
-    cameraRotationOffset: {x: 0, y: 0, z: 0, w: 0}
   locomotion:
     settings: {fileID: 11400000, guid: b0f8834138fc4434c8f3728944fc0326, type: 2}
     wallrunController: {fileID: 1648869761888032421}
@@ -2274,6 +2273,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ded1a8012f56144da9cdce8b53a602a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &5884590268972060587
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7386630257519315590}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4caf47aeb69da9b4ab508dc59ce21cfc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damageEffectController:
+    volumeProfile: {fileID: 11400000, guid: a6560a915ef98420e9faacc1c7438823, type: 2}
+    maxDamageVingette: 0.5
+    damageTakenVignetteScale: 0.004
+    damageTakenVignetteResetSpeed: 1.5
+  deathCamera: {fileID: 2395649815440442212}
 --- !u!1 &7412009424709008240
 GameObject:
   m_ObjectHideFlags: 0

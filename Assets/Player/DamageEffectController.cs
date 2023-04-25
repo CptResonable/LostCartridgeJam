@@ -14,15 +14,15 @@ public class DamageEffectController {
 
     private float damageVignatte;
 
-    private Player player;
-    public void Init(Player player) {
-        this.player = player;
+    private Character character;
+    public void Init(Character character) {
+        this.character = character;
 
         volumeProfile.TryGet<UnityEngine.Rendering.Universal.Vignette>(out vingette);
 
-        player.updateEvent += Player_updateEvent;
+        character.updateEvent += Player_updateEvent;
 
-        player.health.damageTakenEvent += Health_damageTakenEvent;
+        character.health.damageTakenEvent += Health_damageTakenEvent;
     }
 
     private void Health_damageTakenEvent(float f) {
@@ -30,7 +30,7 @@ public class DamageEffectController {
     }
 
     private void Player_updateEvent() {
-        float hpVignette = Mathf.Lerp(maxDamageVingette, 0, player.health.HP / player.health.maxHP);
+        float hpVignette = Mathf.Lerp(maxDamageVingette, 0, character.health.HP / character.health.maxHP);
         damageVignatte = Mathf.Lerp(damageVignatte, 0, damageTakenVignetteResetSpeed * Time.deltaTime);
 
         vingette.intensity.value = hpVignette + damageVignatte;
