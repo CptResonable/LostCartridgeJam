@@ -22,19 +22,36 @@ Material:
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
-    m_TexEnvs: []
+    m_TexEnvs:
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
     - _AlphaCutoff: 0.5
+    - _EnvironmentReflections: 1
     - _InitTime: 0
     - _InitTime1: 0
     - _Lifetime: 0.5
     - _Lifetime1: 2
+    - _QueueControl: 0
+    - _QueueOffset: 0
+    - _ReceiveShadows: 1
     - _Shininess: 0.1
     - _Size: 0.1
     - _Size1: 0.02
+    - _SpecularHighlights: 1
     m_Colors:
-    - _Color0: {r: 0.5754717, g: 0.019001435, b: 0.051330358, a: 0}
+    - _Color0: {r: 0.57547164, g: 0.019001435, b: 0.051330335, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
     - _MainColor: {r: 0.39215687, g: 0.39215687, b: 0.39215687, a: 1}
     - _NoiseOffset: {r: 0, g: 0, b: 0, a: 0}
