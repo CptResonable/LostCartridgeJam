@@ -15,7 +15,7 @@ public class EffectMaterialKeeper : MonoBehaviour {
 
         dirtKickup.Initiate(transform, true, color, effectMaterial.size);
 
-        //AudioManager.i.PlaySoundStatic(effectMaterial.SFX_bulletHit, hitPoint);
+        // AudioManager.i.PlaySoundStatic(effectMaterial.SFX_bulletHit, hitPoint);
     }
 
     public void PlayFootstepEffects() {
