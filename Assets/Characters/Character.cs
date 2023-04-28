@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Character : MonoBehaviour {
+    public uint ID;
     public bool isPlayer;
+
     public CharacterInput characterInput;
     public Head head;
     public UpperBody upperBody;
@@ -34,6 +36,8 @@ public class Character : MonoBehaviour {
     public event Delegates.EmptyDelegate lateUpdateEvent;
 
     protected void Awake() {
+        CharacterManager.i.AddExistingCharacter(this);
+
         rb = GetComponent<Rigidbody>();
         capColider = GetComponent<CapsuleCollider>();
 

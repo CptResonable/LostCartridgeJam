@@ -6,13 +6,14 @@ public class Bullet : MonoBehaviour {
     [SerializeField] private LayerMask layerMask;
     [SerializeField] private LayerMask fleshLayerMask;
     public Rigidbody rb;
+    //public Character firedByCharacter;
+    public ProjectileParams projectileParams;
 
     private Vector3 lastPosition;
     private TrailRenderer trailRenderer;
     private bool isActive;
 
     private float damage;
-
 
     [SerializeField] private GameObject prefab_vfxDirtKickup;
     [SerializeField] private Color bloodColor;
@@ -24,7 +25,7 @@ public class Bullet : MonoBehaviour {
         trailRenderer = GetComponent<TrailRenderer>();
     }
 
-    public void Fire(Vector3 velocity, float damage) {
+    public void Fire(Character firedByCharacter, Vector3 velocity, float damage) {
         this.damage = damage;
         isActive = true;
         rb.isKinematic = false;

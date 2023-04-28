@@ -5,6 +5,8 @@ using UnityEngine;
 public class Gun : Equipment {
     [Header("--- GUN ---")]
 
+    public GunSpecs specs;
+
     [SerializeField] private float timeBetweenShots;
     [SerializeField] private Transform tMuzzle;
     [SerializeField] private Transform tMag;
@@ -12,6 +14,7 @@ public class Gun : Equipment {
     [SerializeField] private GameObject prefabBullet;
     [SerializeField] private GameObject prefab_vfxMuzzleFlash;
 
+    [SerializeField] public bool isAuto;
     [SerializeField] private int magSize;
     [SerializeField] private float muzzleVelocity;
     [SerializeField] private float reloadTime;
@@ -29,7 +32,6 @@ public class Gun : Equipment {
     [SerializeField] private float headUpRecoil;
     [SerializeField] private float headHorizontalRecoil;
     [SerializeField] private float horizontalChangeSpeed;
-    [SerializeField] public bool isAuto;
 
     public GunAnimationController gunAnimationController;
 
@@ -154,9 +156,12 @@ public class Gun : Equipment {
 
         Recoil();
 
+        ProjectileParams projectileParams = new ProjectileParams(tMuzzle.position, tMuzzle.forward, damage, character.ID);
+        //ProjectileManager.i.
+
         GameObject goBullet = EZ_Pooling.EZ_PoolManager.Spawn(prefabBullet.transform, tMuzzle.position - tMuzzle.forward * 0.05f, tMuzzle.rotation).gameObject;
         Bullet bullet = goBullet.GetComponent<Bullet>();
-        bullet.Fire(tMuzzle.forward * muzzleVelocity, damage);
+        bullet.Fire(character, tMuzzle.forward * muzzleVelocity, damage);
 
         // VFX
         GameObject goMuzzle = EZ_Pooling.EZ_PoolManager.Spawn(prefab_vfxMuzzleFlash.transform, tMuzzle.position, tMuzzle.rotation).gameObject;

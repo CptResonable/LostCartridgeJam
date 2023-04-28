@@ -814,6 +814,7 @@ MonoBehaviour:
   jointDriveSpring: 150
   jointDriveDamper: 3
   character: {fileID: 0}
+  specs: {fileID: 11400000, guid: d3df1888971bcc34bb295148bc0ed86c, type: 2}
   timeBetweenShots: 0.1
   tMuzzle: {fileID: 31990487392740302}
   tMag: {fileID: 807141359073220809}
@@ -821,6 +822,7 @@ MonoBehaviour:
     type: 3}
   prefab_vfxMuzzleFlash: {fileID: 638455987314716288, guid: 78b680f0f37a6d0479d39650b0200b83,
     type: 3}
+  isAuto: 1
   magSize: 30
   muzzleVelocity: 180
   reloadTime: 1.25
@@ -933,7 +935,6 @@ MonoBehaviour:
   headUpRecoil: -5
   headHorizontalRecoil: 5
   horizontalChangeSpeed: 4
-  isAuto: 1
   gunAnimationController: {fileID: 0}
   consumeAmmo: 0
   ammoReserve: 0

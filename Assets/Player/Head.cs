@@ -117,8 +117,7 @@ public class Head {
     }
 
     private void Gun_gunFiredEvent(Vector3 rotationalRecoil, Vector3 translationalRecoil) {
-        character.StartCoroutine(ApplyRotationOverTime(-rotationalRecoil.x, rotationalRecoil.y, 0.12f, MiscAnimationCurves.i.recoilHeadApplicationCurve));
-        //shaker.Shake(2, 0.12f);
+        character.StartCoroutine(ApplyRotationOverTime(-rotationalRecoil.x, rotationalRecoil.y, 0.12f, MiscAnimationCurves.i.recoilHeadApplicationCurve));;
     }
 
     //public void SetRotation() {

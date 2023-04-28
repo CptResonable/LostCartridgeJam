@@ -287,7 +287,6 @@ public class NPCLogic_trooper : NPCLogic {
         }
 
         private void FindNewTargetPosition() {
-            Debug.Log("Why? " + logic.transform.position);
             logic.FindNewTargetPosition(logic.transform.position, Random.Range(3f, 20));
             targetReached = false;
         }

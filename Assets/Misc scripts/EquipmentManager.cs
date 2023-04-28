@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class EquipmentManager : MonoBehaviour {
     private static EquipmentManager _i;
-
-    public Dictionary<uint, Equipment> equipments = new Dictionary<uint, Equipment>();
-
     public static EquipmentManager i {
         get {
             if (_i == null) {
@@ -17,6 +14,8 @@ public class EquipmentManager : MonoBehaviour {
             return _i;
         }
     }
+
+    public Dictionary<uint, Equipment> equipments = new Dictionary<uint, Equipment>();
 
     public void SpawnLoadout(Character character, Loadout loadout) {
         foreach (GameObject goPrefab in loadout.items) {

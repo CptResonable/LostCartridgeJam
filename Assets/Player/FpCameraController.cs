@@ -11,7 +11,6 @@ public class FpCameraController : MonoBehaviour {
 
     private float headbobAmount = 0;
 
-
     private void Awake() {
         camera = GetComponent<Camera>();
         animator = GetComponent<Animator>();
@@ -25,6 +24,9 @@ public class FpCameraController : MonoBehaviour {
         character.locomotion.slideStartedEvent += Locomotion_slideStartedEvent;
         character.locomotion.slideEndedEvent += Locomotion_slideEndedEvent;
         character.locomotion.jumpStartedEvent += Locomotion_jumpStartedEvent;
+
+        character.equipmentManager.itemEquipedEvent += EquipmentManager_itemEquipedEvent;
+        character.equipmentManager.itemUnequipedEvent += EquipmentManager_itemUnequipedEvent;
     }
 
     private void Update() {
@@ -65,5 +67,23 @@ public class FpCameraController : MonoBehaviour {
     private void Locomotion_jumpStartedEvent() {
         animator.SetTrigger("Jump");
         shaker.Shake(1, 0.18f);
+    }
+
+    private void EquipmentManager_itemEquipedEvent(Equipment item) {
+        if (item.GetType() == typeof(Gun)) {
+            Gun gun = (Gun)item;
+            gun.gunFiredEvent += Gun_gunFiredEvent;
+        }
+    }
+
+    private void EquipmentManager_itemUnequipedEvent(Equipment item) {
+        if (item.GetType() == typeof(Gun)) {
+            Gun gun = (Gun)item;
+            gun.gunFiredEvent -= Gun_gunFiredEvent;
+        }
+    }
+
+    private void Gun_gunFiredEvent(Vector3 rotationalRecoil, Vector3 translationalRecoil) {
+        shaker.Shake(2, 0.12f);
     }
 }
