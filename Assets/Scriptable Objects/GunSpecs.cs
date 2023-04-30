@@ -9,7 +9,7 @@ public class GunSpecs : ScriptableObject {
     public float muzzleVelocity;
     public float reloadTime;
     public float damage;
-    public int rpm;
+    public float rpm;
 
     [Header("Recoil")]
     public AnimationCurve recoilCurve;
@@ -20,7 +20,6 @@ public class GunSpecs : ScriptableObject {
     public float horizontalRecoil;
     public float recoilIncreasPerBullet;
     public float recoilResetRate;
-    public float recoilT;
     public float headUpRecoil;
     public float headHorizontalRecoil;
     public float horizontalChangeSpeed;

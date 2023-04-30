@@ -303,7 +303,7 @@ GameObject:
   - component: {fileID: 1433787667918712388}
   m_Layer: 6
   m_Name: FirstPersonCamera
-  m_TagString: Untagged
+  m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1992,7 +1992,7 @@ GameObject:
   - component: {fileID: 5628233934188922876}
   - component: {fileID: 5884590268972060587}
   m_Layer: 6
-  m_Name: Player
+  m_Name: Character
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2059,6 +2059,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b3da83c4bd5fa64e886d4b47b4ce659, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ID: 0
   isPlayer: 1
   characterInput: {fileID: 0}
   head:
@@ -3699,7 +3700,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d722258e8589d5241a98d35e29c3a0e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isCrit: 0
   damageMultiplier: 1
+  health:
+    maxHP: 0
+    damageReceivers: []
+    HP: 0
+    isAlive: 1
 --- !u!1 &781954304314620297 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2468846359798025304, guid: f869c8affc168f24cbeec4ce02c99087,
@@ -3773,7 +3780,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d722258e8589d5241a98d35e29c3a0e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isCrit: 0
   damageMultiplier: 1
+  health:
+    maxHP: 0
+    damageReceivers: []
+    HP: 0
+    isAlive: 1
 --- !u!4 &1809767102792605677 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -5655253998049842628, guid: f869c8affc168f24cbeec4ce02c99087,
@@ -3965,7 +3978,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d722258e8589d5241a98d35e29c3a0e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isCrit: 0
   damageMultiplier: 1
+  health:
+    maxHP: 0
+    damageReceivers: []
+    HP: 0
+    isAlive: 1
 --- !u!4 &3950298015058503569 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2182929676139991616, guid: f869c8affc168f24cbeec4ce02c99087,
@@ -4015,7 +4034,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d722258e8589d5241a98d35e29c3a0e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isCrit: 0
   damageMultiplier: 1
+  health:
+    maxHP: 0
+    damageReceivers: []
+    HP: 0
+    isAlive: 1
 --- !u!4 &5191939025418340291 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -2264064943570947566, guid: f869c8affc168f24cbeec4ce02c99087,
@@ -4054,7 +4079,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d722258e8589d5241a98d35e29c3a0e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isCrit: 0
   damageMultiplier: 1
+  health:
+    maxHP: 0
+    damageReceivers: []
+    HP: 0
+    isAlive: 1
 --- !u!4 &5853562729556360661 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -457927158004086780, guid: f869c8affc168f24cbeec4ce02c99087,
@@ -4092,7 +4123,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d722258e8589d5241a98d35e29c3a0e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isCrit: 0
   damageMultiplier: 1
+  health:
+    maxHP: 0
+    damageReceivers: []
+    HP: 0
+    isAlive: 1
 --- !u!4 &5918952863126719730 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -379061443712599773, guid: f869c8affc168f24cbeec4ce02c99087,
@@ -4136,7 +4173,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d722258e8589d5241a98d35e29c3a0e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isCrit: 0
   damageMultiplier: 1
+  health:
+    maxHP: 0
+    damageReceivers: []
+    HP: 0
+    isAlive: 1
 --- !u!1 &7205139101179930690 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5432711358869069203, guid: f869c8affc168f24cbeec4ce02c99087,
@@ -4168,7 +4211,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d722258e8589d5241a98d35e29c3a0e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isCrit: 0
   damageMultiplier: 1
+  health:
+    maxHP: 0
+    damageReceivers: []
+    HP: 0
+    isAlive: 1
 --- !u!4 &7557281469170260537 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4645971609789444072, guid: f869c8affc168f24cbeec4ce02c99087,

@@ -19,4 +19,8 @@ public class LayerMasks : ScriptableObject {
     public LayerMask wall;
     public LayerMask characters;
     public LayerMask equipment;
+
+    public static bool IsInLayerMask(int layer, LayerMask layerMask) {
+        return ((layerMask.value & (1 << layer)) > 0);
+    }
 }

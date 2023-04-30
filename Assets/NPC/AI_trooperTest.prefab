@@ -451,6 +451,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damageMultiplier: 1
+  health:
+    maxHP: 0
+    damageReceivers: []
+    HP: 0
+    isAlive: 1
 --- !u!114 &5658957898750653478
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -903,6 +908,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damageMultiplier: 1
+  health:
+    maxHP: 0
+    damageReceivers: []
+    HP: 0
+    isAlive: 1
 --- !u!114 &6603611099456647412
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2193,6 +2203,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damageMultiplier: 1
+  health:
+    maxHP: 0
+    damageReceivers: []
+    HP: 0
+    isAlive: 1
 --- !u!1 &3184764607355882801
 GameObject:
   m_ObjectHideFlags: 0
@@ -3916,6 +3931,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damageMultiplier: 1
+  health:
+    maxHP: 0
+    damageReceivers: []
+    HP: 0
+    isAlive: 1
 --- !u!1 &5425178260765640599
 GameObject:
   m_ObjectHideFlags: 0
@@ -4123,6 +4143,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damageMultiplier: 1
+  health:
+    maxHP: 0
+    damageReceivers: []
+    HP: 0
+    isAlive: 1
 --- !u!1 &5904020839425117193
 GameObject:
   m_ObjectHideFlags: 0
@@ -4312,6 +4337,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damageMultiplier: 1
+  health:
+    maxHP: 0
+    damageReceivers: []
+    HP: 0
+    isAlive: 1
 --- !u!1 &6665116150353794799
 GameObject:
   m_ObjectHideFlags: 0
@@ -5295,6 +5325,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damageMultiplier: 1
+  health:
+    maxHP: 0
+    damageReceivers: []
+    HP: 0
+    isAlive: 1
 --- !u!1 &8931383173874227364
 GameObject:
   m_ObjectHideFlags: 0
@@ -5465,6 +5500,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damageMultiplier: 1
+  health:
+    maxHP: 0
+    damageReceivers: []
+    HP: 0
+    isAlive: 1
 --- !u!1 &9083557558130900887
 GameObject:
   m_ObjectHideFlags: 0
@@ -5516,7 +5556,7 @@ GameObject:
   - component: {fileID: 5323176118273741118}
   - component: {fileID: 2735624213555400893}
   m_Layer: 6
-  m_Name: Player
+  m_Name: Character
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5584,35 +5624,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b3da83c4bd5fa64e886d4b47b4ce659, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ID: 0
   isPlayer: 0
   characterInput: {fileID: 7018515795662859507}
   head:
     tCameraTarget_hip: {fileID: 4786503518643938930}
     tCameraTarget_ads: {fileID: 2295395686691458267}
     tCameraBase: {fileID: 9174095554237394645}
-    camera: {fileID: 1789046387102124080}
-    animator: {fileID: 1789046387102124095}
     yaw: 0
     pitch: 0
     roll: 0
-    recoilApplicationCurve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    wallRunVerticalTiltBackCurve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    wallAngleToRollCurve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
   locomotion:
     settings: {fileID: 11400000, guid: b0f8834138fc4434c8f3728944fc0326, type: 2}
     wallrunController: {fileID: 1022895982593724994}
@@ -5712,6 +5733,11 @@ MonoBehaviour:
       tFoot: {fileID: 5745109996339070714}
       tIkTarget: {fileID: 198475016226503832}
       tIkPole: {fileID: 9068159387794199583}
+  damageReactionController:
+    drPelvis: {fileID: 0}
+    drTorso_1: {fileID: 0}
+    drTorso_2: {fileID: 0}
+    drHead: {fileID: 0}
   rb: {fileID: 0}
   tRig: {fileID: 6818883754222934155}
   goAliveModel: {fileID: 4362725803417193575}

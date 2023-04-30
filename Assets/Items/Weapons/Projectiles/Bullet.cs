@@ -5,15 +5,13 @@ using UnityEngine;
 public class Bullet : MonoBehaviour {
     [SerializeField] private LayerMask layerMask;
     [SerializeField] private LayerMask fleshLayerMask;
+
     public Rigidbody rb;
-    //public Character firedByCharacter;
     public ProjectileParams projectileParams;
 
     private Vector3 lastPosition;
     private TrailRenderer trailRenderer;
     private bool isActive;
-
-    private float damage;
 
     [SerializeField] private GameObject prefab_vfxDirtKickup;
     [SerializeField] private Color bloodColor;
@@ -25,12 +23,12 @@ public class Bullet : MonoBehaviour {
         trailRenderer = GetComponent<TrailRenderer>();
     }
 
-    public void Fire(Character firedByCharacter, Vector3 velocity, float damage) {
-        this.damage = damage;
+    public void Fire(ProjectileParams projectileParams) {
+        this.projectileParams = projectileParams;
         isActive = true;
         rb.isKinematic = false;
         trailRenderer.Clear();
-        rb.velocity = velocity;
+        rb.velocity = projectileParams.muzzleVelocity;
         lastPosition = transform.position;
     }
 
@@ -40,19 +38,8 @@ public class Bullet : MonoBehaviour {
 
         RaycastHit hit;
         if (Physics.Linecast(lastPosition, transform.position, out hit, layerMask)) {
-            EffectMaterialKeeper materialKeeper;
-            if (hit.transform.TryGetComponent<EffectMaterialKeeper>(out materialKeeper)) {
-
-                materialKeeper.PlayBulletHitEffects(hit.point, hit.normal);
-            }
-
-            DamageReceiver damageReceiver;
-            if (hit.collider.TryGetComponent<DamageReceiver>(out damageReceiver)) {
-                damageReceiver.ReceiveDamage_bulletHit(damage, hit.point, VectorUtils.FromToVector(lastPosition, transform.position).normalized);
-            }
-
+            ProjectileManager.i.ProjectileHit(this, hit, VectorUtils.FromToVector(lastPosition, transform.position).normalized);
             isActive = false;
-
             rb.isKinematic = true;
             StartCoroutine(DespawnDelayConrutine(3));
         }

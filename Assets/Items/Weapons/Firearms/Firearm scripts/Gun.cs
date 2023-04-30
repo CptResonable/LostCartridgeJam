@@ -14,24 +14,7 @@ public class Gun : Equipment {
     [SerializeField] private GameObject prefabBullet;
     [SerializeField] private GameObject prefab_vfxMuzzleFlash;
 
-    [SerializeField] public bool isAuto;
-    [SerializeField] private int magSize;
-    [SerializeField] private float muzzleVelocity;
-    [SerializeField] private float reloadTime;
-    [SerializeField] private float damage;
-
-    [SerializeField] private AnimationCurve recoilCurve;
-    [SerializeField] private AnimationCurve horizontalRecoilCurve;
-    [SerializeField] private AnimationCurve recoilResetSpeedCurve;
-    [SerializeField] private float backRecoil;
-    [SerializeField] private float upRecoil;
-    [SerializeField] private float horizontalRecoil;
-    [SerializeField] private float recoilIncreasPerBullet;
-    [SerializeField] private float recoilResetRate;
-    [SerializeField] private float recoilT;
-    [SerializeField] private float headUpRecoil;
-    [SerializeField] private float headHorizontalRecoil;
-    [SerializeField] private float horizontalChangeSpeed;
+    private float recoilT;
 
     public GunAnimationController gunAnimationController;
 
@@ -58,6 +41,7 @@ public class Gun : Equipment {
 
     protected override void Awake() {
         base.Awake();
+        timeBetweenShots = 1 / (specs.rpm / 60);
 
         gunAnimationController = GetComponentInChildren<GunAnimationController>();
 
@@ -95,7 +79,7 @@ public class Gun : Equipment {
             return;
 
         // Automatic fire
-        if (isAuto) {
+        if (specs.isAuto) {
             if (character.characterInput.action_attack.isDown)
                 TryFire(false);
         }
@@ -111,7 +95,7 @@ public class Gun : Equipment {
 
         cooldown -= Time.deltaTime;
 
-        recoilT -= Time.deltaTime * recoilResetSpeedCurve.Evaluate(timeSinceLastShot);
+        recoilT -= Time.deltaTime * specs.recoilResetSpeedCurve.Evaluate(timeSinceLastShot);
         timeSinceLastShot += Time.deltaTime;
 
         if (recoilT < 0)
@@ -140,7 +124,7 @@ public class Gun : Equipment {
         }
 
         isReloading = true;
-        reloadStartedEvent?.Invoke(reloadTime);
+        reloadStartedEvent?.Invoke(specs.reloadTime);
 
         gunAnimationController.InitReload();
     }
@@ -155,13 +139,12 @@ public class Gun : Equipment {
         bulletInChaimber = false;
 
         Recoil();
+   
+        ProjectileManager.i.FireProjectile(prefabBullet, this, character, tMuzzle, tMuzzle.forward * specs.muzzleVelocity, specs.damage);
 
-        ProjectileParams projectileParams = new ProjectileParams(tMuzzle.position, tMuzzle.forward, damage, character.ID);
-        //ProjectileManager.i.
-
-        GameObject goBullet = EZ_Pooling.EZ_PoolManager.Spawn(prefabBullet.transform, tMuzzle.position - tMuzzle.forward * 0.05f, tMuzzle.rotation).gameObject;
-        Bullet bullet = goBullet.GetComponent<Bullet>();
-        bullet.Fire(character, tMuzzle.forward * muzzleVelocity, damage);
+        //GameObject goBullet = EZ_Pooling.EZ_PoolManager.Spawn(prefabBullet.transform, tMuzzle.position - tMuzzle.forward * 0.05f, tMuzzle.rotation).gameObject;
+        //Bullet bullet = goBullet.GetComponent<Bullet>();
+        //bullet.Fire(character, tMuzzle.forward * specs.muzzleVelocity, specs.damage);
 
         // VFX
         GameObject goMuzzle = EZ_Pooling.EZ_PoolManager.Spawn(prefab_vfxMuzzleFlash.transform, tMuzzle.position, tMuzzle.rotation).gameObject;
@@ -198,13 +181,13 @@ public class Gun : Equipment {
     private void GunAnimationController_magInsertedEvent() {
         tMag.gameObject.SetActive(true);
 
-        if (consumeAmmo && ammoReserve < magSize) {
+        if (consumeAmmo && ammoReserve < specs.magSize) {
             bulletsInMagCount = ammoReserve;
             ammoReserve = 0;
         }
         else {
-            ammoReserve -= (magSize - bulletsInMagCount);
-            bulletsInMagCount = magSize;
+            ammoReserve -= (specs.magSize - bulletsInMagCount);
+            bulletsInMagCount = specs.magSize;
         }
 
         magIn = true;
@@ -215,11 +198,11 @@ public class Gun : Equipment {
     #endregion
 
     private void Recoil() {
-        if (isAuto) {
+        if (specs.isAuto) {
             Rigidbody rb = transform.parent.GetComponent<Rigidbody>();
 
-            float force = recoilCurve.Evaluate(recoilT);
-            float horizontalForceScale = (Mathf.PerlinNoise(recoilT * horizontalChangeSpeed, 321.43f) - 0.2f) * 2 * horizontalRecoilCurve.Evaluate(recoilT);
+            float force = specs.recoilCurve.Evaluate(recoilT);
+            float horizontalForceScale = (Mathf.PerlinNoise(recoilT * specs.horizontalChangeSpeed, 321.43f) - 0.2f) * 2 * specs.horizontalRecoilCurve.Evaluate(recoilT);
 
             rb.AddForce(-tMuzzle.forward * ((force * 5) + 5), ForceMode.Impulse);
             rb.AddForce(tMuzzle.right * horizontalForceScale * 4, ForceMode.Impulse);
@@ -228,13 +211,13 @@ public class Gun : Equipment {
 
             gunFiredEvent?.Invoke(new Vector3((force * 3) + 2, horizontalForceScale * 5.5f), Vector3.zero);
 
-            recoilT += recoilIncreasPerBullet;
+            recoilT += specs.recoilIncreasPerBullet;
         }
         else {
             Rigidbody rb = transform.parent.GetComponent<Rigidbody>();
 
-            float force = recoilCurve.Evaluate(recoilT);
-            float horizontalForceScale = (Mathf.PerlinNoise(recoilT * horizontalChangeSpeed, 321.43f) - 0.2f) * 2 * horizontalRecoilCurve.Evaluate(recoilT);
+            float force = specs.recoilCurve.Evaluate(recoilT);
+            float horizontalForceScale = (Mathf.PerlinNoise(recoilT * specs.horizontalChangeSpeed, 321.43f) - 0.2f) * 2 * specs.horizontalRecoilCurve.Evaluate(recoilT);
             rb.AddForce(-tMuzzle.forward * ((force * 5) + 4), ForceMode.Impulse);
             rb.AddForce(tMuzzle.right * (horizontalForceScale * 4 + 0.2f), ForceMode.Impulse);
             rb.AddTorque(tMuzzle.right * -((force * 1f) + 0.7f), ForceMode.Impulse);
@@ -242,7 +225,7 @@ public class Gun : Equipment {
 
             gunFiredEvent?.Invoke(new Vector3((force * 6) + 4, horizontalForceScale * 10.5f), Vector3.zero);
 
-            recoilT += recoilIncreasPerBullet;
+            recoilT += specs.recoilIncreasPerBullet;
         }
     }
 }
